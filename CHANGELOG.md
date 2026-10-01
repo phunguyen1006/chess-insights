@@ -2,7 +2,7 @@
 
 ## [0.1.5](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.5) — 2026-10-01
 
-First public preview release of the existing standalone extension.
+First GitHub preview release of the existing standalone extension.
 
 ### Added
 
