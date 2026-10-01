@@ -17,6 +17,7 @@ Project-wide correctness and regression-test pass. No new permissions or databas
 - Remove the redundant homepage footer text and avoid collecting layout diagnostics in production.
 - Verify every required runtime asset and synchronized source/build/lockfile versions before packaging; reject incomplete/debug releases.
 - Fix the Vite development version import and stop generated release ZIPs from crashing the Windows file watcher.
+- Update pinned official CI actions to the Node.js 24 runtime after GitHub reported deprecated Node.js 20 actions.
 
 ### Validation
 

@@ -8,6 +8,7 @@ The review covered data normalization/API/cache, analytics, DOM/navigation, Reac
 - TypeScript and ESLint pass. Normal/debug builds and production ZIP checks pass.
 - npm registry audit reports no known dependency vulnerabilities. No runtime dependency upgrade was needed; Node.js type definitions were added for packaging tests.
 - A separate read-only review found no remaining blocking regression in the final diff.
+- GitHub CI also runs the full suite, build and package checks. Official checkout/setup/upload actions are pinned to verified Node.js 24 revisions to remove the obsolete action runtime warning.
 
 | Area            | Reproduced problem                                                                                                | Corrected behavior / tests                                                                                                           |
 | --------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
