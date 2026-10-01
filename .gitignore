@@ -1,0 +1,14 @@
+node_modules/
+.npm-cache/
+dist/
+coverage/
+*.log
+artifacts/
+/releases/
+# Local implementation notes contain machine-specific paths; public docs live in docs/.
+*_REPORT.md
+.env
+.env.*
+!.env.example
+*.pem
+*.key

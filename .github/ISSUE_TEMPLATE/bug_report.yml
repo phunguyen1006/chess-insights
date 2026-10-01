@@ -1,0 +1,31 @@
+name: Bug report
+description: Report a reproducible installation, layout, tracking or analytics problem.
+body:
+  - type: markdown
+    attributes:
+      value: Please omit private account data, browser tokens and personal game history. Check the installation and verification guides before reporting.
+  - type: input
+    id: version
+    attributes:
+      label: Extension version and browser
+      placeholder: v0.1.5, Edge 140, Windows 11
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Include the Chess.com route, viewport size and whether this follows a reload or navigation.
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Screenshots or diagnostics
+      description: Redact usernames and personal information where appropriate. Never include authentication tokens.

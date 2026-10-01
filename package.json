@@ -1,0 +1,50 @@
+{
+  "name": "chess-insights",
+  "version": "0.1.5",
+  "private": true,
+  "description": "Local-first Chess.com activity analytics, rated puzzle tracking, and historical game review for Chrome and Edge.",
+  "license": "GPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/phunguyen1006/chess-insights.git"
+  },
+  "homepage": "https://github.com/phunguyen1006/chess-insights#readme",
+  "bugs": {
+    "url": "https://github.com/phunguyen1006/chess-insights/issues"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build && node scripts/build-content.mjs && node scripts/verify-build.mjs",
+    "build:debug": "npm run build && node scripts/build-content.mjs --debug && node scripts/verify-build.mjs",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "release:pack": "node scripts/package-release.mjs"
+  },
+  "dependencies": {
+    "chess.js": "1.4.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "stockfish": "18.0.8"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.36.0",
+    "@types/chrome": "^0.1.24",
+    "@types/react": "^19.1.16",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.3",
+    "esbuild": "^0.25.10",
+    "eslint": "^9.36.0",
+    "fake-indexeddb": "^6.2.2",
+    "jsdom": "^26.1.0",
+    "prettier": "^3.9.9",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.44.1",
+    "vite": "^7.1.7",
+    "vitest": "^4.1.11"
+  }
+}
