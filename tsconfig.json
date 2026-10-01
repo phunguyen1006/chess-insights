@@ -9,7 +9,7 @@
     "noEmit": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "types": ["chrome", "vite/client"],
+    "types": ["chrome", "vite/client", "node"],
     "allowImportingTsExtensions": true
   },
   "include": ["src", "tests", "vite.config.ts"]

@@ -194,6 +194,18 @@ export function integrate(handlers: MountHandlers) {
       remove("home");
       return;
     }
+    // Native SPA rendering may remove our root or replace its anchors without
+    // replacing <main>. Restore old layout overrides before rediscovering the
+    // mount point; remove() clears target, so it must precede discovery.
+    if (
+      homeRoot &&
+      (!homeRoot.isConnected ||
+        !target?.parent.isConnected ||
+        (target.before && !target.before.isConnected) ||
+        (target.playArea && !target.playArea.isConnected) ||
+        target.cards?.some((card) => !card.isConnected))
+    )
+      remove("home");
     const key = location.pathname + location.hash;
     if (key !== routeKey) {
       routeKey = key;
@@ -218,9 +230,8 @@ export function integrate(handlers: MountHandlers) {
       remove("home");
       return;
     }
-    if (homeRoot && !homeRoot.isConnected) remove("home");
     if (!homeRoot) {
-      captureOriginalLayout();
+      if (import.meta.env.DEV) captureOriginalLayout();
       if (target.groupCards && target.before) {
         const hostStyle = getComputedStyle(target.parent);
         groupedRow = document.createElement("div");

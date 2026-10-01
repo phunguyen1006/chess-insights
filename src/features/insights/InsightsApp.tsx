@@ -170,7 +170,7 @@ export function InsightsApp({
         </Panel>
       ) : (
         <>
-          {settingsOpen && <PuzzleSettings state={puzzles} />}
+          {settingsOpen && <PuzzleSettings key={username} state={puzzles} />}
           <div className="ci-sync" role="status">
             {loading
               ? "Syncing…"

@@ -1,6 +1,7 @@
 import { getMain, IDS } from "./chessDom";
+import { version } from "../../../package.json";
 
-export const LAYOUT_BUILD = "0.1.5-puzzle-activity";
+export const LAYOUT_BUILD = version;
 let original: unknown = null;
 const labels =
   /^(?:play online|play bots|play coach|play a friend|recommended match|daily puzzle|game history)$/i;
@@ -69,7 +70,7 @@ export function downloadLayoutReport() {
   );
   const link = document.createElement("a");
   link.href = url;
-  link.download = "chess-insights-layout-0.1.4.json";
+  link.download = `chess-insights-layout-${version}.json`;
   link.style.display = "none";
   document.body.append(link);
   link.click();

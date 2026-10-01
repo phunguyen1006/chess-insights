@@ -32,6 +32,19 @@ export function observePage(update: () => void) {
         // Our own insertions remain ignored, but removal or corruption by the
         // native renderer must trigger repair even when only our node changed.
         if (touchesSidebar && sidebarNeedsRepair()) return true;
+        // Ignore React's own content mutations, but recover when the native
+        // renderer removes an entire mounted surface from an unchanged shell.
+        if (
+          [...record.removedNodes].some(
+            (node) =>
+              node instanceof Element &&
+              !node.isConnected &&
+              (node.id === IDS.home ||
+                node.id === IDS.app ||
+                !!node.querySelector(`#${IDS.home},#${IDS.app}`)),
+          )
+        )
+          return true;
         if (target?.closest(ownSurfaces)) return false;
         return (
           record.type === "attributes" ||

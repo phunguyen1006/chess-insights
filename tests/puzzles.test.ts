@@ -66,7 +66,7 @@ describe("puzzle persistence", () => {
     );
   });
   it("separates accounts and clearing puzzles preserves all other stores", async () => {
-    await startPuzzleTracking("bob");
+    await startPuzzleTracking("bob", new Date("2026-09-29T12:00:00").getTime());
     await savePuzzleAttempt(attempt("1", "2026-09-30", "unknown", "bob"));
     const db = await database();
     const tx = db.transaction("engineAnalysis", "readwrite");
@@ -98,6 +98,25 @@ describe("puzzle persistence", () => {
     await expect(
       savePuzzleAttempt({ ...attempt("x"), attemptedAt: NaN }),
     ).rejects.toThrow("Invalid");
+  });
+  it("does not replay a completion queued before clear into newly started history", async () => {
+    const before = new Date("2026-09-29T12:00:00").getTime();
+    await startPuzzleTracking("clear-race", before);
+    const queued = attempt("queued", "2026-09-30", "solved", "clear-race");
+    await savePuzzleAttempt(queued);
+    await clearPuzzleHistory("clear-race");
+    await startPuzzleTracking("clear-race", queued.attemptedAt + 1);
+    expect(await savePuzzleAttempt(queued)).toBe(false);
+    const snapshot = await puzzleSnapshot("clear-race");
+    expect(snapshot.attempts).toEqual([]);
+    expect(snapshot.tracking?.revision).toBe(0);
+    expect(
+      await savePuzzleAttempt({
+        ...queued,
+        id: `${queued.id}-new`,
+        attemptedAt: queued.attemptedAt + 2,
+      }),
+    ).toBe(true);
   });
 });
 describe("combined activity", () => {

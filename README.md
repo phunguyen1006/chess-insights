@@ -7,7 +7,7 @@ A standalone Chrome / Edge extension for Chess.com activity analytics, locally t
 
 ## Install
 
-Download **[chess-insights-v0.1.5.zip](https://github.com/phunguyen1006/chess-insights/releases/download/v0.1.5/chess-insights-v0.1.5.zip)** from the [release page](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.5). Extract it to a permanent folder. In `edge://extensions` or `chrome://extensions`, enable **Developer mode**, choose **Load unpacked**, and select the folder containing `manifest.json`.
+Download **[chess-insights-v0.1.6.zip](https://github.com/phunguyen1006/chess-insights/releases/download/v0.1.6/chess-insights-v0.1.6.zip)** from the [release page](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.6). Extract it to a permanent folder. In `edge://extensions` or `chrome://extensions`, enable **Developer mode**, choose **Load unpacked**, and select the folder containing `manifest.json`.
 
 Use your normal browser profile and Chess.com session. The extension does not require a separate login. If account detection fails, enter your public Chess.com username in the Connect form.
 
@@ -15,7 +15,7 @@ Use your normal browser profile and Chess.com session. The extension does not re
 
 GitHub's automatic **Source code** archives contain development source and must be built first. They are not the installable extension. See [installation, upgrades and checksums](docs/INSTALL.md).
 
-**v0.1.5 is a preview release.** Automated tests and local fixtures pass; final authenticated Chess.com DOM integration and narrow-screen sizing still need manual browser verification. See [verification evidence and checklist](docs/VERIFICATION.md).
+**v0.1.6 is a preview release.** Automated tests and local fixtures pass; final authenticated Chess.com DOM integration and offscreen-engine delivery still need manual browser verification; desktop and 390px local fixtures pass. See [verification evidence and checklist](docs/VERIFICATION.md).
 
 ## Features
 

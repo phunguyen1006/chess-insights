@@ -7,6 +7,7 @@ import {
   IDS,
 } from "../src/content/dom/chessDom";
 import { readRoute } from "../src/content/dom/routing";
+import { version } from "../public/manifest.json";
 const fixture = () =>
   `<nav><a href="/play">Play</a><a href="/stats/alice">Stats</a><a href="/training">Train</a><div data-user-menu><a href="/member/Alice">Alice</a></div></nav><main><section id="play"><h2>Play Online</h2></section><div id="cards"><div id="left"><section id="recommended"><h2>Recommended Match</h2><button id="native-match">Watch</button></section><section id="history"><h2>Game History</h2></section></div><section id="puzzle"><h2>Daily Puzzle</h2><button id="native-puzzle">Try puzzle</button></section></div></main>`;
 let mounted: ReturnType<typeof integrate>;
@@ -128,7 +129,7 @@ it("replaces the outer fixed grid flow instead of inheriting a lower native grid
   expect(root.previousElementSibling?.id).toBe("play");
   expect(root.nextElementSibling?.id).toBe("cards");
   expect(document.getElementById("cards")!.style.gridArea).toBe("auto");
-  expect(root.dataset.layoutBuild).toBe("0.1.5-puzzle-activity");
+  expect(root.dataset.layoutBuild).toBe(version);
   mounted.dispose();
   expect(main.style.cssText).toBe(original);
   expect(document.getElementById("cards")!.style.gridArea).toBe("cards");
@@ -270,6 +271,30 @@ it("recovers after delayed rendering and SPA main replacement", () => {
   );
   mounted.update();
   expect(document.querySelectorAll(`#${IDS.home}`)).toHaveLength(1);
+});
+it("remounts a removed heatmap while the same native homepage remains", () => {
+  mounted.update();
+  const original = document.getElementById(IDS.home)!;
+  original.remove();
+  expect(() => mounted.update()).not.toThrow();
+  expect(document.getElementById(IDS.home)).not.toBe(original);
+  expect(document.querySelectorAll(`#${IDS.home}`)).toHaveLength(1);
+  expect(document.getElementById(IDS.home)!.nextElementSibling?.id).toBe(
+    "cards",
+  );
+});
+it("rebuilds placement when the native cards are replaced within the same main", () => {
+  mounted.update();
+  const replacement = document.createElement("div");
+  replacement.id = "cards";
+  replacement.innerHTML =
+    "<section><h2>Recommended Match</h2></section><section><h2>Daily Puzzle</h2></section>";
+  document.getElementById("cards")!.replaceWith(replacement);
+  expect(() => mounted.update()).not.toThrow();
+  expect(document.querySelectorAll(`#${IDS.home}`)).toHaveLength(1);
+  expect(document.getElementById(IDS.home)!.nextElementSibling).toBe(
+    replacement,
+  );
 });
 it("inserts sidebar Insights between Stats and Train without duplicating it", () => {
   mounted.update();

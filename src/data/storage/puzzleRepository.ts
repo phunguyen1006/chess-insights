@@ -70,6 +70,11 @@ export async function savePuzzleAttempt(attempt: PuzzleAttempt) {
     await done.catch(() => undefined);
     throw new Error("Puzzle tracking has not started");
   }
+  // A completion queued before Clear must never recreate the deleted history.
+  if (attempt.attemptedAt < state.puzzleTrackingStartedAt) {
+    await done;
+    return false;
+  }
   if (!previous) {
     store.add({
       ...attempt,

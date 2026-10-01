@@ -2,6 +2,16 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
+  server: {
+    watch: {
+      ignored: [
+        "**/releases/**",
+        "**/artifacts/**",
+        "**/dist/**",
+        "**/coverage/**",
+      ],
+    },
+  },
   build: {
     rollupOptions: {
       input: {

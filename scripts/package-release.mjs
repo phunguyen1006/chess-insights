@@ -9,6 +9,15 @@ import {
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { resolve } from "node:path";
+const verified = spawnSync(
+  process.execPath,
+  ["scripts/verify-build.mjs", "--release"],
+  {
+    stdio: "inherit",
+  },
+);
+if (verified.error || verified.status !== 0)
+  throw verified.error ?? new Error("Release build verification failed");
 const pkg = JSON.parse(await readFile("package.json", "utf8"));
 const manifest = JSON.parse(await readFile("dist/manifest.json", "utf8"));
 if (pkg.version !== manifest.version)

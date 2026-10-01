@@ -33,12 +33,14 @@ export function ReviewBoard({
   mistake: m,
   game,
   review,
+  saving = false,
   onGrade,
   onClose,
 }: {
   mistake: Mistake;
   game: NormalizedGame;
   review?: Review;
+  saving?: boolean;
   onGrade: (grade: Grade, correct: boolean) => void;
   onClose: () => void;
 }) {
@@ -192,6 +194,7 @@ export function ReviewBoard({
                 {(["Again", "Hard", "Good", "Easy"] as Grade[]).map((grade) => (
                   <button
                     key={grade}
+                    disabled={saving}
                     onClick={() => onGrade(grade, answer.correct)}
                   >
                     {grade}

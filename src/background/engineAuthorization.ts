@@ -58,20 +58,22 @@ async function authorize(
     lease = (await chrome.storage.session.get(LEASE_KEY))[LEASE_KEY] as
       Lease | undefined;
   if (message.type === "ci:engine-open") {
+    const tab =
+      sender.tab?.id === undefined
+        ? null
+        : await chrome.tabs.get(sender.tab.id);
     if (
       sender.tab?.id === undefined ||
       !sender.url?.startsWith("https://www.chess.com/") ||
-      !historicalInsightsUrl((await chrome.tabs.get(sender.tab.id)).url ?? "")
+      tab?.active === false ||
+      !historicalInsightsUrl(tab?.url ?? "")
     )
       throw new Error("Historical Mistakes content page required.");
-    if (
-      lease &&
-      lease.tabId !== sender.tab.id &&
-      lease.expires > now &&
-      (!lease.claimed || now - lease.heartbeat < 10000)
-    )
+    if (lease && lease.expires > now)
       throw new Error(
-        "Analysis is already running in another Chess.com tab. Pause it there first.",
+        lease.tabId === sender.tab.id
+          ? "Analysis is already running in this Chess.com tab. Pause it before restarting."
+          : "Analysis is already running in another Chess.com tab. Pause it there first.",
       );
     const username = cleanUsername(message.username),
       state = await analysisState(username);
@@ -101,7 +103,7 @@ async function authorize(
     return true;
   }
   const tab = await chrome.tabs.get(lease.tabId);
-  if (!historicalInsightsUrl(tab.url ?? "")) {
+  if (tab.active === false || !historicalInsightsUrl(tab.url ?? "")) {
     await chrome.storage.session.remove(LEASE_KEY);
     throw new Error("Engine is restricted to historical Mistakes.");
   }

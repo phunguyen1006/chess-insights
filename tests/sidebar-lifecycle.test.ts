@@ -63,6 +63,22 @@ const expectMenu = () => {
   );
 };
 
+it("automatically repairs a heatmap removed alone by the native renderer", async () => {
+  document.querySelector("main")!.innerHTML =
+    "<section><h2>Play Online</h2></section><div><section><h2>Recommended Match</h2></section><section><h2>Daily Puzzle</h2></section></div>";
+  await vi.advanceTimersByTimeAsync(400);
+  const first = document.getElementById(IDS.home)!;
+  expect(first).not.toBeNull();
+  first.remove();
+  await vi.advanceTimersByTimeAsync(200);
+  expect(document.getElementById(IDS.home)).not.toBe(first);
+  expect(document.querySelectorAll(`#${IDS.home}`)).toHaveLength(1);
+  await vi.advanceTimersByTimeAsync(200);
+  const count = update.mock.calls.length;
+  await vi.advanceTimersByTimeAsync(1000);
+  expect(update).toHaveBeenCalledTimes(count);
+});
+
 it("repairs an isolated Insights removal after the initial navigation check already finished", async () => {
   const train = document.querySelector<HTMLAnchorElement>(
     'a[href="/training"]',

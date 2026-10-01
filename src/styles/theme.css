@@ -846,6 +846,7 @@
 }
 .ci-home-card footer {
   font-size: 12px;
+  justify-content: flex-end;
 }
 .ci-home-card a,
 .ci-theme-dark .ci-home-card a {

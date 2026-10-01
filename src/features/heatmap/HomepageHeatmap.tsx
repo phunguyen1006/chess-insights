@@ -110,9 +110,6 @@ export function HomepageHeatmap({
             </p>
           )}
           <footer className="ci-row">
-            <span className="ci-note">
-              Chess activity · Games + Puzzles · Local time
-            </span>
             <a
               href="#chess-insights/activity"
               onClick={(e) => {

@@ -7,13 +7,14 @@ import {
   releaseEngine,
   isEngineActive,
 } from "../src/background/engineAuthorization";
-let url: string, data: Record<string, unknown>;
+let url: string, active: boolean, data: Record<string, unknown>;
 beforeEach(() => {
   url = "https://www.chess.com/home#chess-insights/mistakes";
   data = {};
+  active = true;
   vi.stubGlobal("chrome", {
     runtime: { getURL: (path: string) => `chrome-extension://test/${path}` },
-    tabs: { get: async () => ({ url }) },
+    tabs: { get: async () => ({ url, active }) },
     storage: {
       session: {
         get: async (key: string) => ({ [key]: data[key] }),
@@ -114,4 +115,65 @@ it("releases a finished worker immediately so a second tab can analyze", async (
       tab: { id: 2 },
     } as chrome.runtime.MessageSender),
   ).toHaveProperty("token");
+});
+it("rejects duplicate starts from the owning tab without invalidating its token", async () => {
+  const opened = (await engineAuthorization(
+    { type: "ci:engine-open", username: "alice" },
+    source,
+  )) as { token: string };
+  await engineAuthorization(
+    { type: "ci:engine-claim", token: opened.token },
+    host,
+  );
+  await expect(
+    engineAuthorization({ type: "ci:engine-open", username: "alice" }, source),
+  ).rejects.toThrow("this Chess.com tab");
+  expect(
+    await engineAuthorization(
+      { type: "ci:engine-guard", token: opened.token },
+      host,
+    ),
+  ).toBe(true);
+});
+it("keeps a valid lease exclusive while an evaluation takes more than ten seconds", async () => {
+  const opened = (await engineAuthorization(
+    { type: "ci:engine-open", username: "alice" },
+    source,
+  )) as { token: string };
+  await engineAuthorization(
+    { type: "ci:engine-claim", token: opened.token },
+    host,
+  );
+  const stored = data["ci-engine-authorization"] as { heartbeat: number };
+  stored.heartbeat -= 11000;
+  await expect(
+    engineAuthorization({ type: "ci:engine-open", username: "bob" }, {
+      ...source,
+      tab: { id: 2 },
+    } as chrome.runtime.MessageSender),
+  ).rejects.toThrow("another");
+  expect(
+    await engineAuthorization(
+      { type: "ci:engine-guard", token: opened.token },
+      host,
+    ),
+  ).toBe(true);
+});
+it("revokes analysis when its owning tab becomes hidden", async () => {
+  const opened = (await engineAuthorization(
+    { type: "ci:engine-open", username: "alice" },
+    source,
+  )) as { token: string };
+  await engineAuthorization(
+    { type: "ci:engine-claim", token: opened.token },
+    host,
+  );
+  active = false;
+  await expect(
+    engineAuthorization({ type: "ci:engine-guard", token: opened.token }, host),
+  ).rejects.toThrow("restricted");
+  expect(await isEngineActive("alice")).toBe(false);
+  await expect(
+    engineAuthorization({ type: "ci:engine-open", username: "alice" }, source),
+  ).rejects.toThrow("Historical");
 });

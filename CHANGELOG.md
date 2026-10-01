@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.1.6](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.6)
+
+Project-wide correctness and regression-test pass. No new permissions or database schema changes.
+
+### Fixed
+
+- Recover a removed heatmap and replaced native cards without crashing or duplicating mounts.
+- Preserve queued sync requests after failures and retain manual refresh intent; use UTC archive boundaries and refetch newly closed months after PubAPI's cache window.
+- Serialize partial settings updates, reject malformed archive/profile metadata, and close abandoned blocked database connections.
+- Order puzzle save/OFF/Clear operations; reject old completions after Clear and skip hidden/stale result metadata and unobserved puzzle transitions.
+- Reset puzzle sessions and clear confirmations across accounts; tolerate malformed session storage.
+- Prevent duplicate engine startup, stale worker/watchdog updates and Pause/Cancel races during initialization; wait for stop cleanup before resuming.
+- Preserve concurrent review history, prevent double grading and ignore callbacks from previous accounts.
+- Recover loading state after a cache error during an account switch; clamp month filters at month ends.
+- Remove the redundant homepage footer text and avoid collecting layout diagnostics in production.
+- Verify every required runtime asset and synchronized source/build/lockfile versions before packaging; reject incomplete/debug releases.
+- Fix the Vite development version import and stop generated release ZIPs from crashing the Windows file watcher.
+
+### Validation
+
+209 tests in 29 files pass (51 additional regression tests), plus typecheck and ESLint. Local Stockfish WASM, all Insights sections, desktop/390px layout, SPA mounting and production packaging are verified. See [QA evidence and manual scope](docs/QA-0.1.6.md).
+
 ## [0.1.5](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.5) — 2026-10-01
 
 First GitHub preview release of the existing standalone extension.

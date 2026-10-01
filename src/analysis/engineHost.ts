@@ -1,7 +1,8 @@
 import { LocalEngine, analyzeGame, storedGameReplay } from "./engine";
 import {
   analysisState,
-  put,
+  getAnalysisQueue,
+  updateAnalysisQueue,
   saveEngineGame,
 } from "../data/storage/analysisRepository";
 import { getGames } from "../data/storage/gameRepository";
@@ -17,10 +18,11 @@ let engine: LocalEngine | null = null,
   stopped = false;
 let token = location.hash.slice(1);
 let busy = false;
-const release = () => {
+let activeRun: Promise<void> | null = null;
+const release = (runToken = token) => {
   if (!import.meta.env.DEV)
     void chrome.runtime
-      .sendMessage({ type: "ci:engine-release", token })
+      .sendMessage({ type: "ci:engine-release", token: runToken })
       .catch(() => undefined);
 };
 window.addEventListener("pagehide", () => {
@@ -29,7 +31,16 @@ window.addEventListener("pagehide", () => {
   release();
 });
 async function run() {
+  const runToken = token;
   let username = "";
+  const updateQueue = (
+    update: (
+      current: import("./types").Queue,
+    ) => import("./types").Queue | null,
+  ) =>
+    updateAnalysisQueue(username, (current) =>
+      current.engineRunToken === runToken ? update(current) : null,
+    );
   try {
     if (import.meta.env.DEV) {
       const entry = JSON.parse(
@@ -47,11 +58,17 @@ async function run() {
     } else {
       const reply = (await chrome.runtime.sendMessage({
         type: "ci:engine-claim",
-        token,
+        token: runToken,
       })) as Reply<string>;
       if (!reply.ok) throw new Error(reply.error.message);
       username = reply.data;
     }
+    if (import.meta.env.DEV)
+      await updateAnalysisQueue(username, (current) => ({
+        ...current,
+        engineRunToken: runToken,
+        status: "initializing",
+      }));
     const guard = async () => {
       if (stopped) throw new Error("Analysis paused.");
       if (import.meta.env.DEV) {
@@ -60,13 +77,19 @@ async function run() {
       } else {
         const reply = (await chrome.runtime.sendMessage({
           type: "ci:engine-guard",
-          token,
+          token: runToken,
         })) as Reply<boolean>;
         if (!reply.ok) {
           engine?.stop();
           throw new Error(reply.error.message);
         }
       }
+      const current = await getAnalysisQueue(username);
+      if (
+        current?.engineRunToken !== runToken ||
+        !["initializing", "running"].includes(current.status)
+      )
+        throw new Error("Analysis paused or cancelled.");
     };
     await guard();
     const games = new Map((await getGames(username)).map((g) => [g.id, g]));
@@ -93,37 +116,44 @@ async function run() {
       new URL("vendor/stockfish/stockfish-18-lite-single.js", location.href)
         .href,
     );
-    queue = {
-      ...queue,
-      status: "initializing",
-      engine: { ...engine.status },
-      error: undefined,
-    };
-    await put("analysisQueue", queue);
+    const initializing = await updateQueue((current) =>
+      current.status === "initializing"
+        ? { ...current, engine: { ...engine!.status }, error: undefined }
+        : null,
+    );
+    if (!initializing) return;
+    queue = initializing;
     await engine.ready(async (status) => {
-      const current = (await analysisState(username)).queue;
-      if (current) await put("analysisQueue", { ...current, engine: status });
+      await updateQueue((current) => ({ ...current, engine: status }));
     });
     if (import.meta.env.DEV)
       console.debug("[Chess Insights] Engine ready", engine.status);
-    queue = {
-      ...queue,
-      status: "running",
-      engine: { ...engine.status, running: true },
-      error: undefined,
-    };
-    await put("analysisQueue", queue);
+    const running = await updateQueue((current) =>
+      current.status === "initializing" && !stopped
+        ? {
+            ...current,
+            status: "running",
+            engine: { ...engine!.status, running: true },
+            error: undefined,
+          }
+        : null,
+    );
+    if (!running) return;
+    queue = running;
     while (queue.ids.length && !stopped) {
       await guard();
       const game = games.get(queue.ids[0]);
       if (!game) throw new Error("Stored game is unavailable.");
-      const latest = (await analysisState(username)).queue;
-      if (latest?.status !== "running") return;
-      queue = {
-        ...queue,
-        currentGame: `vs ${game.opponentUsername ?? "unknown"} · ${game.timeClass}`,
-      };
-      await put("analysisQueue", queue);
+      const latest = await updateQueue((current) =>
+        current.status === "running"
+          ? {
+              ...current,
+              currentGame: `vs ${game.opponentUsername ?? "unknown"} · ${game.timeClass}`,
+            }
+          : null,
+      );
+      if (!latest) return;
+      queue = latest;
       const previous = cached.get(game.id),
         source = pgnFingerprint(game.pgn!);
       if (
@@ -145,15 +175,18 @@ async function run() {
         } catch (error) {
           if (engine.status.error) throw error;
           await guard();
-          const current = (await analysisState(username)).queue;
-          if (!current || current.status !== "running") return;
-          queue = {
-            ...current,
-            ids: current.ids.filter((id) => id !== game.id),
-            skipped: (current.skipped ?? 0) + 1,
-            error: `Skipped ${game.id}: ${String(error)}`,
-          };
-          await put("analysisQueue", queue);
+          const skipped = await updateQueue((current) =>
+            current.status === "running"
+              ? {
+                  ...current,
+                  ids: current.ids.filter((id) => id !== game.id),
+                  skipped: (current.skipped ?? 0) + 1,
+                  error: `Skipped ${game.id}: ${String(error)}`,
+                }
+              : null,
+          );
+          if (!skipped) return;
+          queue = skipped;
           continue;
         }
         if (stopped) return;
@@ -177,43 +210,50 @@ async function run() {
           });
       }
       // Re-read persisted queue so cancellation cannot re-add pending games.
-      const current = (await analysisState(username)).queue;
-      if (!current || !["running", "paused"].includes(current.status)) return;
-      queue = {
-        ...current,
-        ids: current.ids.filter((id) => id !== game.id),
-        completed: current.completed + 1,
-      };
-      await put("analysisQueue", queue);
+      const completed = await updateQueue((current) =>
+        ["running", "paused"].includes(current.status)
+          ? {
+              ...current,
+              ids: current.ids.filter((id) => id !== game.id),
+              completed: current.completed + 1,
+            }
+          : null,
+      );
+      if (!completed) return;
+      queue = completed;
       if (queue.status === "paused") return;
     }
-    await put("analysisQueue", {
-      ...queue,
-      status: "idle",
-      engine: { ...engine.status, running: false },
-    });
+    await updateQueue((current) =>
+      current.status === "running" && !current.ids.length
+        ? {
+            ...current,
+            status: "idle",
+            engine: { ...engine!.status, running: false },
+          }
+        : null,
+    );
   } catch (error) {
     if (username && !stopped) {
-      const queue = (await analysisState(username)).queue;
-      if (queue)
-        await put("analysisQueue", {
-          ...queue,
-          status: "error",
-          error: error instanceof Error ? error.message : String(error),
-          engine: engine
-            ? { ...engine.status, running: false, error: String(error) }
-            : undefined,
-        });
+      await updateQueue((current) =>
+        ["initializing", "running"].includes(current.status)
+          ? {
+              ...current,
+              status: "error",
+              error: error instanceof Error ? error.message : String(error),
+              engine: engine
+                ? { ...engine.status, running: false, error: String(error) }
+                : undefined,
+            }
+          : null,
+      );
     }
   } finally {
     try {
       if (username && engine) {
-        const current = (await analysisState(username)).queue;
-        if (current)
-          await put("analysisQueue", {
-            ...current,
-            engine: { ...engine.status, running: false },
-          });
+        await updateQueue((current) => ({
+          ...current,
+          engine: { ...engine!.status, running: false },
+        }));
       }
     } catch (error) {
       if (import.meta.env.DEV)
@@ -224,7 +264,7 @@ async function run() {
     }
     engine?.stop();
     engine = null;
-    release();
+    release(runToken);
     busy = false;
   }
 }
@@ -246,11 +286,18 @@ else
       stopped = false;
       token = message.token;
       reply({ ok: true, data: true });
-      void run();
+      activeRun = run();
     } else if (message.type === "ci:host-stop") {
+      if (message.token && message.token !== token) {
+        reply({ ok: true, data: false });
+        return false;
+      }
       stopped = true;
       engine?.stop();
-      reply({ ok: true, data: true });
+      void (activeRun ?? Promise.resolve()).finally(() =>
+        reply({ ok: true, data: true }),
+      );
+      return true;
     } else if (message.type === "ci:host-test") {
       if (busy) {
         reply({

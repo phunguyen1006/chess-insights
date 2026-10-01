@@ -233,3 +233,31 @@ it("replays only player moves and records normalized black-side losses", async (
     bestMoveSan: "c5",
   });
 });
+it("checks pause authorization again before evaluating the played response", async () => {
+  const game = normalizeGame(
+    {
+      uuid: "guarded",
+      end_time: 1760000000,
+      rules: "chess",
+      white: { username: "alice", result: "win" },
+      black: { username: "bob", result: "resigned" },
+      pgn: pgn("1. e4 e5"),
+    },
+    "alice",
+  )!;
+  let calls = 0;
+  const engine = {
+    newGame: () => undefined,
+    evaluate: async () => {
+      calls++;
+      return { score: { type: "cp", value: 0 }, best: "d2d4", pv: [] };
+    },
+  } as unknown as LocalEngine;
+  let guards = 0;
+  await expect(
+    analyzeGame(game, engine, async () => {
+      if (++guards === 2) throw new Error("paused");
+    }),
+  ).rejects.toThrow("paused");
+  expect(calls).toBe(1);
+});

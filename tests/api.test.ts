@@ -2,6 +2,8 @@ import { afterEach, it, expect, vi } from "vitest";
 import {
   requestJson,
   getArchiveIndex,
+  getMonthlyArchive,
+  getPlayerProfile,
   cleanUsername,
 } from "../src/data/api/chessComApi";
 afterEach(() => {
@@ -12,6 +14,14 @@ it("rejects invalid usernames before network access", () =>
   expect(() => cleanUsername("../../private")).toThrow(
     "valid Chess.com username",
   ));
+it("rejects non-string usernames without coercing them into account names", () => {
+  expect(() => cleanUsername(undefined as unknown as string)).toThrow(
+    "valid Chess.com username",
+  );
+  expect(() => cleanUsername(null as unknown as string)).toThrow(
+    "valid Chess.com username",
+  );
+});
 it("reports 404, malformed JSON and network errors", async () => {
   vi.stubGlobal(
     "fetch",
@@ -33,6 +43,21 @@ it("validates archive response shape", async () => {
     vi.fn().mockResolvedValue(new Response('{"archives":"bad"}')),
   );
   await expect(getArchiveIndex("alice")).rejects.toMatchObject({
+    code: "INVALID_DATA",
+  });
+});
+it("reports valid JSON null payloads as API data errors, not storage failures", async () => {
+  vi.stubGlobal(
+    "fetch",
+    vi.fn().mockImplementation(() => Promise.resolve(new Response("null"))),
+  );
+  await expect(getPlayerProfile("alice")).rejects.toMatchObject({
+    code: "INVALID_DATA",
+  });
+  await expect(getArchiveIndex("alice")).rejects.toMatchObject({
+    code: "INVALID_DATA",
+  });
+  await expect(getMonthlyArchive("alice", 2026, 9)).rejects.toMatchObject({
     code: "INVALID_DATA",
   });
 });

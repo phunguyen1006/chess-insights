@@ -15,19 +15,31 @@ export interface PuzzleObservation {
   ratingChange: number | null;
   puzzleRating: number | null;
 }
-const visible = (e: Element) =>
-  !e.closest('[hidden],[aria-hidden="true"]') &&
-  (e as HTMLElement).style.display !== "none";
+const visible = (e: Element) => {
+  for (let node: Element | null = e; node; node = node.parentElement) {
+    const style = node.ownerDocument.defaultView?.getComputedStyle(node);
+    if (
+      node.matches('[hidden],[aria-hidden="true"]') ||
+      style?.display === "none" ||
+      style?.visibility === "hidden"
+    )
+      return false;
+  }
+  return true;
+};
 export function ratedPuzzleRoot(
   doc: Document = document,
   path = location.pathname,
 ): HTMLElement | null {
   if (!/^\/puzzles\/(rated|training)\/?$/.test(path)) return null;
-  const root = doc.querySelector<HTMLElement>(
-    '#board-layout-sidebar,[data-puzzle-mode="rated"]',
-  );
+  const root = [
+    ...doc.querySelectorAll<HTMLElement>(
+      '#board-layout-sidebar,[data-puzzle-mode="rated"]',
+    ),
+  ].find(visible);
   if (
     !root ||
+    !visible(root) ||
     root.querySelector(
       '[data-puzzle-mode="daily"],[data-puzzle-mode="rush"],[data-puzzle-mode="battle"]',
     )
@@ -42,8 +54,8 @@ export function isRatedPuzzlePage(doc = document, path = location.pathname) {
   return !!ratedPuzzleRoot(doc, path);
 }
 function numeric(root: Element, selector: string): number | null {
-  const e = root.querySelector(selector);
-  if (!e || !visible(e)) return null;
+  const e = [...root.querySelectorAll(selector)].find(visible);
+  if (!e) return null;
   const text = (e.getAttribute("data-value") ?? e.textContent ?? "")
     .trim()
     .replace(/,/g, "");
@@ -52,31 +64,33 @@ function numeric(root: Element, selector: string): number | null {
 export function readPuzzleObservation(root: HTMLElement): PuzzleObservation {
   const identity = root.matches("[data-puzzle-id]")
     ? root
-    : root.querySelector("[data-puzzle-id]");
-  const link = root.querySelector<HTMLAnchorElement>(
-    'a[href*="/puzzles/problem/"]',
-  );
+    : [...root.querySelectorAll("[data-puzzle-id]")].find(visible);
+  const link = [
+    ...root.querySelectorAll<HTMLAnchorElement>('a[href*="/puzzles/problem/"]'),
+  ].find(visible);
   const puzzleId =
     identity?.getAttribute("data-puzzle-id") ??
     link?.getAttribute("href")?.match(/\/puzzles\/problem\/(\d+)/)?.[1] ??
     null;
   const resultNode =
     [
+      root,
       ...root.querySelectorAll(
         '[data-puzzle-result],[data-puzzle-state],[role="status"],.coach-feedback-detail-text,.puzzle-result,.rated-sidebar-result',
       ),
     ].find(
       (e) =>
         visible(e) &&
-        /^(solved|failed|complete|completed|success|failure)$/.test(
+        /^(solved|failed|complete|completed|success|failure)$/i.test(
           e.getAttribute("data-puzzle-result") ??
             e.getAttribute("data-puzzle-state") ??
             "",
         ),
     ) ?? null;
-  const explicit =
+  const explicit = (
     resultNode?.getAttribute("data-puzzle-result") ??
-    resultNode?.getAttribute("data-puzzle-state");
+    resultNode?.getAttribute("data-puzzle-state")
+  )?.toLowerCase();
   const next = [...root.querySelectorAll('button,a[role="button"]')].some(
     (e) =>
       visible(e) &&
@@ -104,8 +118,13 @@ export function readPuzzleObservation(root: HTMLElement): PuzzleObservation {
       : /failed|failure/.test(explicit)
         ? "failed"
         : "unknown";
-  else if (next || (ratingChange !== null && ratingChange !== 0)) {
-    if (/\b(puzzle solved|solved|success|correct!)\b/i.test(feedback))
+  else if (
+    next ||
+    (ratingChange !== null &&
+      ratingChange !== 0 &&
+      /\b(puzzle solved|puzzle failed|solved|failed|success)\b/i.test(feedback))
+  ) {
+    if (/\b(puzzle solved|solved|success|correct)\b/i.test(feedback))
       result = "solved";
     else if (
       /\b(puzzle failed|failed|incorrect|wrong|try again)\b/i.test(feedback)
@@ -139,6 +158,31 @@ interface Session {
   nextRequested?: boolean;
   pending?: PuzzleAttempt[];
 }
+function restoreSession(value: Session | null): Session | null {
+  if (
+    !value ||
+    typeof value.username !== "string" ||
+    !value.username ||
+    typeof value.key !== "string" ||
+    !value.key ||
+    !(value.puzzleId === null || typeof value.puzzleId === "string") ||
+    !["active", "result", "saved", "waiting"].includes(value.state)
+  )
+    return null;
+  const validAttempt = (a: PuzzleAttempt | undefined): a is PuzzleAttempt =>
+    !!a &&
+    a.username === value.username &&
+    typeof a.id === "string" &&
+    Number.isFinite(a.attemptedAt) &&
+    ["solved", "failed", "unknown"].includes(a.result);
+  return {
+    ...value,
+    attempt: validAttempt(value.attempt) ? value.attempt : undefined,
+    pending: Array.isArray(value.pending)
+      ? value.pending.filter(validAttempt)
+      : [],
+  };
+}
 export class PuzzleTrackerMachine {
   session: Session | null;
   private saving = new Set<string>();
@@ -149,10 +193,10 @@ export class PuzzleTrackerMachine {
     private persist: (s: Session | null) => void = () => undefined,
     restored: Session | null = null,
   ) {
-    this.session = restored;
-    for (const a of restored?.pending ?? []) this.pending.set(a.id, a);
-    if (restored?.state === "result" && restored.attempt)
-      this.pending.set(restored.attempt.id, restored.attempt);
+    this.session = restoreSession(restored);
+    for (const a of this.session?.pending ?? []) this.pending.set(a.id, a);
+    if (this.session?.state === "result" && this.session.attempt)
+      this.pending.set(this.session.attempt.id, this.session.attempt);
   }
   private remember() {
     this.persist(
@@ -183,8 +227,21 @@ export class PuzzleTrackerMachine {
       this.reset();
       return;
     }
+    if (this.session && this.session.username !== username) this.reset();
     let s = this.session;
-    if (s?.username !== username) s = null;
+    // A skipped active state must not attribute another puzzle's result to this session.
+    if (
+      s &&
+      o.result &&
+      o.puzzleId &&
+      s.puzzleId &&
+      o.puzzleId !== s.puzzleId
+    ) {
+      s.state = "waiting";
+      this.state = "waiting";
+      this.remember();
+      return;
+    }
     // A result visible on first load is never a new attempt. Observe an active puzzle first.
     if (!s && o.result) return;
     if (
@@ -272,15 +329,17 @@ export function installPuzzleTracker() {
   };
   const machine = new PuzzleTrackerMachine(
     async (a) => {
+      const gen = generation;
       const saved = await send<boolean>({ type: "ci:puzzle-save", attempt: a });
-      if (saved) {
+      if (saved && a.username === username && gen === generation) {
         lastSavedAttempt = a;
         log(`saved ${a.result}; activity invalidated`);
       }
-      snapshot = await send<PuzzleSnapshot>({
+      const next = await send<PuzzleSnapshot>({
         type: "ci:puzzles",
         username: a.username,
       });
+      if (a.username === username && gen === generation) snapshot = next;
     },
     (s) => {
       try {
@@ -327,7 +386,10 @@ export function installPuzzleTracker() {
   const update = async () => {
     const gen = ++generation,
       detected = detectUsername();
-    settings ??= await send<Settings>({ type: "ci:settings" });
+    if (!settings) {
+      const loaded = await send<Settings>({ type: "ci:settings" });
+      settings ??= loaded;
+    }
     if (gen !== generation) return;
     const nextEnabled = settings.trackPuzzleActivity !== false;
     if (enabled && !nextEnabled) {
@@ -341,8 +403,12 @@ export function installPuzzleTracker() {
       snapshot = { attempts: [], tracking: null };
     }
     if (username && enabled && initialized !== username) {
-      await send({ type: "ci:puzzle-start", username });
+      const tracking = await send<PuzzleSnapshot["tracking"]>({
+        type: "ci:puzzle-start",
+        username,
+      });
       if (gen !== generation) return;
+      snapshot = { ...snapshot, tracking };
       initialized = username;
     }
     const next = enabled && username ? ratedPuzzleRoot() : null;
@@ -365,6 +431,9 @@ export function installPuzzleTracker() {
             "hidden",
             "aria-hidden",
             "class",
+            "style",
+            "disabled",
+            "aria-disabled",
           ],
         });
         log("rated page detected");
@@ -384,7 +453,7 @@ export function installPuzzleTracker() {
     if (
       target &&
       root?.contains(target) &&
-      /^(next puzzle|next)$/i.test(
+      /^(next puzzle|next|continue)$/i.test(
         (target.getAttribute("aria-label") ?? target.textContent ?? "").trim(),
       )
     )
@@ -402,9 +471,19 @@ export function installPuzzleTracker() {
           { username?: string } | undefined
       )?.username === username
     ) {
-      void send<PuzzleSnapshot>({ type: "ci:puzzles", username })
+      const account = username;
+      const gen = generation;
+      void send<PuzzleSnapshot>({ type: "ci:puzzles", username: account })
         .then((s) => {
+          if (account !== username || gen !== generation) return;
+          if (
+            snapshot.tracking &&
+            s.tracking?.puzzleTrackingStartedAt !==
+              snapshot.tracking.puzzleTrackingStartedAt
+          )
+            machine.reset();
           snapshot = s;
+          if (enabled) scan();
         })
         .catch(() => undefined);
     }

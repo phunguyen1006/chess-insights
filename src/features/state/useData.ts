@@ -77,6 +77,7 @@ export function useData() {
       setUsername(user);
       setData(initial);
       setError("");
+      setLoading(true);
       try {
         const cached = await send<Snapshot>({
           type: "ci:snapshot",
@@ -86,7 +87,10 @@ export function useData() {
         setData(cached);
         void refresh([new Date().getFullYear()]);
       } catch (e) {
-        if (gen === generation.current) setError(String(e));
+        if (gen === generation.current) {
+          setError(String(e));
+          setLoading(false);
+        }
       }
     },
     [refresh],

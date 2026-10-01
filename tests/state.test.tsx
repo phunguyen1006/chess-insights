@@ -93,6 +93,27 @@ it("ignores stale sync replies after an account switch", async () => {
   expect(state.username).toBe("bob");
   expect(state.data.version).toBe(2);
 });
+it("clears the previous loading state when the next account cache cannot be read", async () => {
+  const original = chrome.runtime.sendMessage;
+  chrome.runtime.sendMessage = ((message: Request) =>
+    message.type === "ci:snapshot" && message.username === "bob"
+      ? Promise.resolve({
+          ok: false,
+          error: { message: "Storage unavailable", code: "UNKNOWN" },
+        })
+      : original(message)) as typeof chrome.runtime.sendMessage;
+  await act(() => root.render(<Probe />));
+  expect(state.loading).toBe(true);
+  await act(() => state.connect("bob"));
+  expect(state.username).toBe("bob");
+  expect(state.error).toContain("Storage unavailable");
+  expect(state.loading).toBe(false);
+  await act(async () =>
+    pending[0].resolve({ ok: true, data: cached("alice") }),
+  );
+  expect(state.username).toBe("bob");
+  expect(state.loading).toBe(false);
+});
 it("forces only the first year in a manual multi-year refresh", async () => {
   await act(() => root.render(<Probe />));
   await act(async () =>

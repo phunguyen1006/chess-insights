@@ -11,6 +11,7 @@ export function usePuzzleData(username: string) {
     const gen = ++generation.current;
     if (!username) {
       setData(empty);
+      setError("");
       return;
     }
     try {
@@ -29,6 +30,7 @@ export function usePuzzleData(username: string) {
   }, [username]);
   useEffect(() => {
     setData(empty);
+    setError("");
     void reload();
     const listener = (
       changes: Record<string, chrome.storage.StorageChange>,

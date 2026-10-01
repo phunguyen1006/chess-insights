@@ -32,6 +32,7 @@ export function MistakesPage({
     [engineError, setEngineError] = useState(""),
     [bankLimit, setBankLimit] = useState(30),
     [starting, setStarting] = useState(false),
+    [grading, setGrading] = useState(false),
     [reanalyze, setReanalyze] = useState(false),
     [reviewQueue, setReviewQueue] = useState<string[]>([]),
     [reviewIndex, setReviewIndex] = useState(0),
@@ -39,16 +40,20 @@ export function MistakesPage({
   const host = useRef<HTMLDivElement>(null),
     frame = useRef<HTMLIFrameElement | null>(null),
     owned = useRef(false),
-    active = useRef(false);
-  const stop = () => {
+    active = useRef(false),
+    generation = useRef(0),
+    opening = useRef(false),
+    savingReview = useRef(false);
+  const stop = async () => {
     const wasOwned = owned.current;
     owned.current = false;
     frame.current?.remove();
     frame.current = null;
     if (!fixtureRuntime && wasOwned)
-      void send({ type: "ci:engine-stop", username }).catch(() => undefined);
+      await send({ type: "ci:engine-stop", username }).catch(() => undefined);
   };
   useEffect(() => {
+    generation.current++;
     active.current = true;
     const poll = setInterval(() => {
       if (!document.hidden)
@@ -98,6 +103,7 @@ export function MistakesPage({
     document.addEventListener("visibilitychange", visibility);
     window.addEventListener("pagehide", pauseOwned);
     return () => {
+      generation.current++;
       active.current = false;
       clearInterval(poll);
       clearInterval(guard);
@@ -107,20 +113,29 @@ export function MistakesPage({
     };
   }, [request]);
   const startEngine = async () => {
+    if (opening.current) return;
+    opening.current = true;
+    const gen = generation.current;
     setStarting(true);
     try {
       if (
+        document.hidden ||
         liveContext() ||
         !location.hash.startsWith("#chess-insights/mistakes")
       )
         throw new Error("Historical Mistakes page required.");
       setEngineError("");
-      if (fixtureRuntime) stop();
+      if (fixtureRuntime) await stop();
       const { token } = await send<{ token: string }>({
         type: "ci:engine-open",
         username,
       });
-      if (!active.current || liveContext()) {
+      if (
+        gen !== generation.current ||
+        !active.current ||
+        document.hidden ||
+        liveContext()
+      ) {
         if (!fixtureRuntime) await send({ type: "ci:engine-stop", username });
         await request("pause");
         return;
@@ -134,8 +149,21 @@ export function MistakesPage({
       frame.current = iframe;
       host.current?.append(iframe);
     } catch (e) {
-      setEngineError(e instanceof Error ? e.message : String(e));
+      if (gen === generation.current && active.current)
+        setEngineError(e instanceof Error ? e.message : String(e));
     } finally {
+      opening.current = false;
+      if (gen === generation.current && active.current) setStarting(false);
+    }
+  };
+  const pauseAnalysis = async () => {
+    setStarting(true);
+    try {
+      await request("pause");
+    } catch {
+      /* inline error */
+    } finally {
+      await stop();
       setStarting(false);
     }
   };
@@ -202,7 +230,9 @@ export function MistakesPage({
     ...new Set(analyzed.map((a) => gameMap.get(a.id)!.localDate.slice(0, 7))),
   ].sort();
   const nextReview = async (grade: Grade, correct: boolean) => {
-    if (!current) return;
+    if (!current || savingReview.current) return;
+    savingReview.current = true;
+    setGrading(true);
     try {
       await request("review", { mistakeId: current.id, grade, correct });
       if (reviewQueue.length) {
@@ -213,6 +243,9 @@ export function MistakesPage({
       } else setSelected("");
     } catch {
       /* inline error */
+    } finally {
+      savingReview.current = false;
+      setGrading(false);
     }
   };
   return (
@@ -360,18 +393,14 @@ export function MistakesPage({
               {all.length}{" "}
             </span>
           )}
-          {state.queue.status === "running" ? (
-            <button
-              onClick={() => {
-                void request("pause").catch(() => undefined);
-              }}
-            >
+          {["running", "initializing"].includes(state.queue.status) ? (
+            <button disabled={starting} onClick={() => void pauseAnalysis()}>
               Pause
             </button>
           ) : (
             state.queue.ids.length > 0 && (
               <button
-                disabled={state.queue.engine?.running}
+                disabled={starting || state.queue.engine?.running}
                 onClick={() => void startEngine()}
               >
                 Resume
@@ -436,6 +465,7 @@ export function MistakesPage({
           mistake={current}
           game={gameMap.get(current.gameId)!}
           review={reviews.get(current.id)}
+          saving={grading}
           onGrade={(grade, correct) => void nextReview(grade, correct)}
         />
       )}

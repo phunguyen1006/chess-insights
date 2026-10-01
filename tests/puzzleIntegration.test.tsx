@@ -31,7 +31,7 @@ afterEach(() => {
   document.body.innerHTML = "";
   sessionStorage.clear();
 });
-it("observes only rated completions, persists, broadcasts to mounted heatmap, survives refresh/account switch and OFF, with no engine requests", async () => {
+it("observes only rated completions, persists, broadcasts to mounted heatmap, survives refresh/account switch, Clear and OFF, with no engine requests", async () => {
   vi.stubGlobal("IS_REACT_ACT_ENVIRONMENT", true);
   vi.stubGlobal(
     "ResizeObserver",
@@ -158,6 +158,26 @@ it("observes only rated completions, persists, broadcasts to mounted heatmap, su
       "2 puzzles",
     );
     await act(async () => {
+      await clearPuzzleHistory("alice");
+      await startPuzzleTracking("alice");
+      notify({
+        "chessInsights.puzzleChange": {
+          newValue: { username: "alice", token: crypto.randomUUID() },
+        },
+      });
+      await pause();
+    });
+    await waitForSummary("Puzzle tracking started");
+    expect((await puzzleSnapshot("alice")).attempts).toHaveLength(0);
+    await act(async () => {
+      status.removeAttribute("data-puzzle-result");
+      status.textContent = "White to move";
+      await pause();
+      status.setAttribute("data-puzzle-result", "solved");
+      await pause();
+    });
+    await waitForSummary("1 puzzles");
+    await act(async () => {
       enabled = false;
       notify({
         "chessInsights.settings": { newValue: { trackPuzzleActivity: false } },
@@ -170,7 +190,7 @@ it("observes only rated completions, persists, broadcasts to mounted heatmap, su
       status.setAttribute("data-puzzle-result", "solved");
       await pause();
     });
-    expect((await puzzleSnapshot("alice")).attempts).toHaveLength(2);
+    expect((await puzzleSnapshot("alice")).attempts).toHaveLength(1);
     await act(async () => {
       enabled = true;
       notify({
@@ -185,7 +205,7 @@ it("observes only rated completions, persists, broadcasts to mounted heatmap, su
       await pause();
     });
     expect((await puzzleSnapshot("bob")).attempts).toHaveLength(1);
-    expect((await puzzleSnapshot("alice")).attempts).toHaveLength(2);
+    expect((await puzzleSnapshot("alice")).attempts).toHaveLength(1);
     expect(
       calls.some(
         (m) => m.type.startsWith("ci:engine") || m.type === "ci:analysis",

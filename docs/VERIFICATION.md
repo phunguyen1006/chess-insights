@@ -1,4 +1,10 @@
-# Verification of v0.1.5
+# Verification
+
+## Current version — 0.1.6
+
+The project-wide QA pass fixed reproduced data, puzzle, engine, navigation, account-state and release-packaging failures. **209 tests / 29 files**, typecheck and ESLint pass. Local desktop and 390px checks now pass, including all Insights sections; real bundled Stockfish WASM initializes and evaluates a position. See [the full QA report](QA-0.1.6.md) for causes, tests, measurements and remaining authenticated/offscreen manual scope.
+
+The evidence below records the original 0.1.5 feature verification.
 
 ## Verified automatically/local fixture
 

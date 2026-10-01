@@ -7,6 +7,8 @@ import { InsightsApp } from "../src/features/insights/InsightsApp";
 import { ActivityPage } from "../src/features/insights/pages/ActivityPage";
 import { RatingPage } from "../src/features/insights/pages/RatingPage";
 import { ResultsPage } from "../src/features/insights/pages/ResultsPage";
+import { FilterBar } from "../src/features/insights/components/Common";
+import { defaultFilters } from "../src/analytics/results";
 import type { DataState } from "../src/features/state/useData";
 import { normalizeGame } from "../src/data/normalize/normalizeGame";
 const g = normalizeGame(
@@ -95,6 +97,62 @@ it("asks for confirmation before clearing local puzzle history and lets the user
   );
   await act(() => button("Cancel").click());
   expect(container.querySelector('[role="alert"]')).toBeNull();
+});
+it("resets the puzzle-clear confirmation after switching accounts", async () => {
+  const state: DataState = {
+    data: { games: [g], years: [2026], lastSync: 1, version: 1 },
+    username: "alice",
+    settingsLoaded: true,
+    loading: false,
+    error: "",
+    refresh: vi.fn(),
+    connect: vi.fn(),
+  };
+  await act(() => root.render(<InsightsApp state={state} detected={null} />));
+  const click = async (label: string) =>
+    act(() =>
+      [...container.querySelectorAll<HTMLButtonElement>("button")]
+        .find((b) => b.textContent === label)!
+        .click(),
+    );
+  await click("Settings");
+  await click("Clear locally tracked puzzle history");
+  expect(container.querySelector('[role="alert"]')).not.toBeNull();
+  await act(() =>
+    root.render(
+      <InsightsApp state={{ ...state, username: "bob" }} detected={null} />,
+    ),
+  );
+  expect(container.querySelector('[role="alert"]')).toBeNull();
+});
+it("clamps month-based periods at the end of shorter months", async () => {
+  vi.useFakeTimers({ toFake: ["Date"] });
+  vi.setSystemTime(new Date("2026-05-31T12:00:00"));
+  const change = vi.fn();
+  try {
+    await act(() =>
+      root.render(
+        <FilterBar
+          filters={defaultFilters}
+          onChange={change}
+          onPeriod={vi.fn()}
+        />,
+      ),
+    );
+    const period = container.querySelector<HTMLSelectElement>(
+      'select[aria-label="Period"]',
+    )!;
+    await act(() => {
+      period.value = "3m";
+      period.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+    expect(change.mock.lastCall?.[0]).toMatchObject({
+      start: "2026-02-28",
+      end: "2026-05-31",
+    });
+  } finally {
+    vi.useRealTimers();
+  }
 });
 it("respects the global time control in Activity rating movement and Rating history", async () => {
   const daily = { ...g, timeClass: "daily" as const };

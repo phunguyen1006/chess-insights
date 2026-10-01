@@ -10,7 +10,7 @@ import type { Request, Reply } from "../shared/types";
 import {
   analysisRequest,
   analysisState,
-  put,
+  updateAnalysisQueue,
 } from "../data/storage/analysisRepository";
 import {
   engineAuthorization,
@@ -34,6 +34,14 @@ async function notifyPuzzleChange(username: string) {
     "chessInsights.puzzleChange": { username, token: crypto.randomUUID() },
   });
 }
+let puzzleMutations: Promise<unknown> = Promise.resolve();
+function mutatePuzzles(
+  action: () => Promise<Reply<unknown>>,
+): Promise<Reply<unknown>> {
+  const next = puzzleMutations.then(action, action);
+  puzzleMutations = next.catch(() => undefined);
+  return next;
+}
 export async function handleMessage(
   message: Request,
   onProgress?: () => void,
@@ -46,49 +54,64 @@ export async function handleMessage(
           data: await puzzleSnapshot(cleanUsername(message.username)),
         };
       case "ci:puzzle-start": {
-        if (!(await getSettings()).trackPuzzleActivity)
-          return { ok: true, data: null };
-        const username = cleanUsername(message.username);
-        const previous = (await puzzleSnapshot(username)).tracking;
-        const data = await startPuzzleTracking(username);
-        if (!previous) await notifyPuzzleChange(username);
-        return { ok: true, data };
+        return await mutatePuzzles(async () => {
+          if (!(await getSettings()).trackPuzzleActivity)
+            return { ok: true, data: null };
+          const username = cleanUsername(message.username);
+          const previous = (await puzzleSnapshot(username)).tracking;
+          const data = await startPuzzleTracking(username);
+          if (!previous) await notifyPuzzleChange(username);
+          return { ok: true, data };
+        });
       }
       case "ci:puzzle-save": {
-        if (!(await getSettings()).trackPuzzleActivity)
-          return { ok: true, data: false };
-        const username = cleanUsername(message.attempt.username);
-        const saved = await savePuzzleAttempt({ ...message.attempt, username });
-        await notifyPuzzleChange(username);
-        return { ok: true, data: saved };
+        return await mutatePuzzles(async () => {
+          if (!(await getSettings()).trackPuzzleActivity)
+            return { ok: true, data: false };
+          const username = cleanUsername(message.attempt.username);
+          const saved = await savePuzzleAttempt({
+            ...message.attempt,
+            username,
+          });
+          await notifyPuzzleChange(username);
+          return { ok: true, data: saved };
+        });
       }
       case "ci:puzzle-setting": {
-        await setSettings({ trackPuzzleActivity: message.enabled });
-        return { ok: true, data: await getSettings() };
+        return await mutatePuzzles(async () => {
+          await setSettings({ trackPuzzleActivity: message.enabled });
+          return { ok: true, data: await getSettings() };
+        });
       }
       case "ci:puzzle-clear": {
-        const username = cleanUsername(message.username);
-        await clearPuzzleHistory(username);
-        if ((await getSettings()).trackPuzzleActivity)
-          await startPuzzleTracking(username);
-        await notifyPuzzleChange(username);
-        return { ok: true, data: true };
+        return await mutatePuzzles(async () => {
+          const username = cleanUsername(message.username);
+          await clearPuzzleHistory(username);
+          if ((await getSettings()).trackPuzzleActivity)
+            await startPuzzleTracking(username);
+          await notifyPuzzleChange(username);
+          return { ok: true, data: true };
+        });
       }
       case "ci:analysis": {
         if (
           message.action === "pause" &&
           !(await isEngineActive(cleanUsername(message.username)))
         ) {
-          const state = await analysisState(cleanUsername(message.username));
-          if (state.queue?.engine)
-            await put("analysisQueue", {
-              ...state.queue,
-              engine: { ...state.queue.engine, running: false },
-            });
+          await updateAnalysisQueue(
+            cleanUsername(message.username),
+            (current) =>
+              current.engine
+                ? { ...current, engine: { ...current.engine, running: false } }
+                : null,
+          );
         }
         if (message.action === "cancel") {
-          await stopEngine();
-          await releaseEngine(cleanUsername(message.username));
+          const username = cleanUsername(message.username);
+          const queue = (await analysisState(username)).queue;
+          if (await isEngineActive(username))
+            await stopEngine(queue?.engineRunToken);
+          await releaseEngine(username, queue?.engineRunToken);
         }
         return {
           ok: true,

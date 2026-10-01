@@ -6,33 +6,44 @@ export function normalizeGame(
   raw: RawGame,
   account: string,
 ): NormalizedGame | null {
+  const text = (value: unknown) => (typeof value === "string" ? value : null);
   const username = account.toLowerCase(),
     white = raw.white ?? {},
-    black = raw.black ?? {};
+    black = raw.black ?? {},
+    whiteUsername = text(white.username),
+    blackUsername = text(black.username);
   const playerColor =
-    white.username?.toLowerCase() === username
+    whiteUsername?.toLowerCase() === username
       ? "white"
-      : black.username?.toLowerCase() === username
+      : blackUsername?.toLowerCase() === username
         ? "black"
         : null;
   if (
     !playerColor ||
     !Number.isFinite(raw.end_time) ||
     !raw.end_time ||
+    raw.end_time <= 0 ||
+    !Number.isFinite(new Date(raw.end_time * 1000).getTime()) ||
     (raw.rules && raw.rules !== "chess")
   )
     return null;
   const player = playerColor === "white" ? white : black,
-    opponent = playerColor === "white" ? black : white;
-  const result = normalizeResult(player.result ?? "", opponent.result ?? "");
+    opponent = playerColor === "white" ? black : white,
+    playerResult = text(player.result) ?? "",
+    opponentResult = text(opponent.result) ?? "",
+    pgn = text(raw.pgn),
+    timeControl = text(raw.time_control) ?? "",
+    timeClass = text(raw.time_class),
+    rawUrl = text(raw.url);
+  const result = normalizeResult(playerResult, opponentResult);
   if (!result) return null;
   const identity =
-    raw.uuid ??
-    raw.url ??
-    `${raw.end_time}:${white.username?.toLowerCase()}:${black.username?.toLowerCase()}:${raw.time_control ?? ""}`;
+    text(raw.uuid) ||
+    rawUrl ||
+    `${raw.end_time}:${whiteUsername?.toLowerCase()}:${blackUsername?.toLowerCase()}:${timeControl}`;
   const url =
-    raw.url && /^https:\/\/(www\.)?chess\.com\/game\//.test(raw.url)
-      ? raw.url
+    rawUrl && /^https:\/\/(www\.)?chess\.com\/game\//.test(rawUrl)
+      ? rawUrl
       : "";
   const rating = (n: unknown) =>
     typeof n === "number" && Number.isFinite(n) ? n : null;
@@ -42,30 +53,25 @@ export function normalizeGame(
     url,
     endTime: raw.end_time,
     localDate: fromUnixLocal(raw.end_time),
-    timeClass: ["rapid", "blitz", "bullet", "daily"].includes(
-      raw.time_class ?? "",
-    )
-      ? (raw.time_class as TimeClass)
+    timeClass: ["rapid", "blitz", "bullet", "daily"].includes(timeClass ?? "")
+      ? (timeClass as TimeClass)
       : "unknown",
-    timeControl: raw.time_control ?? "",
+    timeControl,
     rated: raw.rated === true,
     rules: raw.rules ?? "chess",
     playerColor,
     result,
-    rawPlayerResult: player.result ?? "",
-    rawOpponentResult: opponent.result ?? "",
-    termination: normalizeGameTermination(
-      player.result ?? "",
-      opponent.result ?? "",
-    ),
+    rawPlayerResult: playerResult,
+    rawOpponentResult: opponentResult,
+    termination: normalizeGameTermination(playerResult, opponentResult),
     playerRating: rating(player.rating),
     opponentRating: rating(opponent.rating),
-    opponentUsername: opponent.username ?? null,
-    whiteUsername: white.username ?? null,
-    blackUsername: black.username ?? null,
+    opponentUsername: playerColor === "white" ? blackUsername : whiteUsername,
+    whiteUsername,
+    blackUsername,
     whiteRating: rating(white.rating),
     blackRating: rating(black.rating),
-    pgn: raw.pgn ?? null,
-    ...normalizeOpening(raw.pgn ?? "", raw.eco),
+    pgn,
+    ...normalizeOpening(pgn ?? "", text(raw.eco) ?? undefined),
   };
 }

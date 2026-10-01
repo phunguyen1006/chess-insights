@@ -12,10 +12,12 @@ const mock = vi.hoisted(() => ({
     queue: null,
   } as AnalysisState,
   request: vi.fn(),
+  send: vi.fn(),
 }));
 vi.mock("../src/features/state/useAnalysis", () => ({
   useAnalysis: () => ({ state: mock.state, error: "", request: mock.request }),
 }));
+vi.mock("../src/features/state/client", () => ({ send: mock.send }));
 import { MistakesPage } from "../src/features/insights/pages/MistakesPage";
 import { normalizeGame } from "../src/data/normalize/normalizeGame";
 let root: ReturnType<typeof createRoot>, container: HTMLDivElement;
@@ -33,11 +35,13 @@ beforeEach(() => {
   root = createRoot(container);
   history.replaceState(null, "", "/home#chess-insights/mistakes");
   mock.request.mockResolvedValue(mock.state);
+  mock.send.mockReset();
 });
 afterEach(async () => {
   await act(() => root.unmount());
   container.remove();
   vi.unstubAllGlobals();
+  vi.restoreAllMocks();
 });
 it("shows a primary recent-20 empty-state CTA without zero-filled charts", async () => {
   await act(() => root.render(<MistakesPage username="alice" games={[]} />));
@@ -126,4 +130,131 @@ it("distinguishes a successful analyzed game with no qualifying mistakes from no
     "1 games analyzed. No mistakes exceeded the current classification thresholds.",
   );
   expect(container.textContent).not.toContain("No games analyzed yet.");
+});
+it("provides pause during startup instead of a second Resume control", async () => {
+  mock.state.queue = {
+    id: "alice",
+    username: "alice",
+    ids: ["g"],
+    total: 1,
+    completed: 0,
+    status: "initializing",
+  };
+  await act(() => root.render(<MistakesPage username="alice" games={[]} />));
+  const buttons = [...container.querySelectorAll<HTMLButtonElement>("button")];
+  expect(buttons.some((button) => button.textContent === "Pause")).toBe(true);
+  expect(buttons.some((button) => button.textContent === "Resume")).toBe(false);
+});
+it("saves a review once when a grade is clicked repeatedly before storage replies", async () => {
+  const game = normalizeGame(
+    {
+      uuid: "review-once",
+      end_time: 1790000000,
+      rules: "chess",
+      white: { username: "alice", result: "win" },
+      black: { username: "bob", result: "resigned" },
+    },
+    "alice",
+  )!;
+  mock.state.analyses = [
+    {
+      id: game.id,
+      username: "alice",
+      analysisVersion: 1,
+      engineVersion: "test",
+      nodes: 20000,
+      analyzedAt: 1,
+      source: "test",
+    },
+  ];
+  mock.state.mistakes = [
+    {
+      id: "review-once:v1",
+      username: "alice",
+      gameId: game.id,
+      ply: 1,
+      moveNumber: 1,
+      playerColor: "white",
+      fenBefore: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      playedMoveUci: "e2e4",
+      playedMoveSan: "e4",
+      bestMoveUci: "d2d4",
+      bestMoveSan: "d4",
+      evalBest: { type: "cp", value: 100 },
+      evalPlayed: { type: "cp", value: -150 },
+      centipawnLoss: 250,
+      mateTransition: null,
+      severity: "blunder",
+      phase: "opening",
+      opening: null,
+      createdAt: 1,
+      bestLine: ["d4"],
+      thinkSeconds: null,
+      inPressure: null,
+    },
+  ];
+  let finish!: () => void;
+  mock.request.mockClear();
+  mock.request.mockImplementation((action: string) =>
+    action === "review"
+      ? new Promise<void>((resolve) => {
+          finish = resolve;
+        })
+      : Promise.resolve(mock.state),
+  );
+  await act(() =>
+    root.render(<MistakesPage username="alice" games={[game]} />),
+  );
+  const button = (label: string) =>
+    [...container.querySelectorAll<HTMLButtonElement>("button")].find(
+      (element) => element.textContent === label,
+    )!;
+  await act(() => button("Start Review").click());
+  await act(() => button("Reveal answer").click());
+  await act(() => {
+    button("Good").click();
+    button("Good").click();
+  });
+  expect(
+    mock.request.mock.calls.filter(([action]) => action === "review"),
+  ).toHaveLength(1);
+  expect(button("Good").disabled).toBe(true);
+  await act(async () => finish());
+  expect(container.textContent).toContain(
+    "1 reviewed · 0 correct first try · 1 need more practice",
+  );
+});
+it("stops startup if the tab becomes hidden while authorization is pending", async () => {
+  let hidden = false;
+  vi.spyOn(document, "hidden", "get").mockImplementation(() => hidden);
+  let authorized!: (value: { token: string }) => void;
+  mock.send.mockImplementation((message: { type: string }) =>
+    message.type === "ci:engine-open"
+      ? new Promise<{ token: string }>((resolve) => {
+          authorized = resolve;
+        })
+      : Promise.resolve(true),
+  );
+  mock.state.queue = {
+    id: "alice",
+    username: "alice",
+    ids: ["g"],
+    total: 1,
+    completed: 0,
+    status: "paused",
+  };
+  mock.request.mockClear();
+  mock.request.mockResolvedValue(mock.state);
+  await act(() => root.render(<MistakesPage username="alice" games={[]} />));
+  await act(() =>
+    container.querySelector<HTMLButtonElement>("button.ci-primary")!.click(),
+  );
+  hidden = true;
+  await act(async () => authorized({ token: "hidden-start" }));
+  expect(mock.send).toHaveBeenCalledWith({
+    type: "ci:engine-stop",
+    username: "alice",
+  });
+  expect(mock.request).toHaveBeenCalledWith("pause");
+  expect(container.querySelector("iframe")).toBeNull();
 });

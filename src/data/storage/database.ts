@@ -3,6 +3,7 @@ let pending: Promise<IDBDatabase> | undefined;
 export function database(): Promise<IDBDatabase> {
   return (pending ??= new Promise((resolve, reject) => {
     const req = indexedDB.open(DB_NAME, DB_VERSION);
+    let abandoned = false;
     req.onupgradeneeded = () => {
       const db = req.result;
       if (!db.objectStoreNames.contains("games")) {
@@ -39,6 +40,10 @@ export function database(): Promise<IDBDatabase> {
       }
     };
     req.onsuccess = () => {
+      if (abandoned) {
+        req.result.close();
+        return;
+      }
       req.result.onversionchange = () => {
         req.result.close();
         pending = undefined;
@@ -46,10 +51,12 @@ export function database(): Promise<IDBDatabase> {
       resolve(req.result);
     };
     req.onerror = () => {
-      pending = undefined;
+      if (!abandoned) pending = undefined;
+      abandoned = true;
       reject(req.error);
     };
     req.onblocked = () => {
+      abandoned = true;
       pending = undefined;
       reject(
         new Error(

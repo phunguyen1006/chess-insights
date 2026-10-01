@@ -8,7 +8,7 @@ export class ApiFailure extends Error {
   }
 }
 export function cleanUsername(value: string): string {
-  if (!/^[a-zA-Z0-9_-]{2,30}$/.test(value))
+  if (typeof value !== "string" || !/^[a-zA-Z0-9_-]{2,30}$/.test(value))
     throw new ApiFailure(
       "INVALID_USERNAME",
       "Enter a valid Chess.com username.",
@@ -70,20 +70,21 @@ export function requestJson<T>(path: string): Promise<T> {
   return result;
 }
 export async function getPlayerProfile(username: string) {
-  const profile = await requestJson<Record<string, unknown>>(
+  const profile = await requestJson<Record<string, unknown> | null>(
     cleanUsername(username),
   );
-  if (typeof profile.username !== "string")
+  if (!profile || typeof profile.username !== "string")
     throw new ApiFailure("INVALID_DATA", "Invalid player profile.");
   return profile;
 }
 export const getPlayerStats = (username: string) =>
   requestJson<Record<string, unknown>>(`${cleanUsername(username)}/stats`);
 export async function getArchiveIndex(username: string) {
-  const data = await requestJson<{ archives?: unknown }>(
+  const data = await requestJson<{ archives?: unknown } | null>(
     `${cleanUsername(username)}/games/archives`,
   );
   if (
+    !data ||
     !Array.isArray(data.archives) ||
     !data.archives.every((x) => typeof x === "string")
   )
@@ -95,10 +96,12 @@ export async function getMonthlyArchive(
   year: number,
   month: number,
 ) {
-  const data = await requestJson<{ games?: unknown }>(
+  const data = await requestJson<{ games?: unknown } | null>(
     `${cleanUsername(username)}/games/${year}/${String(month).padStart(2, "0")}`,
   );
-  if (!Array.isArray(data.games))
+  if (!data || !Array.isArray(data.games))
     throw new ApiFailure("INVALID_DATA", "Invalid monthly archive.");
-  return data.games.filter((x) => x && typeof x === "object") as RawGame[];
+  return data.games.filter(
+    (x) => x && typeof x === "object" && !Array.isArray(x),
+  ) as RawGame[];
 }

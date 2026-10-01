@@ -29,6 +29,9 @@ export function useAnalysis(
     [error, setError] = useState(""),
     [progress, setProgress] = useState(0);
   const generation = useRef(0);
+  const sessionKey = `${username}:${parseClocks}`;
+  const session = useRef(sessionKey);
+  session.current = sessionKey;
   const previousDiagnostics = useRef("");
   const request = useCallback(
     async (
@@ -44,18 +47,18 @@ export function useAnalysis(
           action,
           includeClocks: parseClocks,
         });
-        if (gen === generation.current) {
+        if (gen === generation.current && session.current === sessionKey) {
           setState(data);
           setError("");
         }
         return data;
       } catch (e) {
-        if (gen === generation.current)
+        if (gen === generation.current && session.current === sessionKey)
           setError(e instanceof Error ? e.message : String(e));
         throw e;
       }
     },
-    [username, parseClocks],
+    [username, parseClocks, sessionKey],
   );
   useEffect(() => {
     generation.current++;

@@ -20,6 +20,8 @@ import {
 import { timezone } from "../../shared/dates";
 import type { Snapshot, UserRecord } from "../../shared/types";
 const locks = new Map<string, Promise<void>>();
+// PubAPI/CDN responses can lag by 24 hours, including just-closed archives.
+const ARCHIVE_SETTLE_DELAY = 24 * 60 * 60_000;
 export async function snapshot(username: string): Promise<Snapshot> {
   const [games, user] = await Promise.all([
     getGames(username),
@@ -45,12 +47,20 @@ export function shouldRefreshArchive(
   force = false,
 ): boolean {
   if (!lastFetchedAt) return true;
-  const current = now.getFullYear() === year && now.getMonth() + 1 === month;
+  const current =
+    now.getUTCFullYear() === year && now.getUTCMonth() + 1 === month;
   const end = Date.UTC(year, month, 1);
-  // A month first fetched before it closed is refreshed once after rollover.
-  return current
-    ? force || now.getTime() - lastFetchedAt > CURRENT_MONTH_TTL
-    : lastFetchedAt < end;
+  if (current)
+    return force || now.getTime() - lastFetchedAt > CURRENT_MONTH_TTL;
+  const stableAt = end + ARCHIVE_SETTLE_DELAY;
+  if (lastFetchedAt >= stableAt) return false;
+  // Refresh once after the cache window, even if an earlier post-rollover
+  // response looked unchanged. During the window, avoid refetching on every tab.
+  return (
+    now.getTime() >= stableAt ||
+    force ||
+    now.getTime() - lastFetchedAt > INDEX_TTL
+  );
 }
 async function sync(
   username: string,
@@ -151,8 +161,8 @@ export async function syncYears(
   const username = cleanUsername(account);
   const previous = locks.get(username);
   if (previous) {
-    await previous;
-    return syncYears(username, years, false, onProgress);
+    await previous.catch(() => undefined);
+    return syncYears(username, years, force, onProgress);
   }
   const task = sync(username, years, force, onProgress);
   locks.set(username, task);

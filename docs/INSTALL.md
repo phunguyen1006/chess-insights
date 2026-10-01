@@ -2,7 +2,7 @@
 
 ## First installation — Edge or Chrome
 
-1. Download `chess-insights-v0.1.5.zip` from the [GitHub release](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.5). The automatically generated **Source code** archives are source, not a ready-to-load extension.
+1. Download `chess-insights-v0.1.6.zip` from the [GitHub release](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.6). The automatically generated **Source code** archives are source, not a ready-to-load extension.
 2. Extract the ZIP into a permanent folder. Keep the extracted files together. The folder you load must contain `manifest.json` directly.
 3. Open `edge://extensions` or `chrome://extensions` in your normal browser profile and enable **Developer mode**.
 4. Choose **Load unpacked** and select the extracted folder. This project is currently distributed as an unpacked extension, not a browser-store listing.
@@ -23,6 +23,6 @@ Puzzle history starts when this build detects the signed-in account with trackin
 
 ## Verification and reporting
 
-You can verify a download with `SHA256SUMS.txt`. In PowerShell use `Get-FileHash .\chess-insights-v0.1.5.zip -Algorithm SHA256`; on Linux use `sha256sum -c SHA256SUMS.txt`.
+You can verify a download with `SHA256SUMS.txt`. In PowerShell use `Get-FileHash .\chess-insights-v0.1.6.zip -Algorithm SHA256`; on Linux use `sha256sum -c SHA256SUMS.txt`.
 
-This is an early release: the local fixture and automated tests pass, while authenticated Chess.com completion panels and narrow-window sizing require final browser verification. If a puzzle is missed or placement differs, open a GitHub issue with browser/version, extension version, route, expected/actual behavior and a screenshot of the relevant interface. The tracker never supplies puzzle answers or starts an engine on active puzzles.
+This is an early release: the local fixture and automated tests pass, while authenticated Chess.com completion panels and extension offscreen delivery require final browser verification; local desktop and 390px layout checks pass. If a puzzle is missed or placement differs, open a GitHub issue with browser/version, extension version, route, expected/actual behavior and a screenshot of the relevant interface. The tracker never supplies puzzle answers or starts an engine on active puzzles.

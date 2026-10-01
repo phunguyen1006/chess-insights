@@ -208,6 +208,7 @@ export async function analyzeGame(
     const before = await engine.evaluate(move.before),
       playedUci = uciMove(move),
       sameMove = before.best === playedUci;
+    if (!sameMove) await guard();
     const after = sameMove ? null : await engine.evaluate(move.after);
     const evalBest = userEvaluation(before.score, move.color, game.playerColor),
       evalPlayed = after

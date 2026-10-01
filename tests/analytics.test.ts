@@ -122,6 +122,30 @@ describe("Normalization", () => {
     expect(normalizeGame({ ...raw, end_time: undefined }, "alice")).toBeNull();
     expect(normalizeGame({ ...raw, rules: "chess960" }, "alice")).toBeNull();
   });
+  it("rejects out-of-range game times before an invalid date reaches analytics", () => {
+    expect(normalizeGame({ ...raw, end_time: 1e50 }, "alice")).toBeNull();
+    expect(normalizeGame({ ...raw, end_time: -1 }, "alice")).toBeNull();
+  });
+  it("quarantines malformed player metadata and optional PGNs from API JSON", () => {
+    expect(
+      normalizeGame(
+        {
+          ...raw,
+          white: { username: 123, result: "win" },
+        } as unknown as RawGame,
+        "alice",
+      ),
+    ).toBeNull();
+    expect(
+      normalizeGame(
+        { ...raw, pgn: { bad: true } } as unknown as RawGame,
+        "alice",
+      )?.pgn,
+    ).toBeNull();
+    expect(normalizeGame({ ...raw, uuid: "" }, "alice")?.id).toBe(
+      `alice:${raw.url}`,
+    );
+  });
   it("parses supplied tags once and preserves PGN", () => {
     const g = game();
     expect(g.eco).toBe("C50");

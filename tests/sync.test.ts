@@ -2,7 +2,10 @@ import "fake-indexeddb/auto";
 import { afterEach, it, expect, vi } from "vitest";
 import { syncYears, snapshot } from "../src/data/sync/syncManager";
 import { getArchive } from "../src/data/storage/gameRepository";
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => {
+  vi.unstubAllGlobals();
+  vi.useRealTimers();
+});
 it("loads only selected-year archives, persists real data, and avoids redownloading on reload", async () => {
   const username = "sync-user",
     now = new Date(),
@@ -57,4 +60,64 @@ it("loads only selected-year archives, persists real data, and avoids redownload
     code: "COOLDOWN",
   });
   expect(fetcher).toHaveBeenCalledTimes(requests);
+});
+it("lets a queued sync retry independently after the active sync fails", async () => {
+  const username = "queued-retry",
+    now = new Date(),
+    year = now.getUTCFullYear(),
+    month = now.getUTCMonth() + 1,
+    archive = `https://api.chess.com/pub/player/${username}/games/${year}/${String(month).padStart(2, "0")}`;
+  let rejectActive!: (error: Error) => void;
+  const fetcher = vi
+    .fn()
+    .mockImplementationOnce(
+      () =>
+        new Promise<Response>((_resolve, reject) => {
+          rejectActive = reject;
+        }),
+    )
+    .mockResolvedValueOnce(
+      new Response(JSON.stringify({ archives: [archive] })),
+    )
+    .mockResolvedValueOnce(new Response(JSON.stringify({ games: [] })));
+  vi.stubGlobal("fetch", fetcher);
+  const first = syncYears(username, [year]);
+  const failed = expect(first).rejects.toMatchObject({ code: "NETWORK" });
+  await vi.waitFor(() => expect(fetcher).toHaveBeenCalledOnce());
+  const second = syncYears(username, [year]);
+  const retried = expect(second).resolves.toBeUndefined();
+  rejectActive(new Error("temporary offline"));
+  await failed;
+  await retried;
+  expect(fetcher).toHaveBeenCalledTimes(3);
+});
+it("preserves a queued manual refresh instead of silently using the newly cached month", async () => {
+  const username = "queued-force",
+    now = new Date(),
+    year = now.getUTCFullYear(),
+    month = now.getUTCMonth() + 1,
+    archive = `https://api.chess.com/pub/player/${username}/games/${year}/${String(month).padStart(2, "0")}`;
+  let finishActive!: (response: Response) => void;
+  const fetcher = vi
+    .fn()
+    .mockResolvedValueOnce(
+      new Response(JSON.stringify({ archives: [archive] })),
+    )
+    .mockImplementationOnce(
+      () =>
+        new Promise<Response>((resolve) => {
+          finishActive = resolve;
+        }),
+    )
+    .mockResolvedValueOnce(
+      new Response(JSON.stringify({ archives: [archive] })),
+    )
+    .mockResolvedValueOnce(new Response(JSON.stringify({ games: [] })));
+  vi.stubGlobal("fetch", fetcher);
+  const first = syncYears(username, [year]);
+  await vi.waitFor(() => expect(fetcher).toHaveBeenCalledTimes(2));
+  const second = syncYears(username, [year], true);
+  finishActive(new Response(JSON.stringify({ games: [] })));
+  await Promise.all([first, second]);
+  expect(fetcher).toHaveBeenCalledTimes(4);
 });

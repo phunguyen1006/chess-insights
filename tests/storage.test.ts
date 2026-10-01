@@ -1,5 +1,5 @@
 import "fake-indexeddb/auto";
-import { it, expect } from "vitest";
+import { it, expect, vi } from "vitest";
 import { normalizeGame } from "../src/data/normalize/normalizeGame";
 import { getGames, upsertArchive } from "../src/data/storage/gameRepository";
 import { shouldRefreshArchive } from "../src/data/sync/syncManager";
@@ -66,12 +66,42 @@ it("caches closed months but refreshes current month after five minutes", () => 
     shouldRefreshArchive(new Date(2026, 7, 2).getTime(), 2026, 6, now, true),
   ).toBe(false);
 });
-it("refreshes a previous month once after rollover", () => {
-  const now = new Date(2026, 9, 1, 12);
+it("does not freeze a closing month until the PubAPI cache window has elapsed", () => {
+  const now = new Date("2026-10-01T12:00:00Z");
   expect(
-    shouldRefreshArchive(new Date(2026, 8, 30).getTime(), 2026, 9, now),
+    shouldRefreshArchive(Date.parse("2026-09-30T23:00:00Z"), 2026, 9, now),
   ).toBe(true);
   expect(
-    shouldRefreshArchive(new Date(2026, 9, 1, 10).getTime(), 2026, 9, now),
+    shouldRefreshArchive(Date.parse("2026-10-01T10:00:00Z"), 2026, 9, now),
+  ).toBe(true);
+  expect(
+    shouldRefreshArchive(Date.parse("2026-10-01T11:59:00Z"), 2026, 9, now),
   ).toBe(false);
+  expect(
+    shouldRefreshArchive(
+      Date.parse("2026-10-01T23:59:00Z"),
+      2026,
+      9,
+      new Date("2026-10-02T00:01:00Z"),
+    ),
+  ).toBe(true);
+  expect(
+    shouldRefreshArchive(
+      Date.parse("2026-10-02T00:01:00Z"),
+      2026,
+      9,
+      new Date("2026-10-03T00:01:00Z"),
+    ),
+  ).toBe(false);
+});
+it("uses UTC archive months when the browser's local month has already changed", () => {
+  const now = new Date("2026-09-30T18:00:00Z");
+  vi.spyOn(now, "getFullYear").mockReturnValue(2026);
+  vi.spyOn(now, "getMonth").mockReturnValue(9);
+  expect(shouldRefreshArchive(now.getTime() - 60_000, 2026, 9, now)).toBe(
+    false,
+  );
+  expect(shouldRefreshArchive(now.getTime() - 360_000, 2026, 9, now)).toBe(
+    true,
+  );
 });

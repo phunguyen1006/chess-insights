@@ -134,9 +134,17 @@ export function FilterBar({
             end = localDate(now),
             startDate = new Date(now);
           if (value === "30") startDate.setDate(startDate.getDate() - 29);
-          else if (value.endsWith("m"))
+          else if (value.endsWith("m")) {
+            const day = startDate.getDate();
+            startDate.setDate(1);
             startDate.setMonth(startDate.getMonth() - parseInt(value));
-          else if (value === "year") startDate.setMonth(0, 1);
+            const lastDay = new Date(
+              startDate.getFullYear(),
+              startDate.getMonth() + 1,
+              0,
+            ).getDate();
+            startDate.setDate(Math.min(day, lastDay));
+          } else if (value === "year") startDate.setMonth(0, 1);
           const start =
             value === "all" || value === "custom" ? "" : localDate(startDate);
           onChange({

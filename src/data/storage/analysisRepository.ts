@@ -39,6 +39,31 @@ export async function put(store: string, value: unknown) {
   tx.objectStore(store).put(value);
   await transactionDone(tx);
 }
+export async function getAnalysisQueue(
+  username: string,
+): Promise<Queue | null> {
+  return (
+    ((await idbResult(
+      (await database())
+        .transaction("analysisQueue")
+        .objectStore("analysisQueue")
+        .get(username),
+    )) as Queue | undefined) ?? null
+  );
+}
+export async function updateAnalysisQueue(
+  username: string,
+  update: (current: Queue) => Queue | null,
+): Promise<Queue | null> {
+  const tx = (await database()).transaction("analysisQueue", "readwrite");
+  const done = transactionDone(tx);
+  const store = tx.objectStore("analysisQueue");
+  const current = (await idbResult(store.get(username))) as Queue | undefined;
+  const next = current ? update(current) : null;
+  if (next) store.put(next);
+  await done;
+  return next;
+}
 export async function analysisState(
   username: string,
   includeClocks = false,
@@ -152,13 +177,12 @@ export async function analysisRequest(
       reanalyze: message.force === true,
     } satisfies Queue);
   }
-  if ((action === "pause" || action === "cancel") && state.queue)
-    await put("analysisQueue", {
-      ...state.queue,
-      ids: action === "cancel" ? [] : state.queue.ids,
-      status:
-        action === "cancel" || !state.queue.ids.length ? "idle" : "paused",
-    });
+  if (action === "pause" || action === "cancel")
+    await updateAnalysisQueue(username, (current) => ({
+      ...current,
+      ids: action === "cancel" ? [] : current.ids,
+      status: action === "cancel" || !current.ids.length ? "idle" : "paused",
+    }));
   if (action === "review") {
     const mistake = state.mistakes.find((m) => m.id === message.mistakeId);
     if (
@@ -166,16 +190,21 @@ export async function analysisRequest(
       !["Again", "Hard", "Good", "Easy"].includes(message.grade ?? "")
     )
       throw new Error("Invalid review.");
-    await put(
-      "mistakeReviews",
+    const tx = (await database()).transaction("mistakeReviews", "readwrite");
+    const done = transactionDone(tx);
+    const store = tx.objectStore("mistakeReviews");
+    const previous = (await idbResult(store.get(mistake.id))) as
+      Review | undefined;
+    store.put(
       scheduleReview(
         mistake.id,
         username,
         message.grade!,
         message.correct === true,
-        state.reviews.find((r) => r.id === mistake.id),
+        previous,
       ),
     );
+    await done;
   }
   return analysisState(username, message.includeClocks === true);
 }
