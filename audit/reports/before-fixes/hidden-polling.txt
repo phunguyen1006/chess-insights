@@ -1,0 +1,51 @@
+
+ RUN  v4.1.11 $WORKSPACE
+
+stdout | tests/analysisVisibility.test.tsx > does not poll eligibility while hidden and refreshes once on returning
+[Chess Insights] UI requery {"gamesAnalyzed":0,"queued":0,"mistakes":0,"engineRunning":false}
+
+stdout | tests/analysisVisibility.test.tsx > keeps visible polling and removes its timer and visibility listener on unmount
+[Chess Insights] UI requery {"gamesAnalyzed":0,"queued":0,"mistakes":0,"engineRunning":false}
+
+ ❯ tests/analysisVisibility.test.tsx (2 tests | 2 failed) 56ms
+   × does not poll eligibility while hidden and refreshes once on returning 47ms
+   × keeps visible polling and removes its timer and visibility listener on unmount 6ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/analysisVisibility.test.tsx > does not poll eligibility while hidden and refreshes once on returning
+AssertionError: expected [ …(12) ] to have a length of +0 but got 12
+
+- Expected
++ Received
+
+- 0
++ 12
+
+ ❯ tests/analysisVisibility.test.tsx:44:27
+     42|   document.dispatchEvent(new Event("visibilitychange"));
+     43|   await act(() => vi.advanceTimersByTimeAsync(60_000));
+     44|   expect(send.mock.calls).toHaveLength(0);
+       |                           ^
+     45|   hidden.mockReturnValue(false);
+     46|   await act(() => document.dispatchEvent(new Event("visibilitychange")…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/analysisVisibility.test.tsx > keeps visible polling and removes its timer and visibility listener on unmount
+AssertionError: expected undefined to be defined
+ ❯ tests/analysisVisibility.test.tsx:59:20
+     57|   expect(vi.getTimerCount()).toBe(0);
+     58|   const listener = add.mock.calls.find(([name]) => name === "visibilit…
+     59|   expect(listener).toBeDefined();
+       |                    ^
+     60|   expect(remove.mock.calls.some(([name, callback]) => name === "visibi…
+     61| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  00:15:21
+   Duration  1.32s (transform 103ms, setup 0ms, import 184ms, tests 56ms, environment 793ms)

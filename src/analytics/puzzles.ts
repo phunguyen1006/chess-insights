@@ -1,5 +1,5 @@
 import type { NormalizedGame, PuzzleAttempt } from "../shared/types";
-import { byDay } from "./activity";
+import { byDay, heatmapIntensityScale } from "./activity";
 import { streaks } from "./streaks";
 import { localDate, parseDate } from "../shared/dates";
 export type ActivityMode = "all" | "games" | "puzzles";
@@ -47,14 +47,7 @@ export function getCombinedActivityLevel(
 }
 // Existing game metrics retain their scale; combined activity uses four independently normalized levels.
 export function activityLevel(count: number, distribution: number[]) {
-  if (count <= 0) return 0;
-  const positive = distribution.filter((n) => n > 0).sort((a, b) => a - b);
-  if (!positive.length) return 1;
-  if (new Set(positive).size === 1) return 2;
-  const thresholds = [0.25, 0.5, 0.75].map(
-    (q) => positive[Math.floor((positive.length - 1) * q)],
-  );
-  return 1 + thresholds.filter((t) => count > t).length;
+  return heatmapIntensityScale(distribution, [0.25, 0.5, 0.75])(count);
 }
 export function combinedLevels(
   games: NormalizedGame[],
@@ -63,13 +56,15 @@ export function combinedLevels(
   const g = byDay(games),
     p = puzzlesByDay(attempts),
     gv = [...g.values()].map((a) => a.length),
-    pv = [...p.values()].map((a) => a.length);
+    pv = [...p.values()].map((a) => a.length),
+    gameScale = heatmapIntensityScale(gv, [0.25, 0.5, 0.75]),
+    puzzleScale = heatmapIntensityScale(pv, [0.25, 0.5, 0.75]);
   return new Map(
     [...new Set([...g.keys(), ...p.keys()])].map((date) => [
       date,
       getCombinedActivityLevel(
-        activityLevel(g.get(date)?.length ?? 0, gv),
-        activityLevel(p.get(date)?.length ?? 0, pv),
+        gameScale(g.get(date)?.length ?? 0),
+        puzzleScale(p.get(date)?.length ?? 0),
       ),
     ]),
   );
@@ -83,22 +78,25 @@ export function puzzleActivity(attempts: PuzzleAttempt[], today?: string) {
     .sort(
       (a, b) => b.successRate! - a.successRate! || b.resolved - a.resolved,
     )[0];
-  const months = [...new Set(attempts.map((a) => a.localDate.slice(0, 7)))]
-    .sort()
-    .map((month) => {
-      const list = attempts.filter((a) => a.localDate.startsWith(month));
+  const monthGroups = new Map<string, PuzzleAttempt[]>();
+  for (const a of attempts) {
+    const month = a.localDate.slice(0, 7),
+      list = monthGroups.get(month) ?? [];
+    list.push(a);
+    monthGroups.set(month, list);
+  }
+  const months = [...monthGroups]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([month, list]) => {
       return {
         label: month,
         ...puzzleResults(list),
         activeDays: new Set(list.map((a) => a.localDate)).size,
       };
     });
-  const weekdays = Array.from(
-    { length: 7 },
-    (_, i) =>
-      attempts.filter((a) => (parseDate(a.localDate).getDay() + 6) % 7 === i)
-        .length,
-  );
+  const weekdays = Array<number>(7).fill(0);
+  for (const [day, list] of days)
+    weekdays[(parseDate(day).getDay() + 6) % 7] += list.length;
   return {
     ...puzzleResults(attempts),
     activeDays: days.size,

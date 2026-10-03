@@ -1,7 +1,7 @@
 import js from "@eslint/js";
 import ts from "typescript-eslint";
 export default ts.config(
-  { ignores: ["dist/**", "node_modules/**", ".npm-cache/**", "artifacts/**", "public/vendor/**"] },
+  { ignores: ["dist/**", "node_modules/**", ".npm-cache/**", "artifacts/**", "audit/temp/**", "public/vendor/**"] },
   js.configs.recommended,
   ...ts.configs.recommended,
   {

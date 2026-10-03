@@ -1,5 +1,5 @@
 import type { RawGame, NormalizedGame, TimeClass } from "../../shared/types";
-import { fromUnixLocal } from "../../shared/dates";
+import { fromUnixLocal, validCompletionTime } from "../../shared/dates";
 import { normalizeResult, normalizeGameTermination } from "./normalizeResult";
 import { normalizeOpening } from "./normalizeOpening";
 export function normalizeGame(
@@ -20,10 +20,7 @@ export function normalizeGame(
         : null;
   if (
     !playerColor ||
-    !Number.isFinite(raw.end_time) ||
-    !raw.end_time ||
-    raw.end_time <= 0 ||
-    !Number.isFinite(new Date(raw.end_time * 1000).getTime()) ||
+    !validCompletionTime(raw.end_time) ||
     (raw.rules && raw.rules !== "chess")
   )
     return null;

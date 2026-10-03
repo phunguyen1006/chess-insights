@@ -7,6 +7,7 @@ import { getSettings, setSettings } from "../data/storage/settingsRepository";
 import { snapshot, syncYears } from "../data/sync/syncManager";
 import { getUser, saveUser } from "../data/storage/gameRepository";
 import type { Request, Reply } from "../shared/types";
+import { validRequest } from "../shared/requestValidation";
 import {
   analysisRequest,
   analysisState,
@@ -37,6 +38,19 @@ import {
   exportPuzzleBackup,
   importPuzzleBackup,
 } from "../data/storage/puzzleBackupRepository";
+function invalidRequestMessage(message: unknown) {
+  const type =
+    message && typeof message === "object" && "type" in message
+      ? message.type
+      : "";
+  return type === "ci:theme-setting"
+    ? "Invalid appearance theme."
+    : type === "ci:durations"
+      ? "Invalid duration action."
+      : type === "ci:sync"
+        ? "Invalid sync period."
+        : "Invalid extension request.";
+}
 async function notifyPuzzleChange(username: string) {
   // An event token wakes all open content scripts without tabs permission or polling.
   await chrome.storage.local.set({
@@ -57,6 +71,8 @@ export async function handleMessage(
   onDurationProgress?: (progress: DurationProgress) => void,
 ): Promise<Reply<unknown>> {
   try {
+    if (!validRequest(message))
+      throw new ApiFailure("INVALID_REQUEST", invalidRequestMessage(message));
     switch (message.type) {
       case "ci:durations":
         if (!["cache", "analyze"].includes(message.action))
@@ -228,6 +244,16 @@ chrome.runtime.onMessage.addListener((message: Request, sender, reply) => {
   )
     return false;
   if (message.type.startsWith("ci:host-")) return false;
+  if (!validRequest(message)) {
+    reply({
+      ok: false,
+      error: {
+        code: "INVALID_REQUEST",
+        message: invalidRequestMessage(message),
+      },
+    });
+    return false;
+  }
   const notify = () => {
     if (sender.tab?.id !== undefined && "username" in message)
       void chrome.tabs

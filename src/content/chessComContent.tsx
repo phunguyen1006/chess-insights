@@ -13,6 +13,7 @@ import { send } from "../features/state/client";
 import { observePage } from "./dom/pageObserver";
 import { installPuzzleTracker } from "./puzzles/tracker";
 import { useAppearance } from "../features/state/useAppearance";
+import { WidgetBoundary } from "../features/insights/components/WidgetBoundary";
 const puzzleTracker = installPuzzleTracker();
 const roots = new Map<HTMLElement, Root>();
 function syncTheme(element: HTMLElement) {
@@ -65,7 +66,9 @@ function Surface({
     state.connect,
   ]);
   return kind === "home" ? (
-    <HomepageHeatmap state={state} detected={detected} />
+    <WidgetBoundary key={`${state.username}:${state.data.version}`}>
+      <HomepageHeatmap state={state} detected={detected} />
+    </WidgetBoundary>
   ) : (
     <InsightsApp state={state} detected={detected} />
   );

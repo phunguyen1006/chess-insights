@@ -1,6 +1,7 @@
 import { database, idbResult, transactionDone } from "./database";
 import type { Archive, NormalizedGame, UserRecord } from "../../shared/types";
-import { fromUnixLocal } from "../../shared/dates";
+import { fromUnixLocal, validCompletionTime } from "../../shared/dates";
+import { normalizeOpening } from "../normalize/normalizeOpening";
 export async function getGames(username: string): Promise<NormalizedGame[]> {
   const db = await database();
   const games = await idbResult(
@@ -11,7 +12,16 @@ export async function getGames(username: string): Promise<NormalizedGame[]> {
       .getAll(username),
   );
   return (games as NormalizedGame[])
-    .map((g) => ({ ...g, localDate: fromUnixLocal(g.endTime) }))
+    .filter((g) => validCompletionTime(g.endTime))
+    .map((g) => ({
+      ...g,
+      // Old closed archives may never be refetched. Repair URL-derived family
+      // metadata on read without modifying PGNs, saved analyses or schema.
+      ...(typeof g.pgn === "string" && g.pgn.includes('[ECOUrl "')
+        ? normalizeOpening(g.pgn)
+        : {}),
+      localDate: fromUnixLocal(g.endTime),
+    }))
     .sort((a, b) => a.endTime - b.endTime || a.id.localeCompare(b.id));
 }
 export async function getUser(

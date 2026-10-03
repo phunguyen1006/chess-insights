@@ -1,0 +1,442 @@
+{
+  "activityMonths": [
+    6,
+    4,
+    2,
+    0,
+    0,
+    0,
+    0,
+    0,
+    6,
+    6,
+    2,
+    4
+  ],
+  "averageDurationSeconds": 115.0,
+  "blitz": 8,
+  "blitzTimeSeconds": 1160.0,
+  "blunders": 3,
+  "bullet": 6,
+  "bulletTimeSeconds": 820.0,
+  "color.black": {
+    "draws": 2,
+    "games": 15,
+    "losses": 2,
+    "winRate": 73.33333333333333,
+    "wins": 11
+  },
+  "color.white": {
+    "draws": 6,
+    "games": 15,
+    "losses": 6,
+    "winRate": 20.0,
+    "wins": 3
+  },
+  "combinedActiveDays": 13,
+  "combinedActivity": 42,
+  "currentCombinedStreak": 5,
+  "currentGameStreak": 4,
+  "currentPuzzleStreak": 3,
+  "daily": 6,
+  "dailyExcluded": 6,
+  "draws": 8,
+  "durationCoverage": 0.9166666666666666,
+  "durationDistribution": [
+    5,
+    12,
+    5,
+    0,
+    0,
+    0
+  ],
+  "ending.draw": {
+    "50-move rule": 1,
+    "Agreed draw": 3,
+    "Insufficient material": 1,
+    "Stalemate": 2,
+    "Time vs insufficient material": 1
+  },
+  "ending.loss": {
+    "Abandoned": 1,
+    "Checkmate": 1,
+    "Resignation": 2,
+    "Timeout": 4
+  },
+  "ending.win": {
+    "Abandoned": 5,
+    "Checkmate": 6,
+    "Resignation": 2,
+    "Timeout": 1
+  },
+  "failed": 3,
+  "gameActiveDays": 11,
+  "games": 30,
+  "gamesPerActiveDay": 2.727272727272727,
+  "heatmap.combined": {
+    "2023-12-31": 3,
+    "2024-02-28": 3,
+    "2024-02-29": 3,
+    "2024-03-10": 2,
+    "2024-03-11": 1,
+    "2024-11-03": 2,
+    "2024-12-31": 3,
+    "2025-01-01": 6,
+    "2026-09-28": 1,
+    "2026-09-29": 3,
+    "2026-09-30": 4,
+    "2026-10-01": 4,
+    "2026-10-02": 7
+  },
+  "heatmap.combined.sum": 42,
+  "heatmap.games": {
+    "2023-12-31": 2,
+    "2024-02-28": 2,
+    "2024-02-29": 2,
+    "2024-03-10": 2,
+    "2024-11-03": 2,
+    "2024-12-31": 2,
+    "2025-01-01": 6,
+    "2026-09-29": 3,
+    "2026-09-30": 3,
+    "2026-10-01": 3,
+    "2026-10-02": 3
+  },
+  "heatmap.games.sum": 30,
+  "heatmap.puzzles": {
+    "2023-12-31": 1,
+    "2024-02-28": 1,
+    "2024-02-29": 1,
+    "2024-03-11": 1,
+    "2024-12-31": 1,
+    "2026-09-28": 1,
+    "2026-09-30": 1,
+    "2026-10-01": 1,
+    "2026-10-02": 4
+  },
+  "heatmap.puzzles.sum": 12,
+  "hours": [
+    0,
+    3,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    4,
+    4,
+    12,
+    0,
+    0,
+    0,
+    0,
+    3,
+    3,
+    0,
+    0,
+    0,
+    0
+  ],
+  "inaccuracies": 2,
+  "knownDurations": 22,
+  "longestCombinedStreak": 5,
+  "longestGameStreak": 4,
+  "longestPuzzleStreak": 3,
+  "losses": 8,
+  "mistakePhases": {
+    "endgame": 3,
+    "middlegame": 3,
+    "opening": 1
+  },
+  "mistakes": 2,
+  "openings": {
+    "black:B20:Sicilian Defense": {
+      "draws": 0,
+      "games": 3,
+      "losses": 1,
+      "winRate": 66.66666666666666,
+      "wins": 2
+    },
+    "black:C00:French Defense": {
+      "draws": 0,
+      "games": 4,
+      "losses": 0,
+      "winRate": 100.0,
+      "wins": 4
+    },
+    "black:C20:King's Pawn Game": {
+      "draws": 0,
+      "games": 5,
+      "losses": 1,
+      "winRate": 80.0,
+      "wins": 4
+    },
+    "white:B20:Sicilian Defense": {
+      "draws": 1,
+      "games": 3,
+      "losses": 1,
+      "winRate": 33.33333333333333,
+      "wins": 1
+    },
+    "white:C00:French Defense": {
+      "draws": 2,
+      "games": 4,
+      "losses": 2,
+      "winRate": 0.0,
+      "wins": 0
+    },
+    "white:C20:King's Pawn Game": {
+      "draws": 2,
+      "games": 5,
+      "losses": 2,
+      "winRate": 20.0,
+      "wins": 1
+    }
+  },
+  "opponents": {
+    "opponent0": {
+      "averageDifference": -50,
+      "averageRating": 1190,
+      "draws": 4,
+      "games": 10,
+      "losses": 0,
+      "winRate": 60.0,
+      "wins": 6
+    },
+    "opponent1": {
+      "averageDifference": -55,
+      "averageRating": 1210,
+      "draws": 1,
+      "games": 10,
+      "losses": 5,
+      "winRate": 40.0,
+      "wins": 4
+    },
+    "opponent2": {
+      "averageDifference": -63,
+      "averageRating": 1227,
+      "draws": 3,
+      "games": 10,
+      "losses": 3,
+      "winRate": 40.0,
+      "wins": 4
+    }
+  },
+  "pool.blitz": {
+    "draws": 2,
+    "games": 8,
+    "losses": 2,
+    "winRate": 50.0,
+    "wins": 4
+  },
+  "pool.bullet": {
+    "draws": 1,
+    "games": 6,
+    "losses": 2,
+    "winRate": 50.0,
+    "wins": 3
+  },
+  "pool.daily": {
+    "draws": 3,
+    "games": 6,
+    "losses": 1,
+    "winRate": 33.33333333333333,
+    "wins": 2
+  },
+  "pool.rapid": {
+    "draws": 2,
+    "games": 10,
+    "losses": 3,
+    "winRate": 50.0,
+    "wins": 5
+  },
+  "pool.unknown": {
+    "draws": 0,
+    "games": 0,
+    "losses": 0,
+    "winRate": 0,
+    "wins": 0
+  },
+  "puzzleActiveDays": 9,
+  "puzzleSuccessRate": 72.72727272727273,
+  "puzzleWeekdays": [
+    2,
+    1,
+    2,
+    2,
+    4,
+    0,
+    1
+  ],
+  "puzzles": 12,
+  "puzzlesPerActiveDay": 1.3333333333333333,
+  "rapid": 10,
+  "rapidTimeSeconds": 550.0,
+  "rating.blitz": {
+    "change": 70,
+    "current": 1180,
+    "games": 8,
+    "highest": 1180,
+    "lowest": 1110,
+    "start": 1110
+  },
+  "rating.bullet": {
+    "change": 50,
+    "current": 1240,
+    "games": 6,
+    "highest": 1240,
+    "lowest": 1190,
+    "start": 1190
+  },
+  "rating.daily": {
+    "change": 40,
+    "current": 1290,
+    "games": 5,
+    "highest": 1290,
+    "lowest": 1250,
+    "start": 1250
+  },
+  "rating.rapid": {
+    "change": 80,
+    "current": 1090,
+    "games": 9,
+    "highest": 1090,
+    "lowest": 1010,
+    "start": 1010
+  },
+  "rating.unknown": {
+    "change": null,
+    "current": null,
+    "games": 0,
+    "highest": null,
+    "lowest": null,
+    "start": null
+  },
+  "ratingMean.blitz": 1145.0,
+  "ratingMean.bullet": 1215.0,
+  "ratingMean.daily": 1270.0,
+  "ratingMean.rapid": 1050.0,
+  "ratingMean.unknown": null,
+  "ratingSeries.blitz": [
+    1110,
+    1120,
+    1130,
+    1140,
+    1150,
+    1160,
+    1170,
+    1180
+  ],
+  "ratingSeries.bullet": [
+    1190,
+    1200,
+    1210,
+    1220,
+    1230,
+    1240
+  ],
+  "ratingSeries.daily": [
+    1250,
+    1260,
+    1270,
+    1280,
+    1290
+  ],
+  "ratingSeries.rapid": [
+    1010,
+    1020,
+    1030,
+    1040,
+    1050,
+    1060,
+    1070,
+    1080,
+    1090
+  ],
+  "ratingSeries.unknown": [],
+  "rolling3.blitz": [
+    null,
+    null,
+    1120.0,
+    1130.0,
+    1140.0,
+    1150.0,
+    1160.0,
+    1170.0
+  ],
+  "rolling3.bullet": [
+    null,
+    null,
+    1200.0,
+    1210.0,
+    1220.0,
+    1230.0
+  ],
+  "rolling3.daily": [
+    null,
+    null,
+    1260.0,
+    1270.0,
+    1280.0
+  ],
+  "rolling3.rapid": [
+    null,
+    null,
+    1020.0,
+    1030.0,
+    1040.0,
+    1050.0,
+    1060.0,
+    1070.0,
+    1080.0
+  ],
+  "rolling3.unknown": [],
+  "solved": 8,
+  "timeByDay": {
+    "2023-12-31": 30.0,
+    "2024-02-28": 70.0,
+    "2024-02-29": 110.0,
+    "2024-03-10": 150.0,
+    "2024-11-03": 190.0,
+    "2024-12-31": 230.0,
+    "2025-01-01": 930.0,
+    "2026-09-29": 600.0,
+    "2026-09-30": 220.0
+  },
+  "timeByMonth": {
+    "2023-12": 30.0,
+    "2024-02": 180.0,
+    "2024-03": 150.0,
+    "2024-11": 190.0,
+    "2024-12": 230.0,
+    "2025-01": 930.0,
+    "2026-09": 820.0
+  },
+  "timeByWeek": {
+    "2023-12-25": 30.0,
+    "2024-02-26": 180.0,
+    "2024-03-04": 150.0,
+    "2024-10-28": 190.0,
+    "2024-12-30": 1160.0,
+    "2026-09-28": 820.0
+  },
+  "totalTimeSeconds": 2530.0,
+  "unknown": 0,
+  "unknownDurations": 2,
+  "unknownPuzzles": 1,
+  "weekdays": [
+    0,
+    5,
+    11,
+    5,
+    3,
+    0,
+    6
+  ],
+  "winRate": 46.666666666666664,
+  "wins": 14
+}

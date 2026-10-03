@@ -1,0 +1,131 @@
+{
+  "generatedAt": "2026-10-03T17:30:08.133184+00:00",
+  "status": "PASS",
+  "scope": "Strict credential-format and artifact checks, not exhaustive secret detection or an independent security scan.",
+  "workingTree": {
+    "textFilesChecked": 223,
+    "credentialMatches": [],
+    "envFiles": [],
+    "sensitiveTermOccurrences": {
+      "secret": 0,
+      "token": 148,
+      "password": 1,
+      "apikey": 0,
+      "api_key": 0,
+      "authorization": 56,
+      "cookie": 0,
+      "session": 314,
+      "bearer": 0
+    }
+  },
+  "gitHistory": {
+    "uniqueTextBlobsChecked": 313,
+    "credentialMatches": [],
+    "refs": "all reachable local refs"
+  },
+  "artifact": {
+    "file": "chess-insights-v0.1.11.zip",
+    "bytes": 6513615,
+    "sha256": "33942d4c181ccd59cecdf3cbea5788b8e6e6edf4fd243e27c1725dead3a5f30f",
+    "checksumMatches": true,
+    "sourceManifestMatches": true,
+    "credentialMatches": [],
+    "forbiddenPaths": [],
+    "debugMarkers": [],
+    "missingRequired": [],
+    "inventory": [
+      {
+        "path": "background.js",
+        "bytes": 30143
+      },
+      {
+        "path": "content.css",
+        "bytes": 33848
+      },
+      {
+        "path": "content.js",
+        "bytes": 433841
+      },
+      {
+        "path": "engine-host.html",
+        "bytes": 301
+      },
+      {
+        "path": "engineHost.js",
+        "bytes": 4610
+      },
+      {
+        "path": "INSTALL.md",
+        "bytes": 6752
+      },
+      {
+        "path": "LICENSE",
+        "bytes": 35821
+      },
+      {
+        "path": "manifest.json",
+        "bytes": 875
+      },
+      {
+        "path": "THIRD_PARTY_NOTICES.md",
+        "bytes": 935
+      },
+      {
+        "path": "assets/analysisRepository-BXymsrVJ.js",
+        "bytes": 50596
+      },
+      {
+        "path": "icons/icon.svg",
+        "bytes": 349
+      },
+      {
+        "path": "icons/icon128.png",
+        "bytes": 4663
+      },
+      {
+        "path": "icons/icon16.png",
+        "bytes": 666
+      },
+      {
+        "path": "icons/icon32.png",
+        "bytes": 1384
+      },
+      {
+        "path": "icons/icon48.png",
+        "bytes": 1807
+      },
+      {
+        "path": "vendor/chess-js-LICENSE.txt",
+        "bytes": 1315
+      },
+      {
+        "path": "vendor/react-dom-LICENSE.txt",
+        "bytes": 1088
+      },
+      {
+        "path": "vendor/react-LICENSE.txt",
+        "bytes": 1088
+      },
+      {
+        "path": "vendor/stockfish/Copying.txt",
+        "bytes": 35821
+      },
+      {
+        "path": "vendor/stockfish/source-18.0.8.zip",
+        "bytes": 682475
+      },
+      {
+        "path": "vendor/stockfish/SOURCE.md",
+        "bytes": 1188
+      },
+      {
+        "path": "vendor/stockfish/stockfish-18-lite-single.js",
+        "bytes": 21429
+      },
+      {
+        "path": "vendor/stockfish/stockfish-18-lite-single.wasm",
+        "bytes": 7295411
+      }
+    ]
+  }
+}

@@ -1,6 +1,6 @@
 {
   "name": "chess-insights",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "private": true,
   "description": "Local-first Chess.com activity analytics, rated puzzle tracking, and historical game review for Chrome and Edge.",
   "license": "GPL-3.0-only",
@@ -17,6 +17,7 @@
   },
   "type": "module",
   "scripts": {
+    "audit:data": "node audit/verifier/run.mjs",
     "dev": "vite --host 127.0.0.1",
     "build": "tsc --noEmit && vite build && node scripts/build-content.mjs && node scripts/verify-build.mjs",
     "build:debug": "npm run build && node scripts/build-content.mjs --debug && node scripts/verify-build.mjs",

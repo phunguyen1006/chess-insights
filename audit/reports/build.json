@@ -1,0 +1,24 @@
+{
+  "generatedAt": "2026-10-03T17:23:07.089856+00:00",
+  "candidateVersion": "0.1.11",
+  "versionName": "0.1.11 Release Candidate",
+  "baseline": "a8b7455b9f31ab289266dc76e21eee9fd7cff455",
+  "checks": {
+    "typecheck": "PASS",
+    "eslint": "PASS",
+    "fullRegression": "381 tests / 59 files PASS",
+    "independentVerifier": "1399 comparisons / 4 zones PASS",
+    "cleanProductionBuild": "PASS",
+    "packageReleaseVerification": "PASS"
+  },
+  "buildDirectoryInitiallyRemoved": true,
+  "scope": "Build and artifact verification only; production installation, restart, update and offscreen delivery remain unverified.",
+  "artifact": "releases/chess-insights-v0.1.11.zip",
+  "sha256": "33942d4c181ccd59cecdf3cbea5788b8e6e6edf4fd243e27c1725dead3a5f30f",
+  "databaseVersion": 4,
+  "analysisFormatVersion": 1,
+  "engineNodesPerPosition": 20000,
+  "newDependencies": [],
+  "newPermissions": [],
+  "stableTagCreated": false
+}

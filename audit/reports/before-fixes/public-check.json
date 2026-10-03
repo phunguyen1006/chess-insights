@@ -1,0 +1,118 @@
+{
+  "asOf": "2026-10-03T16:52:07.385Z",
+  "scope": "Latest public archive only; not full account history. Independent raw WDL, pools, rating observations, local calendars, openings, opponents and endings. No historical puzzle API, live rating or public-duration claim.",
+  "profiles": [
+    {
+      "publicUsername": "erik",
+      "archiveMonths": 232,
+      "sampledArchive": "2026-10",
+      "rawGames": 3,
+      "checks": [
+        {
+          "zone": "UTC",
+          "comparedMetricGroups": 43,
+          "status": "PASS",
+          "failed": []
+        },
+        {
+          "zone": "Asia/Bangkok",
+          "comparedMetricGroups": 43,
+          "status": "PASS",
+          "failed": []
+        },
+        {
+          "zone": "Etc/GMT+5",
+          "comparedMetricGroups": 43,
+          "status": "PASS",
+          "failed": []
+        },
+        {
+          "zone": "America/New_York",
+          "comparedMetricGroups": 43,
+          "status": "PASS",
+          "failed": []
+        }
+      ]
+    },
+    {
+      "publicUsername": "hikaru",
+      "archiveMonths": 154,
+      "sampledArchive": "2026-10",
+      "rawGames": 68,
+      "checks": [
+        {
+          "zone": "UTC",
+          "comparedMetricGroups": 43,
+          "status": "FAIL",
+          "failed": [
+            "openings"
+          ]
+        },
+        {
+          "zone": "Asia/Bangkok",
+          "comparedMetricGroups": 43,
+          "status": "FAIL",
+          "failed": [
+            "openings"
+          ]
+        },
+        {
+          "zone": "Etc/GMT+5",
+          "comparedMetricGroups": 43,
+          "status": "FAIL",
+          "failed": [
+            "openings"
+          ]
+        },
+        {
+          "zone": "America/New_York",
+          "comparedMetricGroups": 43,
+          "status": "FAIL",
+          "failed": [
+            "openings"
+          ]
+        }
+      ]
+    },
+    {
+      "publicUsername": "magnuscarlsen",
+      "archiveMonths": 67,
+      "sampledArchive": "2026-10",
+      "rawGames": 20,
+      "checks": [
+        {
+          "zone": "UTC",
+          "comparedMetricGroups": 43,
+          "status": "FAIL",
+          "failed": [
+            "openings"
+          ]
+        },
+        {
+          "zone": "Asia/Bangkok",
+          "comparedMetricGroups": 43,
+          "status": "FAIL",
+          "failed": [
+            "openings"
+          ]
+        },
+        {
+          "zone": "Etc/GMT+5",
+          "comparedMetricGroups": 43,
+          "status": "FAIL",
+          "failed": [
+            "openings"
+          ]
+        },
+        {
+          "zone": "America/New_York",
+          "comparedMetricGroups": 43,
+          "status": "FAIL",
+          "failed": [
+            "openings"
+          ]
+        }
+      ]
+    }
+  ]
+}

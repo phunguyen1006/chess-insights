@@ -118,8 +118,15 @@ export function useAnalysis(
       void request("selection").catch(() => undefined);
     };
     refresh();
-    const poll = setInterval(refresh, 5000);
-    return () => clearInterval(poll);
+    const refreshVisible = () => {
+      if (!document.hidden) refresh();
+    };
+    const poll = setInterval(refreshVisible, 5000);
+    document.addEventListener("visibilitychange", refreshVisible);
+    return () => {
+      clearInterval(poll);
+      document.removeEventListener("visibilitychange", refreshVisible);
+    };
   }, [includeSelection, request, gameKey, revision, analysisKey]);
   useEffect(() => {
     if (!parseClocks) return;

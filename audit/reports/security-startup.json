@@ -1,0 +1,16 @@
+{
+  "status": "UNVERIFIED",
+  "scanId": null,
+  "providerContextReturned": false,
+  "startResponse": {
+    "content": [
+      {
+        "type": "text",
+        "text": "The selected scan target changed while the scan was starting. Try again."
+      }
+    ],
+    "isError": true
+  },
+  "scope": "Recorded direct-start failure only. This is not a completed provider security report.",
+  "replacementScanStarted": false
+}

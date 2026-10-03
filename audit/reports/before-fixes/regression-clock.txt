@@ -1,0 +1,1417 @@
+
+ RUN  v4.1.11 $WORKSPACE
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/auditLifecycle.test.tsx > keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+ ✓ tests/auditLifecycle.test.tsx (1 test) 17837ms
+   ✓ keeps nodes, observers, listeners and timers bounded for 30 complete SPA cycles  17833ms
+ ✓ tests/devServer.test.ts (2 tests) 8940ms
+   ✓ serves the layout report and content entry through Vite's actual DEV transform  8104ms
+   ✓ observes source additions while ignoring generated release ZIPs  396ms
+stderr | tests/playTimeActivityUi.test.tsx > opens and reloads the direct Play Time activity route with its selected date
+TypeError: Cannot read properties of undefined (reading 'localeCompare')
+    at $WORKSPACE/src/analytics/ratings.ts:40:45
+    at Array.sort (<anonymous>)
+    at observedDeltas ($WORKSPACE/src/analytics/ratings.ts:39:30)
+    at $WORKSPACE/src/features/heatmap/ActivityHeatmap.tsx:72:32
+    at mountMemo ($WORKSPACE\node_modules\react-dom\cjs\react-dom-client.development.js:9161:23)
+    at Object.useMemo ($WORKSPACE\node_modules\react-dom\cjs\react-dom-client.development.js:28886:18)
+    at process.env.NODE_ENV.exports.useMemo ($WORKSPACE\node_modules\react\cjs\react.development.js:1297:34)
+    at ActivityHeatmap ($WORKSPACE/src/features/heatmap/ActivityHeatmap.tsx:72:18)
+    at Object.react_stack_bottom_frame ($WORKSPACE\node_modules\react-dom\cjs\react-dom-client.development.js:28571:20)
+    at renderWithHooks ($WORKSPACE\node_modules\react-dom\cjs\react-dom-client.development.js:8030:22) {
+  [stack]: [Getter/Setter],
+  [message]: "Cannot read properties of undefined (reading 'localeCompare')"
+}
+
+The above error occurred in the <ActivityHeatmap> component.
+
+React will try to recreate this component tree from scratch using the error boundary you provided, WidgetBoundary.
+
+
+ ❯ tests/playTimeActivityUi.test.tsx (7 tests | 7 failed) 883ms
+   × stripes days with no duration and reports coverage without fabricating zero play time 80ms
+   × encodes recorded seconds rather than game counts and leaves puzzle-only dates unfilled 10ms
+   × keeps the Play Time metric independent of all activity mode 9ms
+   × keeps the Play Time metric independent of puzzles activity mode 8ms
+   × excludes Daily games and presents empty real-time duration coverage as unavailable 612ms
+   × retains Play Time mode when selecting a calendar date 77ms
+   × opens and reloads the direct Play Time activity route with its selected date 83ms
+ ✓ tests/auditPerformance.test.tsx (1 test) 13664ms
+   ✓ measures 1k/5k/10k games and 50k activities through actual aggregation and rendering  13661ms
+stdout | tests/puzzleIntegration.test.tsx > observes only rated completions, persists, broadcasts to mounted heatmap, survives refresh/account switch, Clear and OFF, with no engine requests
+[Chess Insights puzzles] rated page detected
+
+stdout | tests/puzzleIntegration.test.tsx > observes only rated completions, persists, broadcasts to mounted heatmap, survives refresh/account switch, Clear and OFF, with no engine requests
+[Chess Insights puzzles] saved solved; activity invalidated
+
+stdout | tests/puzzleIntegration.test.tsx > observes only rated completions, persists, broadcasts to mounted heatmap, survives refresh/account switch, Clear and OFF, with no engine requests
+[Chess Insights puzzles] rated page detected
+
+stderr | tests/puzzleIntegration.test.tsx > observes only rated completions, persists, broadcasts to mounted heatmap, survives refresh/account switch, Clear and OFF, with no engine requests
+An update to HomepageHeatmap inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to HomepageHeatmap inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to HomepageHeatmap inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+stdout | tests/puzzleIntegration.test.tsx > observes only rated completions, persists, broadcasts to mounted heatmap, survives refresh/account switch, Clear and OFF, with no engine requests
+[Chess Insights puzzles] saved failed; activity invalidated
+
+stdout | tests/puzzleIntegration.test.tsx > observes only rated completions, persists, broadcasts to mounted heatmap, survives refresh/account switch, Clear and OFF, with no engine requests
+[Chess Insights puzzles] saved solved; activity invalidated
+
+stdout | tests/puzzleIntegration.test.tsx > observes only rated completions, persists, broadcasts to mounted heatmap, survives refresh/account switch, Clear and OFF, with no engine requests
+[Chess Insights puzzles] rated page detected
+
+stdout | tests/puzzleIntegration.test.tsx > observes only rated completions, persists, broadcasts to mounted heatmap, survives refresh/account switch, Clear and OFF, with no engine requests
+[Chess Insights puzzles] saved solved; activity invalidated
+
+ ✓ tests/puzzleIntegration.test.tsx (2 tests) 3849ms
+   ✓ observes only rated completions, persists, broadcasts to mounted heatmap, survives refresh/account switch, Clear and OFF, with no engine requests  3845ms
+ ✓ tests/releasePackage.test.ts (6 tests) 3467ms
+   ✓ refuses to publish a package missing runtime asset assets/shared.js  324ms
+   ✓ packages a verified build with matching SHA-256 and bundled installation/license files  2058ms
+ ✓ tests/playTimeSnapshot.test.ts (2 tests) 2061ms
+   ✓ retains public Play Time and Sessions through the production PGN-redacted snapshot  1981ms
+ ✓ tests/auditGolden.test.tsx (3 tests) 1535ms
+   ✓ renders every calendar count exactly once in games, puzzles and combined modes  1436ms
+stdout | tests/ui.test.tsx > renders honest future placeholders and disables refresh while syncing
+[Chess Insights] UI requery {"gamesAnalyzed":0,"queued":0,"mistakes":0,"engineRunning":false}
+
+ ✓ tests/ui.test.tsx (11 tests) 3053ms
+   ✓ keeps All Activity independent of game filters and hides those filters in Puzzles  1218ms
+   ✓ resets the puzzle-clear confirmation after switching accounts  305ms
+   ✓ respects the global time control in Activity rating movement and Rating history  403ms
+   ✓ renders every day with accessible labels and supports focus tooltips  345ms
+ ✓ tests/playTimePublicValidation.test.ts (6 tests) 1207ms
+   ✓ reports public fixture coverage without treating unavailable games as zero-duration samples  1036ms
+ ✓ tests/analysis.test.ts (18 tests) 1181ms
+   ✓ parses the actual public archive fixture without invented timings  1149ms
+stdout | tests/mistakeUi.test.tsx > offers every remaining game after an earlier batch completed and queues the global scope
+[Chess Insights] Analyze selection {
+  id: 'alice',
+  username: 'alice',
+  ids: [],
+  completed: 20,
+  total: 20,
+  status: 'idle'
+}
+
+stderr | tests/mistakeUi.test.tsx > offers every remaining game after an earlier batch completed and queues the global scope
+An update to MistakesPage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+stderr | tests/mistakeUi.test.tsx > retries the failed pending queue instead of replacing it with the selected scope
+An update to MistakesPage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+stderr | tests/mistakeUi.test.tsx > does not stop a resumed host from a delayed paused-state poll
+An update to MistakesPage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ tests/mistakeUi.test.tsx (19 tests) 1474ms
+stdout | tests/sidebar-lifecycle.test.ts > automatically repairs a heatmap removed alone by the native renderer
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage detected · mount anchors pending {
+  attemptedStrategies: [
+    'stable selectors',
+    'semantic card anchors',
+    'history-preceding-row',
+    'after-play-area'
+  ]
+}
+
+stdout | tests/sidebar-lifecycle.test.ts > automatically repairs a heatmap removed alone by the native renderer
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/sidebar-lifecycle.test.ts > automatically repairs a heatmap removed alone by the native renderer
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/sidebar-lifecycle.test.ts > repairs an isolated Insights removal after the initial navigation check already finished
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage detected · mount anchors pending {
+  attemptedStrategies: [
+    'stable selectors',
+    'semantic card anchors',
+    'history-preceding-row',
+    'after-play-area'
+  ]
+}
+
+stdout | tests/sidebar-lifecycle.test.ts > survives repeated Train/Watch/Community navigation and replacement of the entire menu
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage detected · mount anchors pending {
+  attemptedStrategies: [
+    'stable selectors',
+    'semantic card anchors',
+    'history-preceding-row',
+    'after-play-area'
+  ]
+}
+
+stdout | tests/sidebar-lifecycle.test.ts > repairs a missing item during continuous native updates instead of debouncing forever
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage detected · mount anchors pending {
+  attemptedStrategies: [
+    'stable selectors',
+    'semantic card anchors',
+    'history-preceding-row',
+    'after-play-area'
+  ]
+}
+
+stdout | tests/sidebar-lifecycle.test.ts > repairs a empty wrapper even though its position and ID are unchanged
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage detected · mount anchors pending {
+  attemptedStrategies: [
+    'stable selectors',
+    'semantic card anchors',
+    'history-preceding-row',
+    'after-play-area'
+  ]
+}
+
+stdout | tests/sidebar-lifecycle.test.ts > repairs a changed label even though its position and ID are unchanged
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage detected · mount anchors pending {
+  attemptedStrategies: [
+    'stable selectors',
+    'semantic card anchors',
+    'history-preceding-row',
+    'after-play-area'
+  ]
+}
+
+stdout | tests/sidebar-lifecycle.test.ts > repairs a changed destination even though its position and ID are unchanged
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage detected · mount anchors pending {
+  attemptedStrategies: [
+    'stable selectors',
+    'semantic card anchors',
+    'history-preceding-row',
+    'after-play-area'
+  ]
+}
+
+stdout | tests/sidebar-lifecycle.test.ts > waits for the delayed native Stats/Train anchors and repairs when they arrive
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage detected · mount anchors pending {
+  attemptedStrategies: [
+    'stable selectors',
+    'semantic card anchors',
+    'history-preceding-row',
+    'after-play-area'
+  ]
+}
+
+stdout | tests/sidebar-lifecycle.test.ts > ignores healthy extension rendering and preserves native navigation listeners
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage detected · mount anchors pending {
+  attemptedStrategies: [
+    'stable selectors',
+    'semantic card anchors',
+    'history-preceding-row',
+    'after-play-area'
+  ]
+}
+
+stdout | tests/sidebar-lifecycle.test.ts > updates selection on back/forward and stops observers and pending work on disposal
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage detected · mount anchors pending {
+  attemptedStrategies: [
+    'stable selectors',
+    'semantic card anchors',
+    'history-preceding-row',
+    'after-play-area'
+  ]
+}
+
+stdout | tests/sidebar-lifecycle.test.ts > mounts on a fresh /watch document with separate favorites lists and no homepage main
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage detected · mount anchors pending {
+  attemptedStrategies: [
+    'stable selectors',
+    'semantic card anchors',
+    'history-preceding-row',
+    'after-play-area'
+  ]
+}
+
+stdout | tests/sidebar-lifecycle.test.ts > mounts on a fresh /train document with separate favorites lists and no homepage main
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage detected · mount anchors pending {
+  attemptedStrategies: [
+    'stable selectors',
+    'semantic card anchors',
+    'history-preceding-row',
+    'after-play-area'
+  ]
+}
+
+stdout | tests/sidebar-lifecycle.test.ts > inserts before Train when Stats is absent and does not inherit active Train styling
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage detected · mount anchors pending {
+  attemptedStrategies: [
+    'stable selectors',
+    'semantic card anchors',
+    'history-preceding-row',
+    'after-play-area'
+  ]
+}
+
+stdout | tests/sidebar-lifecycle.test.ts > recognizes legacy semantic buttons and preserves their native listeners
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage detected · mount anchors pending {
+  attemptedStrategies: [
+    'stable selectors',
+    'semantic card anchors',
+    'history-preceding-row',
+    'after-play-area'
+  ]
+}
+
+stdout | tests/sidebar-lifecycle.test.ts > uses a visible mobile control without copying native responsive hiding classes
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage detected · mount anchors pending {
+  attemptedStrategies: [
+    'stable selectors',
+    'semantic card anchors',
+    'history-preceding-row',
+    'after-play-area'
+  ]
+}
+
+stdout | tests/sidebar-lifecycle.test.ts > continues repairing after the entire body is replaced by another application shell
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage detected · mount anchors pending {
+  attemptedStrategies: [
+    'stable selectors',
+    'semantic card anchors',
+    'history-preceding-row',
+    'after-play-area'
+  ]
+}
+
+stdout | tests/sidebar-lifecycle.test.ts > removes a cloned duplicate and repairs an item moved to the wrong menu list
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage detected · mount anchors pending {
+  attemptedStrategies: [
+    'stable selectors',
+    'semantic card anchors',
+    'history-preceding-row',
+    'after-play-area'
+  ]
+}
+
+stdout | tests/sidebar-lifecycle.test.ts > keeps the native Watch page visible if SPA navigation retains an old Insights hash
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage detected · mount anchors pending {
+  attemptedStrategies: [
+    'stable selectors',
+    'semantic card anchors',
+    'history-preceding-row',
+    'after-play-area'
+  ]
+}
+
+stdout | tests/sidebar-lifecycle.test.ts > chooses the active menu instead of an old menu inside a hidden outer application shell
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage detected · mount anchors pending {
+  attemptedStrategies: [
+    'stable selectors',
+    'semantic card anchors',
+    'history-preceding-row',
+    'after-play-area'
+  ]
+}
+
+ ✓ tests/sidebar-lifecycle.test.ts (19 tests) 1404ms
+stdout | tests/dom.test.ts > mounts only once before both native cards across the full home width
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/dom.test.ts > recognizes router buttons with nested icons and prefers the actual puzzle title over a stats class
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'play-heatmap-native-columns'
+}
+[Chess Insights] Heatmap mounted {
+  strategy: 'play-heatmap-native-columns',
+  sharedRowFound: true,
+  width: 0
+}
+
+stdout | tests/dom.test.ts > splits Play Online out of native left/right columns, then restores them (main columns: false)
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'play-heatmap-native-columns'
+}
+[Chess Insights] Heatmap mounted {
+  strategy: 'play-heatmap-native-columns',
+  sharedRowFound: true,
+  width: 0
+}
+
+stdout | tests/dom.test.ts > splits Play Online out of native left/right columns, then restores them (main columns: true)
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'split-native-home-columns'
+}
+[Chess Insights] Heatmap mounted {
+  strategy: 'split-native-home-columns',
+  sharedRowFound: true,
+  width: 0
+}
+
+stdout | tests/dom.test.ts > matches the complete row width, including the puzzle
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap geometry {
+  mounted: true,
+  heatmapTop: 0,
+  heatmapBottom: 0,
+  recommendedTop: 0,
+  recommendedBottom: 100,
+  heatmapWidth: 0,
+  recommendedWidth: 487,
+  heatmap: {
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    width: 0,
+    height: 0,
+    position: 'relative'
+  },
+  recommendedMatch: {
+    left: 20,
+    right: 507,
+    top: 0,
+    bottom: 100,
+    width: 487,
+    height: 100
+  },
+  nativeModule: { tagName: 'DIV', className: '' },
+  horizontalAligned: false,
+  aligned: false,
+  nativeRow: {
+    left: 20,
+    right: 507,
+    top: 0,
+    bottom: 100,
+    width: 487,
+    height: 100
+  },
+  playOnline: { left: 0, right: 0, top: 0, bottom: 0, width: 0, height: 0 },
+  belowPlayOnline: true,
+  verticalOverlap: true,
+  host: {
+    tagName: 'MAIN',
+    className: '',
+    display: 'flex',
+    position: '',
+    flexDirection: 'column',
+    gridTemplateColumns: ''
+  }
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/dom.test.ts > replaces the outer fixed grid flow instead of inheriting a lower native grid slot
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/dom.test.ts > makes and restores a flow column for flat sibling cards without losing native handlers
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/dom.test.ts > waits for a reliable recommendation anchor instead of mounting a full-row fallback
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage detected · mount anchors pending {
+  attemptedStrategies: [
+    'stable selectors',
+    'semantic card anchors',
+    'history-preceding-row',
+    'after-play-area'
+  ]
+}
+
+stdout | tests/dom.test.ts > inserts a complete grid row after Play Online and restores explicit native row positions
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'after-play-full-width'
+}
+[Chess Insights] Heatmap mounted { strategy: 'after-play-full-width', sharedRowFound: true, width: 0 }
+
+stdout | tests/dom.test.ts > handles Chess.com's reported mix of an auto left row and a sidebar pinned to row 2/span 2
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'after-play-full-width'
+}
+[Chess Insights] Heatmap mounted { strategy: 'after-play-full-width', sharedRowFound: true, width: 0 }
+
+stdout | tests/dom.test.ts > mounts outside the full native row when the recommendation class is only on a title
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/dom.test.ts > leaves native nested grid coordinates intact by mounting outside the entire row
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/dom.test.ts > recovers after delayed rendering and SPA main replacement
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage detected · mount anchors pending {
+  attemptedStrategies: [
+    'stable selectors',
+    'semantic card anchors',
+    'history-preceding-row',
+    'after-play-area'
+  ]
+}
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/dom.test.ts > remounts a removed heatmap while the same native homepage remains
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/dom.test.ts > rebuilds placement when the native cards are replaced within the same main
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/dom.test.ts > inserts sidebar Insights between Stats and Train without duplicating it
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+stdout | tests/dom.test.ts > hides and restores native modules and keeps puzzle controls functional
+[Chess Insights] Homepage detected
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+[Chess Insights] Homepage anchors resolved {
+  recommendedFound: true,
+  dailyPuzzleFound: true,
+  sharedRowFound: true,
+  strategy: 'full-home-row'
+}
+[Chess Insights] Heatmap mounted { strategy: 'full-home-row', sharedRowFound: true, width: 0 }
+
+ ✓ tests/dom.test.ts (24 tests) 929ms
+ ✓ tests/auditArchives.test.ts (9 tests) 582ms
+   ✓ fetches the entire monthly array of 5000 games without page-size truncation  330ms
+ ✓ tests/engineHostLifecycle.test.ts (4 tests) 642ms
+ ❯ tests/ratingRedesign.test.tsx (6 tests | 2 failed) 455ms
+   ✓ keeps rating highlights, strongest win and opponent averages tied to rated standard games 146ms
+   ✓ shows missing opponent rating coverage and never invents empty-pool highlights 79ms
+   ✓ uses one controlled color value for rating and opening selectors 96ms
+   × preserves rolling series and all four truthful profile rating cards 21ms
+   × renders semantic outcome totals and reason shares without donuts 59ms
+   ✓ keeps separate opening colors and sample thresholds while putting the repertoire first 53ms
+stderr | tests/puzzleBackupUi.test.tsx > previews a validated account backup before merging, then reports added and kept records
+An update to PuzzleBackupSettings inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+stderr | tests/puzzleBackupUi.test.tsx > downloads a validated JSON backup with a success status and reports download failures
+An update to PuzzleBackupSettings inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ tests/puzzleBackupUi.test.tsx (7 tests) 574ms
+   ✓ shows restored attempts before the live boundary while leaving empty older dates unknown  372ms
+ ✓ tests/puzzleMutations.test.ts (6 tests) 232ms
+ ✓ tests/timeUi.test.tsx (7 tests) 426ms
+ ✓ tests/opponentsUi.test.tsx (4 tests) 280ms
+ ✓ tests/unanalyzedGames.test.ts (3 tests) 324ms
+ ✓ tests/appearance.test.tsx (3 tests) 114ms
+ ✓ tests/analysisRecovery.test.ts (1 test) 334ms
+   ✓ preserves 108 older-release results, findings, reviews and queue; reads them while preview is blocked  332ms
+ ✓ tests/durationCache.test.ts (4 tests) 316ms
+ ✓ tests/puzzleTracker.test.ts (11 tests) 284ms
+ ✓ tests/sync.test.ts (3 tests) 235ms
+ ✓ tests/gameExport.test.tsx (16 tests) 167ms
+ ✓ tests/review.test.tsx (1 test) 212ms
+ ✓ tests/requestValidation.test.ts (3 tests) 174ms
+ ✓ tests/mistakePipeline.test.ts (1 test) 217ms
+ ✓ tests/auditReleaseControls.test.tsx (2 tests) 134ms
+ ✓ tests/migration.test.ts (1 test) 54ms
+ ✓ tests/chartTrend.test.tsx (3 tests) 149ms
+ ✓ tests/heatmapScale.test.tsx (2 tests) 100ms
+ ✓ tests/puzzleBackup.test.ts (20 tests) 92ms
+ ✓ tests/api.test.ts (6 tests) 57ms
+ ✓ tests/playTimeHook.test.tsx (6 tests) 68ms
+ ✓ tests/offscreen.test.ts (4 tests) 79ms
+ ✓ tests/widgetIsolation.test.tsx (1 test) 126ms
+ ✓ tests/database.test.ts (1 test) 73ms
+ ✓ tests/durationRuntime.test.ts (5 tests) 86ms
+stdout | tests/playTime.test.ts > Observed game duration > keeps header priority when clock differences are small and flags strong mismatch
+[Chess Insights] Duration source mismatch alice:duration 600 20
+
+ ✓ tests/playTime.test.ts (22 tests) 121ms
+ ✓ tests/analysisQueue.test.ts (4 tests) 80ms
+ ✓ tests/state.test.tsx (4 tests) 54ms
+stdout | tests/analysisState.test.tsx > loads 108 saved analyses before a delayed eligibility preview and coalesces polls
+[Chess Insights] UI requery {"gamesAnalyzed":0,"queued":0,"mistakes":0,"engineRunning":false}
+
+stdout | tests/analysisState.test.tsx > loads 108 saved analyses before a delayed eligibility preview and coalesces polls
+[Chess Insights] UI requery {"gamesAnalyzed":108,"queued":0,"mistakes":0,"engineRunning":false,"status":"idle"}
+
+stdout | tests/analysisState.test.tsx > does not let an earlier poll undo a completed cancellation
+[Chess Insights] UI requery {"gamesAnalyzed":0,"queued":0,"mistakes":0,"engineRunning":false}
+
+stdout | tests/analysisState.test.tsx > does not let an earlier poll undo a completed cancellation
+[Chess Insights] UI requery {"gamesAnalyzed":0,"queued":0,"mistakes":0,"engineRunning":false,"status":"idle"}
+
+stdout | tests/analysisState.test.tsx > does not apply an old account's request callback invoked after an account switch
+[Chess Insights] UI requery {"gamesAnalyzed":0,"queued":0,"mistakes":0,"engineRunning":false}
+
+stdout | tests/analysisState.test.tsx > does not apply an old account's request callback invoked after an account switch
+[Chess Insights] UI requery {"gamesAnalyzed":0,"queued":0,"mistakes":0,"engineRunning":false,"status":"idle"}
+
+ ✓ tests/analysisState.test.tsx (3 tests) 48ms
+ ✓ tests/auditNetwork.test.ts (3 tests) 58ms
+ ✓ tests/openingUrlAudit.test.ts (2 tests) 23ms
+ ✓ tests/chartEncoding.test.tsx (1 test) 47ms
+ ✓ tests/completionTime.test.ts (2 tests) 30ms
+ ✓ tests/puzzles.test.ts (12 tests) 28ms
+ ✓ tests/visuals.test.ts (7 tests) 59ms
+ ✓ tests/storage.test.ts (5 tests) 18ms
+ ✓ tests/puzzleMigration.test.ts (1 test) 22ms
+ ✓ tests/analytics.test.ts (41 tests) 31ms
+ ✓ tests/engineAuthorization.test.ts (7 tests) 28ms
+ ✓ tests/settings.test.ts (2 tests) 11ms
+stdout | tests/engineStartup.test.ts > waits for uciok then readyok before allowing evaluations
+[Chess Insights] Worker created chrome-extension://test/vendor/stockfish/stockfish-18-lite-single.js
+
+stdout | tests/engineStartup.test.ts > waits for uciok then readyok before allowing evaluations
+[Chess Insights] uciok
+
+stdout | tests/engineStartup.test.ts > waits for uciok then readyok before allowing evaluations
+[Chess Insights] readyok
+
+stdout | tests/engineStartup.test.ts > reports a silent startup after 12 seconds instead of remaining initializing forever
+[Chess Insights] Worker created local.js
+
+ ✓ tests/engineStartup.test.ts (2 tests) 23ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 9 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/playTimeActivityUi.test.tsx > stripes days with no duration and reports coverage without fabricating zero play time
+ FAIL  tests/playTimeActivityUi.test.tsx > encodes recorded seconds rather than game counts and leaves puzzle-only dates unfilled
+ FAIL  tests/playTimeActivityUi.test.tsx > keeps the Play Time metric independent of all activity mode
+ FAIL  tests/playTimeActivityUi.test.tsx > keeps the Play Time metric independent of puzzles activity mode
+ FAIL  tests/playTimeActivityUi.test.tsx > retains Play Time mode when selecting a calendar date
+TypeError: Cannot read properties of undefined (reading 'localeCompare')
+ ❯ src/analytics/ratings.ts:40:45
+     38|   const deltas = new Map<string, number>();
+     39|   for (const g of [...games].sort(
+     40|     (a, b) => a.endTime - b.endTime || a.id.localeCompare(b.id),
+       |                                             ^
+     41|   )) {
+     42|     if (!g.rated || g.playerRating === null || g.rules !== "chess") co…
+ ❯ observedDeltas src/analytics/ratings.ts:39:30
+ ❯ src/features/heatmap/ActivityHeatmap.tsx:72:32
+ ❯ mountMemo node_modules/react-dom/cjs/react-dom-client.development.js:9161:23
+ ❯ Object.useMemo node_modules/react-dom/cjs/react-dom-client.development.js:28886:18
+ ❯ process.env.NODE_ENV.exports.useMemo node_modules/react/cjs/react.development.js:1297:34
+ ❯ ActivityHeatmap src/features/heatmap/ActivityHeatmap.tsx:72:18
+ ❯ Object.react_stack_bottom_frame node_modules/react-dom/cjs/react-dom-client.development.js:28571:20
+ ❯ renderWithHooks node_modules/react-dom/cjs/react-dom-client.development.js:8030:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯
+
+ FAIL  tests/playTimeActivityUi.test.tsx > excludes Daily games and presents empty real-time duration coverage as unavailable
+TypeError: Cannot read properties of undefined (reading 'localeCompare')
+ ❯ src/analytics/ratings.ts:40:45
+     38|   const deltas = new Map<string, number>();
+     39|   for (const g of [...games].sort(
+     40|     (a, b) => a.endTime - b.endTime || a.id.localeCompare(b.id),
+       |                                             ^
+     41|   )) {
+     42|     if (!g.rated || g.playerRating === null || g.rules !== "chess") co…
+ ❯ observedDeltas src/analytics/ratings.ts:39:30
+ ❯ GameList src/features/insights/components/Common.tsx:285:18
+ ❯ Object.react_stack_bottom_frame node_modules/react-dom/cjs/react-dom-client.development.js:28571:20
+ ❯ renderWithHooks node_modules/react-dom/cjs/react-dom-client.development.js:8030:22
+ ❯ updateFunctionComponent node_modules/react-dom/cjs/react-dom-client.development.js:10569:19
+ ❯ beginWork node_modules/react-dom/cjs/react-dom-client.development.js:12205:18
+ ❯ runWithFiberInDEV node_modules/react-dom/cjs/react-dom-client.development.js:1048:13
+ ❯ performUnitOfWork node_modules/react-dom/cjs/react-dom-client.development.js:19176:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯
+
+ FAIL  tests/playTimeActivityUi.test.tsx > opens and reloads the direct Play Time activity route with its selected date
+TypeError: Cannot read properties of undefined (reading 'localeCompare')
+ ❯ src/analytics/ratings.ts:40:45
+     38|   const deltas = new Map<string, number>();
+     39|   for (const g of [...games].sort(
+     40|     (a, b) => a.endTime - b.endTime || a.id.localeCompare(b.id),
+       |                                             ^
+     41|   )) {
+     42|     if (!g.rated || g.playerRating === null || g.rules !== "chess") co…
+ ❯ observedDeltas src/analytics/ratings.ts:39:30
+ ❯ sessionAnalytics src/analytics/playTime.ts:254:14
+ ❯ src/features/insights/InsightsApp.tsx:118:30
+ ❯ Object.react_stack_bottom_frame node_modules/react-dom/cjs/react-dom-client.development.js:28656:20
+ ❯ runWithFiberInDEV node_modules/react-dom/cjs/react-dom-client.development.js:1048:13
+ ❯ commitHookEffectListMount node_modules/react-dom/cjs/react-dom-client.development.js:13748:29
+ ❯ commitHookPassiveMountEffects node_modules/react-dom/cjs/react-dom-client.development.js:13835:11
+ ❯ commitPassiveMountOnFiber node_modules/react-dom/cjs/react-dom-client.development.js:16906:13
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯
+
+ FAIL  tests/ratingRedesign.test.tsx > preserves rolling series and all four truthful profile rating cards
+TypeError: Cannot read properties of undefined (reading 'localeCompare')
+ ❯ src/analytics/ratings.ts:40:45
+     38|   const deltas = new Map<string, number>();
+     39|   for (const g of [...games].sort(
+     40|     (a, b) => a.endTime - b.endTime || a.id.localeCompare(b.id),
+       |                                             ^
+     41|   )) {
+     42|     if (!g.rated || g.playerRating === null || g.rules !== "chess") co…
+ ❯ observedDeltas src/analytics/ratings.ts:39:30
+ ❯ src/features/insights/pages/RatingPage.tsx:108:27
+ ❯ mountMemo node_modules/react-dom/cjs/react-dom-client.development.js:9161:23
+ ❯ Object.useMemo node_modules/react-dom/cjs/react-dom-client.development.js:28886:18
+ ❯ process.env.NODE_ENV.exports.useMemo node_modules/react/cjs/react.development.js:1297:34
+ ❯ RatingPage src/features/insights/pages/RatingPage.tsx:108:13
+ ❯ Object.react_stack_bottom_frame node_modules/react-dom/cjs/react-dom-client.development.js:28571:20
+ ❯ renderWithHooks node_modules/react-dom/cjs/react-dom-client.development.js:8030:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/9]⎯
+
+ FAIL  tests/ratingRedesign.test.tsx > renders semantic outcome totals and reason shares without donuts
+AssertionError: expected 'Results by time controlWins (green) ·…' to contain '4 games'
+
+Expected: "4 games"
+Received: "Results by time controlWins (green) · Draws (gray) · Losses (red)rapid3 games · 66.7% wins212 W · 0 D · 1 Lblitz0 games · 0.0% wins0 W · 0 D · 0 Lbullet0 games · 0.0% wins0 W · 0 D · 0 Ldaily0 games · 0.0% wins0 W · 0 D · 0 L"
+
+ ❯ tests/ratingRedesign.test.tsx:354:58
+    352|     container.querySelector('[aria-label="How you lose"]')?.textConten…
+    353|   ).toContain("100.0% of 1 losses");
+    354|   expect(section("Results by time control").textContent).toContain("4 …
+       |                                                          ^
+    355|   expect(
+    356|     container.querySelector(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/9]⎯
+
+
+ Test Files  2 failed | 56 passed (58)
+      Tests  9 failed | 370 passed (379)
+   Start at  00:12:00
+   Duration  118.20s (transform 4.46s, setup 0ms, import 9.99s, tests 68.75s, environment 21.48s)
+
+JSON report written to $WORKSPACE/audit/temp/regression-full.json
