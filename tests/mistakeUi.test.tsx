@@ -171,12 +171,22 @@ it("starts a review from the active severity section without changing the stored
   expect(container.textContent).toContain("Review position · Move 1");
   expect(mock.state.mistakes).toHaveLength(2);
 });
-it("shows a primary recent-20 empty-state CTA without zero-filled charts", async () => {
+it("shows an accurate empty-state CTA with just the unanalyzed scope", async () => {
   await act(() => root.render(<MistakesPage username="alice" games={[]} />));
   expect(container.textContent).toContain("No games analyzed yet.");
   expect(container.querySelector("button.ci-primary")?.textContent).toBe(
-    "Analyze Recent 20 Games",
+    "Checking games…",
   );
+  expect(
+    container.querySelector<HTMLButtonElement>("button.ci-primary")?.disabled,
+  ).toBe(true);
+  expect(
+    [
+      ...container.querySelectorAll(
+        'select[aria-label="Analyze scope"] option',
+      ),
+    ].map((o) => o.textContent),
+  ).toEqual(["Unanalyzed games"]);
   expect(container.textContent).not.toContain("Severity distribution");
 });
 it("exposes failed initialization and a retry instead of silently showing zeros", async () => {
@@ -194,6 +204,90 @@ it("exposes failed initialization and a retry instead of silently showing zeros"
   expect(container.querySelector("button.ci-primary")?.textContent).toBe(
     "Retry Analysis",
   );
+});
+it("offers every remaining game after an earlier batch completed and queues the global scope", async () => {
+  vi.spyOn(document, "hidden", "get").mockReturnValue(false);
+  mock.state.selection = {
+    total: 1000,
+    analyzed: 108,
+    pending: 890,
+    skipped: 2,
+  };
+  mock.state.queue = {
+    id: "alice",
+    username: "alice",
+    ids: [],
+    completed: 20,
+    total: 20,
+    status: "idle",
+  };
+  mock.request.mockClear();
+  mock.request.mockResolvedValue(mock.state);
+  await act(() => root.render(<MistakesPage username="alice" games={[]} />));
+  const button =
+    container.querySelector<HTMLButtonElement>("button.ci-primary")!;
+  expect(button.textContent).toBe("Analyze 890 games");
+  expect(button.disabled).toBe(false);
+  expect(container.textContent).toContain("890 games ready to analyze");
+  expect(container.textContent).not.toContain("Reanalyze cached games");
+  await act(() => button.click());
+  expect(mock.request).toHaveBeenCalledWith("enqueue", { scope: "unanalyzed" });
+});
+it("disables a new batch during full-history sync and when all eligible games are analyzed", async () => {
+  mock.state.selection = { total: 100, analyzed: 80, pending: 20, skipped: 0 };
+  await act(() =>
+    root.render(<MistakesPage username="alice" games={[]} loadingHistory />),
+  );
+  expect(
+    container.querySelector<HTMLButtonElement>("button.ci-primary")?.disabled,
+  ).toBe(true);
+  expect(container.textContent).toContain("Loading full public game history");
+  mock.state.selection = { total: 100, analyzed: 100, pending: 0, skipped: 0 };
+  await act(() => root.render(<MistakesPage username="alice" games={[]} />));
+  expect(
+    container.querySelector<HTMLButtonElement>("button.ci-primary")?.disabled,
+  ).toBe(true);
+  expect(container.querySelector("button.ci-primary")?.textContent).toBe(
+    "No unanalyzed games",
+  );
+});
+it("recovers a paused queue with a stale running flag when its engine no longer exists", async () => {
+  vi.useFakeTimers();
+  vi.spyOn(document, "hidden", "get").mockReturnValue(false);
+  mock.state.queue = {
+    id: "alice",
+    username: "alice",
+    ids: ["g"],
+    total: 2,
+    completed: 1,
+    status: "paused",
+    engine: {
+      workerCreated: true,
+      wasmLoaded: true,
+      uciOk: true,
+      readyOk: true,
+      running: true,
+      error: null,
+    },
+  };
+  mock.request.mockClear();
+  mock.request.mockResolvedValue(mock.state);
+  mock.send.mockResolvedValue({ active: false });
+  try {
+    await act(() => root.render(<MistakesPage username="alice" games={[]} />));
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1000);
+    });
+    expect(mock.send).toHaveBeenCalledWith({
+      type: "ci:engine-status",
+      username: "alice",
+    });
+    expect(mock.request).toHaveBeenCalledWith("pause");
+    expect(mock.state.queue.ids).toEqual(["g"]);
+    expect(mock.state.queue.completed).toBe(1);
+  } finally {
+    vi.useRealTimers();
+  }
 });
 it("retries the failed pending queue instead of replacing it with the selected scope", async () => {
   vi.spyOn(document, "hidden", "get").mockReturnValue(false);

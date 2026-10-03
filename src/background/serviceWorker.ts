@@ -158,6 +158,11 @@ export async function handleMessage(
       }
       case "ci:settings":
         return { ok: true, data: await getSettings() };
+      case "ci:theme-setting":
+        if (!["light", "dark"].includes(message.theme))
+          throw new ApiFailure("INVALID_REQUEST", "Invalid appearance theme.");
+        await setSettings({ theme: message.theme });
+        return { ok: true, data: await getSettings() };
       case "ci:connect": {
         const profile = await getPlayerProfile(cleanUsername(message.username));
         const username = cleanUsername(profile.username as string);

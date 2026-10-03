@@ -51,6 +51,29 @@ beforeEach(() => {
   vi.clearAllMocks();
 });
 afterAll(() => vi.unstubAllGlobals());
+it("saves appearance without changing account or puzzle preferences and rejects invalid themes", async () => {
+  state.settings = {
+    username: "alice",
+    trackPuzzleActivity: false,
+    theme: "light",
+  };
+  expect(
+    await handleMessage({ type: "ci:theme-setting", theme: "dark" }),
+  ).toEqual({
+    ok: true,
+    data: { username: "alice", trackPuzzleActivity: false, theme: "dark" },
+  });
+  expect(
+    await handleMessage({
+      type: "ci:theme-setting",
+      theme: "system",
+    } as unknown as import("../src/shared/types").Request),
+  ).toMatchObject({
+    ok: false,
+    error: { code: "INVALID_REQUEST", message: "Invalid appearance theme." },
+  });
+  expect(state.settings.theme).toBe("dark");
+});
 const attempt: PuzzleAttempt = {
   id: "alice:42:session",
   username: "alice",

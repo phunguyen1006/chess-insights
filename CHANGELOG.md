@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.9](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.9) — 2026-10-03
+
+### Changed
+
+- Replace all six analysis scopes with **Unanalyzed games**, covering all cached history independently of page filters. Opening Mistakes loads available archive years.
+- Show exact pending, already-analyzed and unsupported counts from stored PGNs and current engine/source versions. A completed old batch no longer hides remaining games.
+- Remove the reanalysis checkbox from this workflow, queue every eligible pending game without a 10/20-game cap, and retain pause/resume and completed results.
+- Add Settings → Appearance → **Light mode / Dark mode**, stored on the device and synchronized across open Insights/homepage surfaces. Theme colors cover charts, tooltips, tables, filters, review controls and heatmaps.
+- Yield PGN eligibility checks in small batches and reuse source-aware results during progress polling.
+
+No new permissions, dependencies or database schema changes. Existing data and reviews are retained. See [verification and manual integration checks](docs/QA-0.1.9.md).
+
 ## [0.1.8](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.8) — 2026-10-03
 
 Observed Play Time, Sessions and an Insights redesign following Chess.com's native Stats composition. No new permissions or dependencies.

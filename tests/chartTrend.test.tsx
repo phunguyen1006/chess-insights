@@ -34,11 +34,11 @@ it("fills cyan areas only across contiguous known observations and keeps isolate
   );
   expect(
     container.querySelector("linearGradient stop")?.getAttribute("stop-color"),
-  ).toBe("#42b8e8");
+  ).toBe("var(--ci-chart-color, #42b8e8)");
   const fills = container.querySelectorAll('path[fill^="url"]');
   expect(fills.length).toBe(2);
   const line = container.querySelector('path[fill="none"]')!;
-  expect(line.getAttribute("stroke")).toBe("#42b8e8");
+  expect(line.getAttribute("stroke")).toBe("var(--ci-chart-color, #42b8e8)");
   expect(line.getAttribute("d")?.match(/M/g)?.length).toBe(3);
   const points = [
     ...container.querySelectorAll<SVGCircleElement>("circle[aria-label]"),
@@ -49,11 +49,11 @@ it("fills cyan areas only across contiguous known observations and keeps isolate
       .slice(0, 4)
       .every((point) => point.getAttribute("fill") === "transparent"),
   ).toBe(true);
-  expect(points[4].getAttribute("fill")).toBe("#42b8e8");
+  expect(points[4].getAttribute("fill")).toBe("var(--ci-chart-color, #42b8e8)");
   await act(() =>
     points[0].dispatchEvent(new FocusEvent("focusin", { bubbles: true })),
   );
-  expect(points[0].getAttribute("fill")).toBe("#42b8e8");
+  expect(points[0].getAttribute("fill")).toBe("var(--ci-chart-color, #42b8e8)");
   expect(container.querySelector('[role="status"]')?.textContent).toContain(
     "Day 0: 1",
   );

@@ -23,6 +23,8 @@ import { GameExport } from "./components/GameExport";
 import { usePlayTime, playTimeDebug } from "../state/usePlayTime";
 import { playTimeSummary, sessionAnalytics } from "../../analytics/playTime";
 import { SegmentedControl } from "./components/NativeStats";
+import { AppearanceSettings } from "./components/AppearanceSettings";
+import { useAppearance } from "../state/useAppearance";
 export function InsightsApp({
   state,
   detected,
@@ -30,6 +32,7 @@ export function InsightsApp({
   state: DataState;
   detected: string | null;
 }) {
+  const appearance = useAppearance();
   const [route, setRoute] = useState(readRoute()),
     [editing, setEditing] = useState(false),
     [filters, setFilters] = useState({
@@ -95,6 +98,11 @@ export function InsightsApp({
     [data.games, filters],
   );
   const section = route?.section ?? "overview";
+  const historyYears = data.years.join(",");
+  useEffect(() => {
+    if (section === "mistakes" && username && historyYears)
+      void refresh(historyYears.split(",").map(Number));
+  }, [section, username, historyYears, refresh]);
   const duration = usePlayTime(
     username,
     data.version,
@@ -133,7 +141,10 @@ export function InsightsApp({
     if (years.length) void refresh(years);
   };
   return (
-    <div className="ci-scope ci-insights">
+    <div
+      className={`ci-scope ci-insights${appearance.theme === "dark" ? " ci-theme-dark" : ""}`}
+      data-ci-theme={appearance.theme}
+    >
       <header className="ci-row ci-insights-header">
         <div>
           <p className="ci-eyebrow">YOUR CHESS, OVER TIME</p>
@@ -215,6 +226,7 @@ export function InsightsApp({
         <>
           {settingsOpen && (
             <div id="ci-settings" key={username}>
+              <AppearanceSettings appearance={appearance} />
               <PuzzleBackupSettings
                 username={username}
                 onImported={puzzles.reload}
@@ -422,6 +434,7 @@ export function InsightsApp({
                   key={username}
                   username={username}
                   games={games}
+                  loadingHistory={loading}
                 />
               )}
             </>

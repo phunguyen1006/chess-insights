@@ -7,7 +7,7 @@ A standalone Chrome / Edge extension for Chess.com activity analytics, locally t
 
 ## Install
 
-Download **[chess-insights-v0.1.8.zip](https://github.com/phunguyen1006/chess-insights/releases/download/v0.1.8/chess-insights-v0.1.8.zip)** from the [release page](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.8). Extract it to a permanent folder. In `edge://extensions` or `chrome://extensions`, enable **Developer mode**, choose **Load unpacked**, and select the folder containing `manifest.json`.
+Download **[chess-insights-v0.1.9.zip](https://github.com/phunguyen1006/chess-insights/releases/download/v0.1.9/chess-insights-v0.1.9.zip)** from the [release page](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.9). Extract it to a permanent folder. In `edge://extensions` or `chrome://extensions`, enable **Developer mode**, choose **Load unpacked**, and select the folder containing `manifest.json`.
 
 Use your normal browser profile and Chess.com session. The extension does not require a separate login. If account detection fails, enter your public Chess.com username in the Connect form.
 
@@ -15,7 +15,7 @@ Use your normal browser profile and Chess.com session. The extension does not re
 
 GitHub's automatic **Source code** archives contain development source and must be built first. They are not the installable extension. See [installation, upgrades and checksums](docs/INSTALL.md).
 
-**v0.1.8 is a preview release.** It adds recorded Play Time, Sessions and a native Stats interface. Authenticated Chess.com DOM integration and extension offscreen-engine delivery still need manual browser verification. See [implementation and visual QA](docs/QA-0.1.8.md).
+**v0.1.9 is a preview release.** It adds all-history Unanalyzed games analysis and saved Light/Dark appearance settings. Authenticated Chess.com DOM integration and extension offscreen-engine delivery still need manual browser verification. See [implementation and visual QA](docs/QA-0.1.9.md).
 
 ![Native Stats Rating page — local fixture with public game data](docs/images/native-stats/rating-preview.png)
 
@@ -31,8 +31,8 @@ GitHub's automatic **Source code** archives contain development source and must 
 - **Game CSV export:** download the current filtered cached games, with 16 columns and spreadsheet-safe UTF-8 output.
 - **Rating / Openings / Opponents / Results:** separate rating pools, rolling averages, opening and head-to-head comparisons, sample-size thresholds, termination and timeout statistics.
 - **Time Management:** clock coverage, thinking-time distributions, phase comparisons and historical per-game details from PGN clocks.
-- **Mistake Bank:** bundled local Stockfish, explicit historical-game analysis, pause/resume queue, classified mistakes, answer reveal and scheduled reviews.
-- **Settings:** account selection, puzzle tracking toggle, puzzle JSON backup/restore and separately confirmed puzzle-only history clearing.
+- **Mistake Bank:** bundled local Stockfish, a single Unanalyzed games scope covering all cached history, accurate eligible-game counts, an unlimited pause/resume queue, classified mistakes, answer reveal and scheduled reviews. Opening Mistakes loads available archive years; only compatible completed PGNs enter the queue. Keep Mistakes visible and your device awake while analyzing; leaving or hiding the tab pauses analysis.
+- **Settings:** saved Light/Dark mode for Insights and the homepage heatmap, account selection, puzzle tracking toggle, puzzle JSON backup/restore and separately confirmed puzzle-only history clearing.
 
 ![Homepage activity on the local integration fixture](docs/images/home-activity.png)
 

@@ -1,15 +1,9 @@
 import { database, idbResult, transactionDone } from "./database";
-import { getGames } from "./gameRepository";
-import {
-  parsePgnClockData,
-  TIME_PARSER_VERSION,
-  completedPgn,
-} from "../../analysis/clocks";
+import { getGames, getUser } from "./gameRepository";
+import { parsePgnClockData, TIME_PARSER_VERSION } from "../../analysis/clocks";
 import {
   scheduleReview,
   MISTAKE_ANALYSIS_VERSION,
-  ENGINE_VERSION,
-  ENGINE_NODES,
 } from "../../analysis/evaluation";
 import type {
   AnalysisState,
@@ -21,7 +15,24 @@ import type {
 } from "../../analysis/types";
 import type { Request } from "../../shared/types";
 import { pgnFingerprint } from "../../analysis/fingerprint";
-import { storedGameReplay } from "../../analysis/engine";
+import { selectAnalysisGames } from "../../analysis/selection";
+import type { NormalizedGame } from "../../shared/types";
+
+const selectionGames = new Map<
+  string,
+  { version: number; games: NormalizedGame[] }
+>();
+async function cachedSelectionGames(username: string) {
+  const user = await getUser(username);
+  const cached = selectionGames.get(username);
+  if (user && cached?.version === user.version) return cached.games;
+  const games = await getGames(username);
+  if (user) {
+    if (selectionGames.size >= 4) selectionGames.clear();
+    selectionGames.set(username, { version: user.version, games });
+  }
+  return games;
+}
 export async function records<T>(
   store: string,
   username: string,
@@ -132,34 +143,21 @@ export async function analysisRequest(
       throw new Error(
         "Analysis is already running. Pause before changing the queue.",
       );
-    const games = await getGames(username),
+    const games =
+        message.scope === "unanalyzed"
+          ? await cachedSelectionGames(username)
+          : await getGames(username),
       ids = new Set(message.ids ?? []);
-    const cached = new Map(state.analyses.map((a) => [a.id, a]));
-    const selected = games.filter((g) => ids.has(g.id));
-    const eligible = selected.filter((g) => {
-      try {
-        storedGameReplay(g);
-        return true;
-      } catch (error) {
-        if (import.meta.env.DEV)
-          console.debug("[Chess Insights] PGN skipped", String(error));
-        return false;
-      }
-    });
-    const pending = eligible
-      .filter(
-        (g) =>
-          ids.has(g.id) &&
-          !!g.pgn &&
-          completedPgn(g.pgn) &&
-          (message.force === true ||
-            cached.get(g.id)?.analysisVersion !== MISTAKE_ANALYSIS_VERSION ||
-            cached.get(g.id)?.source !== pgnFingerprint(g.pgn) ||
-            cached.get(g.id)?.engineVersion !== ENGINE_VERSION ||
-            cached.get(g.id)?.nodes !== ENGINE_NODES),
-      )
-      .sort((a, b) => b.endTime - a.endTime)
-      .map((g) => g.id);
+    const selected =
+      message.scope === "unanalyzed"
+        ? games
+        : games.filter((g) => ids.has(g.id));
+    const selection = await selectAnalysisGames(
+      selected,
+      state.analyses,
+      message.scope !== "unanalyzed" && message.force === true,
+    );
+    const pending = selection.pending;
     await put("analysisQueue", {
       id: username,
       username,
@@ -167,14 +165,20 @@ export async function analysisRequest(
       completed: 0,
       total: pending.length,
       selected: selected.length,
-      withPgn: selected.filter((g) => !!g.pgn).length,
-      parseable: eligible.length,
-      skipped: selected.length - eligible.length,
-      error: !eligible.length
-        ? "No eligible completed games with a valid player PGN in this selection."
-        : undefined,
-      status: !eligible.length ? "error" : pending.length ? "paused" : "idle",
-      reanalyze: message.force === true,
+      withPgn: selection.withPgn,
+      parseable: selection.parseable,
+      skipped: selection.skipped,
+      error:
+        selected.length > 0 && !selection.parseable
+          ? "No eligible completed games with a valid player PGN in this selection."
+          : undefined,
+      status:
+        selected.length > 0 && !selection.parseable
+          ? "error"
+          : pending.length
+            ? "paused"
+            : "idle",
+      reanalyze: message.scope !== "unanalyzed" && message.force === true,
     } satisfies Queue);
   }
   if (action === "pause" || action === "cancel")
@@ -206,7 +210,20 @@ export async function analysisRequest(
     );
     await done;
   }
-  return analysisState(username, message.includeClocks === true);
+  const next = await analysisState(username, message.includeClocks === true);
+  if (message.includeSelection) {
+    const selected = await selectAnalysisGames(
+      await cachedSelectionGames(username),
+      next.analyses,
+    );
+    next.selection = {
+      total: selected.total,
+      analyzed: selected.analyzed,
+      pending: selected.pending.length,
+      skipped: selected.skipped,
+    };
+  }
+  return next;
 }
 export async function saveEngineGame(
   analysis: EngineAnalysis,

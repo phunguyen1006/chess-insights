@@ -1,12 +1,15 @@
 {
   "manifest_version": 3,
   "name": "Chess Insights",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Advanced activity and performance analytics for Chess.com.",
   "permissions": ["storage", "offscreen"],
   "minimum_chrome_version": "116",
   "host_permissions": ["https://www.chess.com/*", "https://api.chess.com/*"],
-  "background": { "service_worker": "background.js", "type": "module" },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
   },

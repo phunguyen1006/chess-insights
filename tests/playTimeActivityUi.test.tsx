@@ -107,6 +107,12 @@ const puzzle: PuzzleAttempt = {
 };
 let container: HTMLDivElement, root: Root;
 beforeEach(() => {
+  vi.stubGlobal("chrome", {
+    storage: { onChanged: { addListener: vi.fn(), removeListener: vi.fn() } },
+    runtime: {
+      sendMessage: async () => ({ ok: true, data: { theme: "light" } }),
+    },
+  });
   (
     globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
   ).IS_REACT_ACT_ENVIRONMENT = true;

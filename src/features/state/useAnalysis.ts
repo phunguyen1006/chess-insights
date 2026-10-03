@@ -24,6 +24,7 @@ export function useAnalysis(
   games: NormalizedGame[],
   parseClocks = false,
   revision = 0,
+  includeSelection = false,
 ) {
   const [state, setState] = useState(empty),
     [error, setError] = useState(""),
@@ -46,6 +47,7 @@ export function useAnalysis(
           username,
           action,
           includeClocks: parseClocks,
+          includeSelection,
         });
         if (gen === generation.current && session.current === sessionKey) {
           setState(data);
@@ -58,7 +60,7 @@ export function useAnalysis(
         throw e;
       }
     },
-    [username, parseClocks, sessionKey],
+    [username, parseClocks, sessionKey, includeSelection],
   );
   useEffect(() => {
     generation.current++;

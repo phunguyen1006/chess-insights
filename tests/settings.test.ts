@@ -28,10 +28,12 @@ it("preserves concurrent account and puzzle preference updates", async () => {
   await Promise.all([
     setSettings({ username: "alice" }),
     setSettings({ trackPuzzleActivity: false }),
+    setSettings({ theme: "dark" }),
   ]);
   expect(await getSettings()).toEqual({
     username: "alice",
     trackPuzzleActivity: false,
+    theme: "dark",
   });
 });
 
@@ -58,5 +60,8 @@ it("allows later setting changes to succeed after a storage write fails", async 
   const second = setSettings({ trackPuzzleActivity: false });
   await failed;
   await second;
-  expect(await getSettings()).toEqual({ trackPuzzleActivity: false });
+  expect(await getSettings()).toEqual({
+    trackPuzzleActivity: false,
+    theme: "light",
+  });
 });

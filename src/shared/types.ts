@@ -71,6 +71,7 @@ export interface UserRecord {
 export interface Settings {
   username?: string;
   trackPuzzleActivity?: boolean;
+  theme?: "light" | "dark";
 }
 export interface PuzzleAttempt {
   id: string;
@@ -133,6 +134,8 @@ export type Request =
       correct?: boolean;
       mistakeId?: string;
       includeClocks?: boolean;
+      includeSelection?: boolean;
+      scope?: "unanalyzed";
       force?: boolean;
     }
   | { type: "ci:engine-open"; username: string }
@@ -145,5 +148,6 @@ export type Request =
   | { type: "ci:engine-release"; token: string }
   | { type: "ci:connect"; username: string }
   | { type: "ci:settings" }
+  | { type: "ci:theme-setting"; theme: "light" | "dark" }
   | { type: "ci:snapshot"; username: string }
   | { type: "ci:sync"; username: string; years: number[]; force?: boolean };
