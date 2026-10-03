@@ -13,6 +13,13 @@ production build and ZIP checks pass. No stable tag/release was created.
 Fixture success does not establish production installation or a completed
 independent security scan.
 
+GitHub [CI run 37140873980](https://github.com/phunguyen1006/chess-insights/actions/runs/37140873980)
+also passed on implementation commit `e3309b5`: clean dependency install,
+typecheck, lint, all tests, four-zone verifier, production build, packaging and
+artifact upload. [Recorded CI metadata](audit/reports/ci.json) preserves that
+immutable result. [PR #4](https://github.com/phunguyen1006/chess-insights/pull/4)
+remains draft until mandatory release gates close.
+
 | Gate | Result | Evidence / limit |
 | --- | --- | --- |
 | Data integrity / golden / invariants | PASS, tested scope | [CSV](audit/reports/comparison.csv), [summary](audit/reports/verifier-summary.json) |
