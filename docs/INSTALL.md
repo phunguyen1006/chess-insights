@@ -2,7 +2,7 @@
 
 ## First installation — Edge or Chrome
 
-1. Download `chess-insights-v0.1.9.zip` from the [GitHub release](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.9). The automatically generated **Source code** archives are source, not a ready-to-load extension.
+1. Download `chess-insights-v0.1.10.zip` from the [GitHub release](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.10). The automatically generated **Source code** archives are source, not a ready-to-load extension.
 2. Extract the ZIP into a permanent folder. Keep the extracted files together. The folder you load must contain `manifest.json` directly.
 3. Open `edge://extensions` or `chrome://extensions` in your normal browser profile and enable **Developer mode**.
 4. Choose **Load unpacked** and select the extracted folder. This project is currently distributed as an unpacked extension, not a browser-store listing.
@@ -12,7 +12,7 @@
 
 1. Note the directory used by the existing unpacked extension. If it already supports puzzle backups (v0.1.7 or later), download one from Settings before replacing files.
 2. Close Chess.com tabs, extract the new ZIP to a temporary directory and replace the extension files in the **same existing extension directory**. Do not uninstall the extension, change its directory, clear extension storage or load a second copy.
-3. Click **Reload** on the existing extension card, then reopen/reload Chess.com. v0.1.9 keeps database version 4 and adds appearance settings without resetting storage. Upgrades from versions before v0.1.8 also add the duration cache. The upgrade preserves games, archives, puzzles, analysis, reviews and settings; no storage reset is needed.
+3. Click **Reload** on the existing extension card, then reopen/reload Chess.com. v0.1.10 keeps database version 4 and the same engine/analysis format without resetting storage. Upgrades from versions before v0.1.8 also add the duration cache. The upgrade preserves games, archives, puzzles, analysis, reviews and settings; no storage reset is needed.
 4. The homepage calendar should appear below Play Online and above Recommended Match + Daily Puzzle. Insights should be present in the sidebar on native navigation pages.
 
 ## Puzzle tracking check
@@ -51,6 +51,6 @@ The CSV contains 16 columns: completion time (UTC), local date, username, oppone
 
 ## Verification and reporting
 
-You can verify a download with `SHA256SUMS.txt`. In PowerShell use `Get-FileHash .\chess-insights-v0.1.9.zip -Algorithm SHA256`; on Linux use `sha256sum -c SHA256SUMS.txt`.
+You can verify a download with `SHA256SUMS.txt`. In PowerShell use `Get-FileHash .\chess-insights-v0.1.10.zip -Algorithm SHA256`; on Linux use `sha256sum -c SHA256SUMS.txt`.
 
-This is an early release. Automated tests cover export/import validation, storage rollback and review behavior; authenticated Chess.com completion panels and extension offscreen delivery require final browser verification. See the [version-specific QA report](https://github.com/phunguyen1006/chess-insights/blob/main/docs/QA-0.1.9.md) for completed local/browser checks. If a puzzle is missed or placement differs, open a GitHub issue with browser/version, extension version, route, expected/actual behavior and a screenshot of the relevant interface. The tracker never supplies puzzle answers or starts an engine on active puzzles.
+This is an early release. Automated tests cover export/import validation, storage rollback and review behavior; authenticated Chess.com completion panels and extension offscreen delivery require final browser verification. See the [version-specific QA report](https://github.com/phunguyen1006/chess-insights/blob/main/docs/QA-0.1.10.md) for completed local/browser checks. If a puzzle is missed or placement differs, open a GitHub issue with browser/version, extension version, route, expected/actual behavior and a screenshot of the relevant interface. The tracker never supplies puzzle answers or starts an engine on active puzzles.

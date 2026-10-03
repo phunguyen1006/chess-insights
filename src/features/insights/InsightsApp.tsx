@@ -435,6 +435,7 @@ export function InsightsApp({
                   username={username}
                   games={games}
                   loadingHistory={loading}
+                  version={data.version}
                 />
               )}
             </>

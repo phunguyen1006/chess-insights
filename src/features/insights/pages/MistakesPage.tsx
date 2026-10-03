@@ -17,16 +17,18 @@ export function MistakesPage({
   username,
   games,
   loadingHistory = false,
+  version = 0,
 }: {
   username: string;
   games: NormalizedGame[];
   loadingHistory?: boolean;
+  version?: number;
 }) {
-  const { state, error, request } = useAnalysis(
+  const { state, loaded, error, selectionError, request } = useAnalysis(
       username,
       games,
       false,
-      0,
+      version,
       true,
     ),
     [view, setView] = useState("overview"),
@@ -46,10 +48,12 @@ export function MistakesPage({
     owned = useRef(false),
     active = useRef(false),
     generation = useRef(0),
+    engineEpoch = useRef(0),
     reviewSession = useRef(0),
     opening = useRef(false),
     savingReview = useRef(false);
   const stop = async () => {
+    engineEpoch.current++;
     const wasOwned = owned.current;
     owned.current = false;
     frame.current?.remove();
@@ -61,9 +65,18 @@ export function MistakesPage({
     generation.current++;
     active.current = true;
     const poll = setInterval(() => {
+      const epoch = engineEpoch.current;
       if (!document.hidden)
         void request("state")
           .then((s) => {
+            // A poll started before Resume must not stop or orphan-check the
+            // new host using its old paused/idle snapshot.
+            if (
+              !active.current ||
+              opening.current ||
+              epoch !== engineEpoch.current
+            )
+              return;
             if (
               !owned.current &&
               (["running", "initializing"].includes(s.queue?.status ?? "") ||
@@ -74,7 +87,12 @@ export function MistakesPage({
                 username,
               })
                 .then(({ active: running }) => {
-                  if (!running && active.current)
+                  if (
+                    !running &&
+                    active.current &&
+                    !opening.current &&
+                    epoch === engineEpoch.current
+                  )
                     void request("pause").catch(() => undefined);
                 })
                 .catch(() => undefined);
@@ -119,6 +137,7 @@ export function MistakesPage({
   }, [request]);
   const startEngine = async () => {
     if (opening.current) return;
+    engineEpoch.current++;
     opening.current = true;
     const gen = generation.current;
     setStarting(true);
@@ -173,7 +192,7 @@ export function MistakesPage({
     }
   };
   const enqueue = async () => {
-    if (starting || opening.current || loadingHistory) return;
+    if (starting || opening.current) return;
     setStarting(true);
     try {
       const s = await request("enqueue", {
@@ -257,7 +276,15 @@ export function MistakesPage({
       <p className="ci-muted">
         Review important mistakes from your completed games.
       </p>
-      {!analyzed.length && (
+      {!loaded && <p role="status">Loading saved analysis…</p>}
+      {loaded && state.analyses.length > analyzed.length && (
+        <p role="status">
+          {number(state.analyses.length)} analyzed games saved for this account
+          · {number(analyzed.length)} in the selected filters. Choose All time
+          and All Stats to see the full bank.
+        </p>
+      )}
+      {loaded && !state.analyses.length && (
         <div className="ci-panel ci-analysis-empty">
           <h3>No games analyzed yet.</h3>
           <p>
@@ -310,9 +337,7 @@ export function MistakesPage({
               state.queue?.ids.length &&
               ["paused", "error"].includes(state.queue.status)
             ) &&
-              (loadingHistory ||
-                !state.selection ||
-                state.selection.pending === 0)) ||
+              (!state.selection || state.selection.pending === 0)) ||
             (state.queue?.status === "paused" && state.queue.engine?.running) ||
             ["running", "initializing"].includes(state.queue?.status ?? "")
           }
@@ -325,13 +350,11 @@ export function MistakesPage({
                 ? "Resume Analysis"
                 : engineError || state.queue?.status === "error"
                   ? "Retry Analysis"
-                  : loadingHistory
-                    ? "Loading history…"
-                    : !state.selection
-                      ? "Checking games…"
-                      : state.selection.pending === 0
-                        ? "No unanalyzed games"
-                        : `Analyze ${number(state.selection.pending)} games`}
+                  : !state.selection
+                    ? "Checking games…"
+                    : state.selection.pending === 0
+                      ? "No unanalyzed games"
+                      : `Analyze ${number(state.selection.pending)} games`}
         </button>
         <button
           disabled={!filtered.some((m) => due(m.id))}
@@ -356,12 +379,12 @@ export function MistakesPage({
         </button>
       </div>
       <p className="ci-note" role="status">
-        {loadingHistory
-          ? "Loading full public game history…"
-          : state.selection
-            ? `${number(state.selection.pending)} games ready to analyze · ${number(state.selection.analyzed)} already analyzed · ${number(state.selection.skipped)} unavailable or unsupported`
-            : "Checking completed game PGNs…"}{" "}
+        {state.selection
+          ? `${number(state.selection.pending)} games ready to analyze · ${number(state.selection.analyzed)} already analyzed · ${number(state.selection.skipped)} unavailable or unsupported`
+          : "Checking completed game PGNs…"}{" "}
         All cached history; page filters do not limit analysis.
+        {loadingHistory &&
+          " More archives are loading in the background; cached games can be analyzed now."}
       </p>
       <div ref={host} />
       {state.queue && (
@@ -424,6 +447,12 @@ export function MistakesPage({
         </p>
       )}
       {error && <p className="ci-status">{error}</p>}
+      {selectionError && (
+        <p role="status">
+          Could not check unanalyzed games. {selectionError} Retrying
+          automatically.
+        </p>
+      )}
       <div className="ci-advanced-layout">
         <SecondarySidebar
           label="Mistake statistics"

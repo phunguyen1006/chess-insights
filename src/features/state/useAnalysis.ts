@@ -27,44 +27,81 @@ export function useAnalysis(
   includeSelection = false,
 ) {
   const [state, setState] = useState(empty),
+    [loaded, setLoaded] = useState(false),
     [error, setError] = useState(""),
+    [selectionError, setSelectionError] = useState(""),
     [progress, setProgress] = useState(0);
   const generation = useRef(0);
+  const inFlight = useRef(new Map<string, Promise<AnalysisState>>());
+  const sequence = useRef(0),
+    applied = useRef(0);
   const sessionKey = `${username}:${parseClocks}`;
   const session = useRef(sessionKey);
   session.current = sessionKey;
   const previousDiagnostics = useRef("");
   const request = useCallback(
-    async (
+    (
       action: Extract<Request, { type: "ci:analysis" }>["action"],
       extra: Partial<Extract<Request, { type: "ci:analysis" }>> = {},
     ) => {
       const gen = generation.current;
-      try {
-        const data = await send<AnalysisState>({
-          ...extra,
-          type: "ci:analysis",
-          username,
-          action,
-          includeClocks: parseClocks,
-          includeSelection,
-        });
-        if (gen === generation.current && session.current === sessionKey) {
-          setState(data);
-          setError("");
-        }
-        return data;
-      } catch (e) {
-        if (gen === generation.current && session.current === sessionKey)
-          setError(e instanceof Error ? e.message : String(e));
-        throw e;
+      const flightKey = `${gen}:${sessionKey}:${action}`;
+      if (["state", "selection"].includes(action)) {
+        const pending = inFlight.current.get(flightKey);
+        if (pending) return pending;
       }
+      const serial = ++sequence.current;
+      const run = (async () => {
+        try {
+          const data = await send<AnalysisState>({
+            ...extra,
+            type: "ci:analysis",
+            username,
+            action,
+            includeClocks: parseClocks,
+            includeSelection: false,
+          });
+          if (gen === generation.current && session.current === sessionKey) {
+            if (action === "selection") {
+              setState((previous) => ({
+                ...previous,
+                selection: data.selection,
+              }));
+              setSelectionError("");
+            } else if (serial >= applied.current) {
+              applied.current = serial;
+              setState((previous) => ({
+                ...data,
+                selection: data.selection ?? previous.selection,
+              }));
+              setLoaded(true);
+              setError("");
+            }
+          }
+          return data;
+        } catch (e) {
+          if (gen === generation.current && session.current === sessionKey) {
+            const message = e instanceof Error ? e.message : String(e);
+            if (action === "selection") setSelectionError(message);
+            else setError(message);
+          }
+          throw e;
+        } finally {
+          inFlight.current.delete(flightKey);
+        }
+      })();
+      if (["state", "selection"].includes(action))
+        inFlight.current.set(flightKey, run);
+      return run;
     },
-    [username, parseClocks, sessionKey, includeSelection],
+    [username, parseClocks, sessionKey],
   );
   useEffect(() => {
     generation.current++;
     setState(empty);
+    setLoaded(false);
+    setError("");
+    setSelectionError("");
     setProgress(0);
     void request("state").catch(() => undefined);
     return () => {
@@ -72,6 +109,18 @@ export function useAnalysis(
     };
   }, [request]);
   const gameKey = games.map((g) => g.id).join("|");
+  const analysisKey = state.analyses
+    .map((a) => `${a.id}:${a.analyzedAt}:${a.source}`)
+    .join("|");
+  useEffect(() => {
+    if (!includeSelection) return;
+    const refresh = () => {
+      void request("selection").catch(() => undefined);
+    };
+    refresh();
+    const poll = setInterval(refresh, 5000);
+    return () => clearInterval(poll);
+  }, [includeSelection, request, gameKey, revision, analysisKey]);
   useEffect(() => {
     if (!parseClocks) return;
     let active = true;
@@ -114,5 +163,5 @@ export function useAnalysis(
       previousDiagnostics.current = details;
     }
   }, [state, username, games.length]);
-  return { state, error, progress, request };
+  return { state, loaded, error, selectionError, progress, request };
 }

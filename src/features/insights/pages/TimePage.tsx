@@ -894,9 +894,6 @@ export function TimePage({
   onTimeout,
   version = 0,
   durationRecords = [],
-  durationLoading = false,
-  durationProcessed = 0,
-  durationTotal = 0,
 }: {
   username: string;
   games: NormalizedGame[];
@@ -949,24 +946,6 @@ export function TimePage({
       />
       <div className="ci-advanced-content">
         <h2>{timeViews.find(([id]) => id === view)?.[1]}</h2>
-        <p className="ci-muted">
-          {view === "clock-usage" || view === "time-pressure"
-            ? "How you use your clock in completed games."
-            : "Observed playing time from completed real-time games."}
-        </p>
-        {durationLoading && (
-          <p className="ci-status" role="status">
-            Calculating play time… {number(durationProcessed)} /{" "}
-            {number(durationTotal)} games. Cached observations are shown as they
-            become available.
-          </p>
-        )}
-        {view !== "clock-usage" && analysis.progress < games.length && (
-          <p className="ci-status" role="status">
-            Analyzing clock data {number(analysis.progress)} /{" "}
-            {number(games.length)} games.
-          </p>
-        )}
         {(view === "overview" || view === "play-time") && (
           <>
             <div className="ci-primary-stat">

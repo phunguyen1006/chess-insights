@@ -286,8 +286,10 @@ it("renders cached duration totals while a lazy calculation is in progress and r
     durationProcessed: 3,
     durationTotal: 10,
   });
-  expect(container.textContent).toContain(
-    "Calculating play time… 3 / 10 games",
+  expect(container.textContent).not.toContain("Calculating play time");
+  expect(container.textContent).not.toContain("Analyzing clock data");
+  expect(container.textContent).not.toContain(
+    "Observed playing time from completed real-time games",
   );
   expect(container.querySelector(".ci-primary-stat strong")?.textContent).toBe(
     "15m 30s",

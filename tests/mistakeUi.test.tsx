@@ -13,9 +13,16 @@ const mock = vi.hoisted(() => ({
   } as AnalysisState,
   request: vi.fn(),
   send: vi.fn(),
+  loaded: true,
 }));
 vi.mock("../src/features/state/useAnalysis", () => ({
-  useAnalysis: () => ({ state: mock.state, error: "", request: mock.request }),
+  useAnalysis: () => ({
+    state: mock.state,
+    loaded: mock.loaded,
+    error: "",
+    selectionError: "",
+    request: mock.request,
+  }),
 }));
 vi.mock("../src/features/state/client", () => ({ send: mock.send }));
 import { MistakesPage } from "../src/features/insights/pages/MistakesPage";
@@ -24,6 +31,7 @@ import type { Mistake } from "../src/analysis/types";
 let root: ReturnType<typeof createRoot>, container: HTMLDivElement;
 beforeEach(() => {
   vi.stubGlobal("IS_REACT_ACT_ENVIRONMENT", true);
+  mock.loaded = true;
   mock.state = {
     clocks: [],
     analyses: [],
@@ -233,15 +241,18 @@ it("offers every remaining game after an earlier batch completed and queues the 
   await act(() => button.click());
   expect(mock.request).toHaveBeenCalledWith("enqueue", { scope: "unanalyzed" });
 });
-it("disables a new batch during full-history sync and when all eligible games are analyzed", async () => {
+it("allows cached games during full-history sync and disables an exhausted queue", async () => {
   mock.state.selection = { total: 100, analyzed: 80, pending: 20, skipped: 0 };
   await act(() =>
     root.render(<MistakesPage username="alice" games={[]} loadingHistory />),
   );
   expect(
     container.querySelector<HTMLButtonElement>("button.ci-primary")?.disabled,
-  ).toBe(true);
-  expect(container.textContent).toContain("Loading full public game history");
+  ).toBe(false);
+  expect(container.querySelector("button.ci-primary")?.textContent).toBe(
+    "Analyze 20 games",
+  );
+  expect(container.textContent).toContain("cached games can be analyzed now");
   mock.state.selection = { total: 100, analyzed: 100, pending: 0, skipped: 0 };
   await act(() => root.render(<MistakesPage username="alice" games={[]} />));
   expect(
@@ -250,6 +261,29 @@ it("disables a new batch during full-history sync and when all eligible games ar
   expect(container.querySelector("button.ci-primary")?.textContent).toBe(
     "No unanalyzed games",
   );
+});
+it("never claims saved analyses are missing while storage is still loading", async () => {
+  mock.loaded = false;
+  await act(() =>
+    root.render(<MistakesPage username="alice" games={[]} loadingHistory />),
+  );
+  expect(container.textContent).toContain("Loading saved analysis…");
+  expect(container.textContent).not.toContain("No games analyzed yet.");
+});
+it("reports older saved analyses even when current filters hide all their games", async () => {
+  reviewFixture(1);
+  mock.state.analyses = Array.from({ length: 108 }, (_, i) => ({
+    ...mock.state.analyses[0],
+    id: `old-${i}`,
+  }));
+  await act(() =>
+    root.render(<MistakesPage username="alice" games={[]} loadingHistory />),
+  );
+  expect(container.textContent).toContain(
+    "108 analyzed games saved for this account",
+  );
+  expect(container.textContent).toContain("0 in the selected filters");
+  expect(container.textContent).not.toContain("No games analyzed yet.");
 });
 it("recovers a paused queue with a stale running flag when its engine no longer exists", async () => {
   vi.useFakeTimers();
@@ -315,6 +349,54 @@ it("retries the failed pending queue instead of replacing it with the selected s
   expect(mock.request).not.toHaveBeenCalledWith("enqueue", expect.anything());
   expect(mock.state.queue).toMatchObject({ completed: 30, total: 100 });
   expect(mock.state.queue.ids).toHaveLength(70);
+});
+it("does not stop a resumed host from a delayed paused-state poll", async () => {
+  vi.useFakeTimers();
+  vi.spyOn(document, "hidden", "get").mockReturnValue(false);
+  mock.state.queue = {
+    id: "alice",
+    username: "alice",
+    ids: ["g"],
+    completed: 108,
+    total: 125,
+    status: "paused",
+    engine: {
+      workerCreated: true,
+      wasmLoaded: true,
+      uciOk: true,
+      readyOk: true,
+      running: false,
+      error: null,
+    },
+  };
+  let finish!: (value: AnalysisState) => void;
+  mock.request.mockImplementation(
+    () =>
+      new Promise<AnalysisState>((resolve) => {
+        finish = resolve;
+      }),
+  );
+  mock.send.mockResolvedValue({ token: "new-host" });
+  try {
+    await act(() => root.render(<MistakesPage username="alice" games={[]} />));
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1000);
+    });
+    await act(() =>
+      container.querySelector<HTMLButtonElement>("button.ci-primary")!.click(),
+    );
+    await act(async () => finish(mock.state));
+    expect(mock.send).toHaveBeenCalledWith({
+      type: "ci:engine-open",
+      username: "alice",
+    });
+    expect(mock.send).not.toHaveBeenCalledWith({
+      type: "ci:engine-stop",
+      username: "alice",
+    });
+  } finally {
+    vi.useRealTimers();
+  }
 });
 it("disables duplicate startup/running clicks and exposes real progress", async () => {
   mock.state.queue = {

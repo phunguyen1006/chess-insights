@@ -334,6 +334,13 @@ const chromeFixture = {
           return { ok: true, data: await analysisRequest(message) };
         case "ci:engine-open": {
           const token = crypto.randomUUID();
+          // Mirror production startup before the iframe loads its modules.
+          await updateAnalysisQueue(message.username, (current) => ({
+            ...current,
+            engineRunToken: token,
+            status: "initializing",
+            engine: undefined,
+          }));
           localStorage.setItem(
             `ci-engine:${token}`,
             JSON.stringify({
