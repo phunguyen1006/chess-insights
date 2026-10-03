@@ -37,13 +37,19 @@ export function getHeatmapIntensity(
   count: number,
   distribution: number[],
 ): number {
-  if (count <= 0) return 0;
+  return heatmapIntensityScale(distribution)(count);
+}
+// Build thresholds once per dataset, then look up every day in constant time.
+export function heatmapIntensityScale(
+  distribution: number[],
+  quantiles = [0.2, 0.4, 0.6, 0.8],
+): (count: number) => number {
   const positive = distribution.filter((n) => n > 0).sort((a, b) => a - b);
-  if (!positive.length) return 1;
-  const unique = new Set(positive);
-  if (unique.size === 1) return 2;
-  const thresholds = [0.2, 0.4, 0.6, 0.8].map(
+  if (!positive.length) return (count) => (count > 0 ? 1 : 0);
+  if (new Set(positive).size === 1) return (count) => (count > 0 ? 2 : 0);
+  const thresholds = quantiles.map(
     (q) => positive[Math.floor((positive.length - 1) * q)],
   );
-  return 1 + thresholds.filter((t) => count > t).length;
+  return (count) =>
+    count > 0 ? 1 + thresholds.filter((t) => count > t).length : 0;
 }

@@ -2,7 +2,6 @@ import { useMemo, useRef, useEffect, useState, useLayoutEffect } from "react";
 import type { CSSProperties } from "react";
 import type { NormalizedGame, PuzzleAttempt } from "../../shared/types";
 import {
-  activityLevel,
   combinedLevels,
   puzzleHistoryKnown,
   puzzleResults,
@@ -10,7 +9,7 @@ import {
 } from "../../analytics/puzzles";
 import type { ActivityMode } from "../../analytics/puzzles";
 import { calendar, displayDate } from "../../shared/dates";
-import { byDay, getHeatmapIntensity } from "../../analytics/activity";
+import { byDay, heatmapIntensityScale } from "../../analytics/activity";
 import { results } from "../../analytics/results";
 import { observedDeltas, dayRatingChanges } from "../../analytics/ratings";
 import type { GameDurationRecord } from "../../analysis/playTime";
@@ -61,21 +60,15 @@ export function ActivityHeatmap({
     () => [...durationDays.values()].map((day) => day.durationSeconds),
     [durationDays],
   );
-  const levels = useMemo(
-    () =>
-      mode === "all"
-        ? combinedLevels(games, attempts)
-        : new Map(
-            [...puzzleDays].map(([d, a]) => [
-              d,
-              activityLevel(
-                a.length,
-                [...puzzleDays.values()].map((p) => p.length),
-              ),
-            ]),
-          ),
-    [games, attempts, puzzleDays, mode],
-  );
+  const levels = useMemo(() => {
+    const scale = heatmapIntensityScale(
+      [...puzzleDays.values()].map((p) => p.length),
+      [0.25, 0.5, 0.75],
+    );
+    return mode === "all"
+      ? combinedLevels(games, attempts)
+      : new Map([...puzzleDays].map(([d, a]) => [d, scale(a.length)]));
+  }, [games, attempts, puzzleDays, mode]);
   const deltas = useMemo(() => observedDeltas(ratingSource), [ratingSource]);
   const values = useMemo(
     () =>
@@ -84,39 +77,30 @@ export function ActivityHeatmap({
       ),
     [days, metric],
   );
-  const intensities = useMemo(
-    () =>
-      new Map(
-        [...days].map(([date, list]) => {
-          const r = results(list);
-          if (metric === "playTime")
-            return [
-              date,
-              getHeatmapIntensity(
-                durationDays.get(date)?.durationSeconds ?? 0,
-                durationValues,
-              ),
-            ];
-          if (metric === "rating") {
-            const change = dayRatingChanges(list, deltas).get(pool);
-            return [
-              date,
-              change === undefined ? 0 : change === 0 ? 2 : change > 0 ? 4 : 1,
-            ];
-          }
-          if (metric === "winRate")
-            return [date, Math.max(1, Math.ceil(r.winRate / 20))];
+  const intensities = useMemo(() => {
+    const scale = heatmapIntensityScale(values),
+      durationScale = heatmapIntensityScale(durationValues);
+    return new Map(
+      [...days].map(([date, list]) => {
+        const r = results(list);
+        if (metric === "playTime")
           return [
             date,
-            getHeatmapIntensity(
-              metric === "wins" ? r.wins : list.length,
-              values,
-            ),
+            durationScale(durationDays.get(date)?.durationSeconds ?? 0),
           ];
-        }),
-      ),
-    [days, deltas, metric, pool, values, durationDays, durationValues],
-  );
+        if (metric === "rating") {
+          const change = dayRatingChanges(list, deltas).get(pool);
+          return [
+            date,
+            change === undefined ? 0 : change === 0 ? 2 : change > 0 ? 4 : 1,
+          ];
+        }
+        if (metric === "winRate")
+          return [date, Math.max(1, Math.ceil(r.winRate / 20))];
+        return [date, scale(metric === "wins" ? r.wins : list.length)];
+      }),
+    );
+  }, [days, deltas, metric, pool, values, durationDays, durationValues]);
   const container = useRef<HTMLDivElement>(null),
     tooltipRef = useRef<HTMLDivElement>(null),
     [width, setWidth] = useState(0),

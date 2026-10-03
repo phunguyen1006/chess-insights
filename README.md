@@ -5,6 +5,8 @@
 
 A standalone Chrome / Edge extension for Chess.com activity analytics, locally tracked rated puzzles, and on-demand review of completed games. Independent community software; not an official Chess.com product.
 
+**Audit candidate: v0.1.11.** This branch contains correctness, resilience and performance fixes plus an independent data verifier. It is **not release ready**: a clean-profile production installation and the independent security scan remain unverified. See [the final audit and release gates](FINAL-AUDIT.md). No stable tag has been created.
+
 ## Install
 
 Download **[chess-insights-v0.1.10.zip](https://github.com/phunguyen1006/chess-insights/releases/download/v0.1.10/chess-insights-v0.1.10.zip)** from the [release page](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.10). Extract it to a permanent folder. In `edge://extensions` or `chrome://extensions`, enable **Developer mode**, choose **Load unpacked**, and select the folder containing `manifest.json`.
@@ -84,6 +86,7 @@ Open the local address shown by Vite. The fixture uses public `erik` archive dat
 npm run typecheck
 npm run lint
 npm test
+npm run audit:data
 npm run build
 npm run release:pack
 ```

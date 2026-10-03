@@ -25,6 +25,7 @@ import { playTimeSummary, sessionAnalytics } from "../../analytics/playTime";
 import { SegmentedControl } from "./components/NativeStats";
 import { AppearanceSettings } from "./components/AppearanceSettings";
 import { useAppearance } from "../state/useAppearance";
+import { WidgetBoundary } from "./components/WidgetBoundary";
 export function InsightsApp({
   state,
   detected,
@@ -272,7 +273,7 @@ export function InsightsApp({
               </p>
             </Panel>
           ) : (
-            <>
+            <WidgetBoundary key={`${username}:${section}:${data.version}`}>
               {section === "overview" && (
                 <>
                   <OverviewPage
@@ -438,7 +439,7 @@ export function InsightsApp({
                   version={data.version}
                 />
               )}
-            </>
+            </WidgetBoundary>
           )}
           {duration.error && (
             <p role="status">Play time unavailable: {duration.error}</p>

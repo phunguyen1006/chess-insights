@@ -1,0 +1,50 @@
+{
+  "games": 30,
+  "wins": 14,
+  "losses": 8,
+  "draws": 8,
+  "rapid": 10,
+  "blitz": 8,
+  "bullet": 6,
+  "daily": 6,
+  "puzzles": 12,
+  "solved": 8,
+  "failed": 3,
+  "unknownPuzzles": 1,
+  "combinedActivity": 42,
+  "knownDurations": 22,
+  "totalTimeSeconds": 2530,
+  "rapidTimeSeconds": 550,
+  "blitzTimeSeconds": 1160,
+  "bulletTimeSeconds": 820,
+  "dailyExcluded": 6,
+  "unknownDurations": 2,
+  "currentGameStreak": 4,
+  "longestGameStreak": 4,
+  "currentPuzzleStreak": 3,
+  "longestPuzzleStreak": 3,
+  "currentCombinedStreak": 5,
+  "longestCombinedStreak": 5,
+  "inaccuracies": 2,
+  "mistakes": 2,
+  "blunders": 3,
+  "zones": {
+    "UTC": {
+      "gameActiveDays": 12,
+      "combinedActiveDays": 14
+    },
+    "Asia/Bangkok": {
+      "gameActiveDays": 14,
+      "combinedActiveDays": 16
+    },
+    "Etc/GMT+5": {
+      "gameActiveDays": 11,
+      "combinedActiveDays": 13
+    },
+    "America/New_York": {
+      "gameActiveDays": 11,
+      "combinedActiveDays": 13
+    }
+  },
+  "manualDerivation": "Pool W/D/L: Rapid 5/2/3, Blitz 4/2/2, Bullet 3/1/2, Daily 2/3/1. Known seconds 10*(1+...+22)=2530; pool sums 550+1160+820. Duplicate IDs do not add activity. See golden-notes.md."
+}

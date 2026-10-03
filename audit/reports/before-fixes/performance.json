@@ -1,0 +1,35 @@
+{
+  "samples": [
+    {
+      "games": 1000,
+      "normalizeMs": 30.749399999999923,
+      "durationParseMs": 700.3907000000002,
+      "aggregateMs": 56.914000000000215,
+      "heatmapServerRenderMs": 129.76299999999992,
+      "heapUsedBytes": 48607528
+    },
+    {
+      "games": 5000,
+      "normalizeMs": 46.95629999999983,
+      "durationParseMs": 4260.1954,
+      "aggregateMs": 555.4220000000005,
+      "heatmapServerRenderMs": 2021.3243999999995,
+      "heapUsedBytes": 56109072
+    },
+    {
+      "games": 10000,
+      "normalizeMs": 98.22880000000077,
+      "durationParseMs": 7162.345499999998,
+      "aggregateMs": 1846.2222999999976,
+      "heatmapServerRenderMs": 5999.673699999999,
+      "heapUsedBytes": 86536168
+    }
+  ],
+  "puzzles": {
+    "attempts": 50000,
+    "activeDays": 10000,
+    "aggregateMs": 2455.678,
+    "heatmapServerRenderMs": 8297.694900000002
+  },
+  "scope": "Single run, Node/jsdom server render. Heap values are process snapshots, not a browser leak measurement; no layout or browser long-task claim."
+}

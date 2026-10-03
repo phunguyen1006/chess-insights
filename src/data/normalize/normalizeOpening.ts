@@ -16,7 +16,7 @@ export function normalizeOpening(pgn: string, ecoUrl?: string) {
   const suppliedVariation = tag("Variation");
   if (!tag("Opening") && name) {
     const family = name.match(
-      /^(.+?\b(?:Game|Defense|Opening|Attack|Gambit|System))\b(?:\s+(.+))?$/i,
+      /^(.+?\b(?:Game|Defense|Opening|Attack|Gambit|System))\b(?:[\s.:]+(.+))?$/i,
     );
     if (family)
       return {

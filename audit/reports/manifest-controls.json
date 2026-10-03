@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "permissions": [
+    "storage",
+    "offscreen"
+  ],
+  "hosts": [
+    "https://www.chess.com/*",
+    "https://api.chess.com/*"
+  ],
+  "contentMatches": [
+    "https://www.chess.com/*"
+  ],
+  "optionalPermissions": [],
+  "webAccessibleResources": [],
+  "externallyConnectable": [],
+  "scope": "Manifest assertions only; this is not a completed independent security scan."
+}

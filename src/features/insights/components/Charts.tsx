@@ -123,7 +123,7 @@ export function Trend({
     runs.filter((run) => run.length === 1).map((run) => run[0].i),
   );
   const display = (d: Datum) =>
-    `${d.label}: ${number(d.value)}${percent ? "%" : ""}${d.detail ? ` Â· ${d.detail}` : ""}`;
+    `${d.label}: ${number(d.value)}${percent ? "%" : ""}${d.detail ? ` · ${d.detail}` : ""}`;
   return (
     <div ref={size.ref} className={compact ? "ci-spark" : "ci-chart ci-trend"}>
       <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={label}>
@@ -278,7 +278,7 @@ export function Donut({
             const fraction = (d.value ?? 0) / total,
               start = offset;
             offset += fraction;
-            const detail = `${d.label}: ${d.value} ${unit} Â· ${(fraction * 100).toFixed(1)}%${d.detail ? ` Â· ${d.detail}` : ""}`;
+            const detail = `${d.label}: ${d.value} ${unit} · ${(fraction * 100).toFixed(1)}%${d.detail ? ` · ${d.detail}` : ""}`;
             return (
               <circle
                 key={d.label}
@@ -346,13 +346,13 @@ export interface Outcome {
 export function Stacked({ data }: { data: Outcome[] }) {
   return (
     <div className="ci-stacked">
-      <p className="ci-note">Wins (green) Â· Draws (gray) Â· Losses (red)</p>
+      <p className="ci-note">Wins (green) · Draws (gray) · Losses (red)</p>
       {data.map((d) => (
         <div className="ci-stack-row" key={d.label}>
           <div className="ci-row">
             <strong>{d.label}</strong>
             <span>
-              {d.games} games Â· {d.winRate.toFixed(1)}% wins
+              {d.games} games · {d.winRate.toFixed(1)}% wins
             </span>
           </div>
           <div className="ci-stack-track">
@@ -372,7 +372,7 @@ export function Stacked({ data }: { data: Outcome[] }) {
             ))}
           </div>
           <small>
-            {d.wins} W Â· {d.draws} D Â· {d.losses} L
+            {d.wins} W · {d.draws} D · {d.losses} L
           </small>
         </div>
       ))}
@@ -405,7 +405,7 @@ export function Columns({ data, label }: { data: Datum[]; label: string }) {
         {data.map((d, i) => {
           const width = (W - 46) / Math.max(1, data.length),
             h = ((d.value ?? 0) / max) * 165,
-            text = `${d.label}: ${number(d.value)} games${d.detail ? ` Â· ${d.detail}` : ""}`;
+            text = `${d.label}: ${number(d.value)} games${d.detail ? ` · ${d.detail}` : ""}`;
           return (
             <g key={d.label}>
               <rect
@@ -490,7 +490,7 @@ export function Scatter({
           </g>
         ))}
         {data.map((d, i) => {
-          const text = `${d.label}: ${xLabel} ${number(d.x)} Â· ${yLabel} ${number(d.y)}${percent ? "%" : ""}${d.detail ? ` Â· ${d.detail}` : ""}`;
+          const text = `${d.label}: ${xLabel} ${number(d.x)} · ${yLabel} ${number(d.y)}${percent ? "%" : ""}${d.detail ? ` · ${d.detail}` : ""}`;
           return (
             <circle
               key={i}

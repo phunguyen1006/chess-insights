@@ -1,0 +1,309 @@
+{
+  "success": true,
+  "numTotalTestSuites": 70,
+  "numPassedTestSuites": 70,
+  "numFailedTestSuites": 0,
+  "numTotalTests": 381,
+  "numPassedTests": 381,
+  "numFailedTests": 0,
+  "startTime": 1791047922282,
+  "testFiles": 59,
+  "scope": "Full Vitest suite, maxWorkers=1; browser production-install checks are separate.",
+  "tests": [
+    {
+      "file": "analysis.test.ts",
+      "status": "passed",
+      "tests": 18
+    },
+    {
+      "file": "analysisQueue.test.ts",
+      "status": "passed",
+      "tests": 4
+    },
+    {
+      "file": "analysisRecovery.test.ts",
+      "status": "passed",
+      "tests": 1
+    },
+    {
+      "file": "analysisState.test.tsx",
+      "status": "passed",
+      "tests": 3
+    },
+    {
+      "file": "analysisVisibility.test.tsx",
+      "status": "passed",
+      "tests": 2
+    },
+    {
+      "file": "analytics.test.ts",
+      "status": "passed",
+      "tests": 41
+    },
+    {
+      "file": "api.test.ts",
+      "status": "passed",
+      "tests": 6
+    },
+    {
+      "file": "appearance.test.tsx",
+      "status": "passed",
+      "tests": 3
+    },
+    {
+      "file": "auditArchives.test.ts",
+      "status": "passed",
+      "tests": 9
+    },
+    {
+      "file": "auditGolden.test.tsx",
+      "status": "passed",
+      "tests": 3
+    },
+    {
+      "file": "auditLifecycle.test.tsx",
+      "status": "passed",
+      "tests": 1
+    },
+    {
+      "file": "auditNetwork.test.ts",
+      "status": "passed",
+      "tests": 3
+    },
+    {
+      "file": "auditPerformance.test.tsx",
+      "status": "passed",
+      "tests": 1
+    },
+    {
+      "file": "auditReleaseControls.test.tsx",
+      "status": "passed",
+      "tests": 2
+    },
+    {
+      "file": "chartEncoding.test.tsx",
+      "status": "passed",
+      "tests": 1
+    },
+    {
+      "file": "chartTrend.test.tsx",
+      "status": "passed",
+      "tests": 3
+    },
+    {
+      "file": "completionTime.test.ts",
+      "status": "passed",
+      "tests": 2
+    },
+    {
+      "file": "database.test.ts",
+      "status": "passed",
+      "tests": 1
+    },
+    {
+      "file": "devServer.test.ts",
+      "status": "passed",
+      "tests": 2
+    },
+    {
+      "file": "dom.test.ts",
+      "status": "passed",
+      "tests": 24
+    },
+    {
+      "file": "durationCache.test.ts",
+      "status": "passed",
+      "tests": 4
+    },
+    {
+      "file": "durationRuntime.test.ts",
+      "status": "passed",
+      "tests": 5
+    },
+    {
+      "file": "engineAuthorization.test.ts",
+      "status": "passed",
+      "tests": 7
+    },
+    {
+      "file": "engineHostLifecycle.test.ts",
+      "status": "passed",
+      "tests": 4
+    },
+    {
+      "file": "engineStartup.test.ts",
+      "status": "passed",
+      "tests": 2
+    },
+    {
+      "file": "gameExport.test.tsx",
+      "status": "passed",
+      "tests": 16
+    },
+    {
+      "file": "heatmapScale.test.tsx",
+      "status": "passed",
+      "tests": 2
+    },
+    {
+      "file": "migration.test.ts",
+      "status": "passed",
+      "tests": 1
+    },
+    {
+      "file": "mistakePipeline.test.ts",
+      "status": "passed",
+      "tests": 1
+    },
+    {
+      "file": "mistakeUi.test.tsx",
+      "status": "passed",
+      "tests": 19
+    },
+    {
+      "file": "offscreen.test.ts",
+      "status": "passed",
+      "tests": 4
+    },
+    {
+      "file": "openingUrlAudit.test.ts",
+      "status": "passed",
+      "tests": 2
+    },
+    {
+      "file": "opponentsUi.test.tsx",
+      "status": "passed",
+      "tests": 4
+    },
+    {
+      "file": "playTime.test.ts",
+      "status": "passed",
+      "tests": 22
+    },
+    {
+      "file": "playTimeActivityUi.test.tsx",
+      "status": "passed",
+      "tests": 7
+    },
+    {
+      "file": "playTimeHook.test.tsx",
+      "status": "passed",
+      "tests": 6
+    },
+    {
+      "file": "playTimePublicValidation.test.ts",
+      "status": "passed",
+      "tests": 6
+    },
+    {
+      "file": "playTimeSnapshot.test.ts",
+      "status": "passed",
+      "tests": 2
+    },
+    {
+      "file": "puzzleBackup.test.ts",
+      "status": "passed",
+      "tests": 20
+    },
+    {
+      "file": "puzzleBackupUi.test.tsx",
+      "status": "passed",
+      "tests": 7
+    },
+    {
+      "file": "puzzleIntegration.test.tsx",
+      "status": "passed",
+      "tests": 2
+    },
+    {
+      "file": "puzzleMigration.test.ts",
+      "status": "passed",
+      "tests": 1
+    },
+    {
+      "file": "puzzleMutations.test.ts",
+      "status": "passed",
+      "tests": 6
+    },
+    {
+      "file": "puzzles.test.ts",
+      "status": "passed",
+      "tests": 12
+    },
+    {
+      "file": "puzzleTracker.test.ts",
+      "status": "passed",
+      "tests": 11
+    },
+    {
+      "file": "ratingRedesign.test.tsx",
+      "status": "passed",
+      "tests": 6
+    },
+    {
+      "file": "releasePackage.test.ts",
+      "status": "passed",
+      "tests": 6
+    },
+    {
+      "file": "requestValidation.test.ts",
+      "status": "passed",
+      "tests": 3
+    },
+    {
+      "file": "review.test.tsx",
+      "status": "passed",
+      "tests": 1
+    },
+    {
+      "file": "settings.test.ts",
+      "status": "passed",
+      "tests": 2
+    },
+    {
+      "file": "sidebar-lifecycle.test.ts",
+      "status": "passed",
+      "tests": 19
+    },
+    {
+      "file": "state.test.tsx",
+      "status": "passed",
+      "tests": 4
+    },
+    {
+      "file": "storage.test.ts",
+      "status": "passed",
+      "tests": 5
+    },
+    {
+      "file": "sync.test.ts",
+      "status": "passed",
+      "tests": 3
+    },
+    {
+      "file": "timeUi.test.tsx",
+      "status": "passed",
+      "tests": 7
+    },
+    {
+      "file": "ui.test.tsx",
+      "status": "passed",
+      "tests": 11
+    },
+    {
+      "file": "unanalyzedGames.test.ts",
+      "status": "passed",
+      "tests": 3
+    },
+    {
+      "file": "visuals.test.ts",
+      "status": "passed",
+      "tests": 7
+    },
+    {
+      "file": "widgetIsolation.test.tsx",
+      "status": "passed",
+      "tests": 1
+    }
+  ]
+}

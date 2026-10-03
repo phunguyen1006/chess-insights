@@ -1,0 +1,59 @@
+
+ RUN  v4.1.11 $WORKSPACE
+
+ ❯ tests/requestValidation.test.ts (3 tests | 2 failed) 659ms
+   × rejects a non-boolean settings mutation at the message boundary 22ms
+   × rejects unknown analysis actions and malformed review grades before touching storage 16ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/requestValidation.test.ts > rejects a non-boolean settings mutation at the message boundary
+AssertionError: expected { ok: true, data: {} } to match object { ok: false, …(1) }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "error": {
+-     "code": "INVALID_REQUEST",
+-   },
+-   "ok": false,
++   "ok": true,
+  }
+
+ ❯ tests/requestValidation.test.ts:15:84
+     13| it("rejects a non-boolean settings mutation at the message boundary",a…
+     14|   const {handleMessage}=await import("../src/background/serviceWorker"…
+     15|   expect(await handleMessage({type:"ci:puzzle-setting",enabled:"false"…
+       |                                                                                    ^
+     16|   const {setSettings}=await import("../src/data/storage/settingsReposi…
+     17| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/requestValidation.test.ts > rejects unknown analysis actions and malformed review grades before touching storage
+AssertionError: expected { ok: false, error: { …(2) } } to match object { ok: false, …(1) }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "error": {
+-     "code": "INVALID_REQUEST",
++     "code": "STORAGE",
+    },
+    "ok": false,
+  }
+
+ ❯ tests/requestValidation.test.ts:21:51
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 1 passed (3)
+   Start at  00:00:38
+   Duration  1.22s (transform 570ms, setup 0ms, import 119ms, tests 659ms, environment 0ms)

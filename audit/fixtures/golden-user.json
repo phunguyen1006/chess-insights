@@ -1,0 +1,1077 @@
+{
+  "username": "auditplayer",
+  "asOf": "2026-10-03T12:00:00Z",
+  "games": [
+    {
+      "uuid": "g01",
+      "url": "https://www.chess.com/game/live/10001",
+      "end_time": 1704041940,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "rapid",
+      "time_control": "600",
+      "white": {
+        "username": "auditplayer",
+        "rating": 1010,
+        "result": "win"
+      },
+      "black": {
+        "username": "Opponent0",
+        "rating": 920,
+        "result": "resigned"
+      },
+      "pgn": "[White \"auditplayer\"]\n[Black \"Opponent0\"]\n[Result \"1-0\"]\n[UTCDate \"2023.12.31\"]\n[UTCTime \"16:58:50\"]\n[EndDate \"2023.12.31\"]\n[EndTime \"16:59:00\"]\n[ECO \"C20\"]\n[Opening \"King's Pawn Game: Synthetic Variation\"]\n\n1. e4 e5 2. Nf3 Nc6 1-0"
+    },
+    {
+      "uuid": "g02",
+      "url": "https://www.chess.com/game/live/10002",
+      "end_time": 1704042060,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "rapid",
+      "time_control": "600",
+      "white": {
+        "username": "Opponent1",
+        "rating": 940,
+        "result": "win"
+      },
+      "black": {
+        "username": "auditplayer",
+        "rating": 1020,
+        "result": "checkmated"
+      },
+      "pgn": "[White \"Opponent1\"]\n[Black \"auditplayer\"]\n[Result \"1-0\"]\n[UTCDate \"2023.12.31\"]\n[UTCTime \"17:00:40\"]\n[EndDate \"2023.12.31\"]\n[EndTime \"17:01:00\"]\n[ECO \"C20\"]\n[Opening \"King's Pawn Game: Synthetic Variation\"]\n\n1. e4 e5 2. Nf3 Nc6 1-0"
+    },
+    {
+      "uuid": "g03",
+      "url": "https://www.chess.com/game/live/10003",
+      "end_time": 1709139540,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "rapid",
+      "time_control": "600",
+      "white": {
+        "username": "auditplayer",
+        "rating": 1030,
+        "result": "stalemate"
+      },
+      "black": {
+        "username": "Opponent2",
+        "rating": 960,
+        "result": "stalemate"
+      },
+      "pgn": "[White \"auditplayer\"]\n[Black \"Opponent2\"]\n[Result \"1/2-1/2\"]\n[UTCDate \"2024.02.28\"]\n[UTCTime \"16:58:30\"]\n[EndDate \"2024.02.28\"]\n[EndTime \"16:59:00\"]\n[ECO \"C20\"]\n[Opening \"King's Pawn Game: Synthetic Variation\"]\n\n1. e4 e5 2. Nf3 Nc6 1/2-1/2"
+    },
+    {
+      "uuid": "g04",
+      "url": "https://www.chess.com/game/live/10004",
+      "end_time": 1709139660,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "rapid",
+      "time_control": "600",
+      "white": {
+        "username": "Opponent0",
+        "rating": 980,
+        "result": "abandoned"
+      },
+      "black": {
+        "username": "auditplayer",
+        "rating": 1040,
+        "result": "win"
+      },
+      "pgn": "[White \"Opponent0\"]\n[Black \"auditplayer\"]\n[Result \"0-1\"]\n[UTCDate \"2024.02.28\"]\n[UTCTime \"17:00:20\"]\n[EndDate \"2024.02.28\"]\n[EndTime \"17:01:00\"]\n[ECO \"C20\"]\n[Opening \"King's Pawn Game: Synthetic Variation\"]\n\n1. e4 e5 2. Nf3 Nc6 0-1"
+    },
+    {
+      "uuid": "g05",
+      "url": "https://www.chess.com/game/live/10005",
+      "end_time": 1709225940,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "rapid",
+      "time_control": "600",
+      "white": {
+        "username": "auditplayer",
+        "rating": 1050,
+        "result": "resigned"
+      },
+      "black": {
+        "username": "Opponent1",
+        "rating": 1000,
+        "result": "win"
+      },
+      "pgn": "[White \"auditplayer\"]\n[Black \"Opponent1\"]\n[Result \"0-1\"]\n[UTCDate \"2024.02.29\"]\n[UTCTime \"16:58:10\"]\n[EndDate \"2024.02.29\"]\n[EndTime \"16:59:00\"]\n[ECO \"C20\"]\n[Opening \"King's Pawn Game: Synthetic Variation\"]\n\n1. e4 e5 2. Nf3 Nc6 0-1"
+    },
+    {
+      "uuid": "g06",
+      "url": "https://www.chess.com/game/live/10006",
+      "end_time": 1709226060,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "rapid",
+      "time_control": "600",
+      "white": {
+        "username": "Opponent2",
+        "rating": 1020,
+        "result": "checkmated"
+      },
+      "black": {
+        "username": "auditplayer",
+        "rating": 1060,
+        "result": "win"
+      },
+      "pgn": "[White \"Opponent2\"]\n[Black \"auditplayer\"]\n[Result \"0-1\"]\n[UTCDate \"2024.02.29\"]\n[UTCTime \"17:00:00\"]\n[EndDate \"2024.02.29\"]\n[EndTime \"17:01:00\"]\n[ECO \"C20\"]\n[Opening \"King's Pawn Game: Synthetic Variation\"]\n\n1. e4 e5 2. Nf3 Nc6 0-1"
+    },
+    {
+      "uuid": "g07",
+      "url": "https://www.chess.com/game/live/10007",
+      "end_time": 1710053940,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "rapid",
+      "time_control": "600",
+      "white": {
+        "username": "auditplayer",
+        "rating": 1070,
+        "result": "agreed"
+      },
+      "black": {
+        "username": "Opponent0",
+        "rating": 1040,
+        "result": "agreed"
+      },
+      "pgn": "[White \"auditplayer\"]\n[Black \"Opponent0\"]\n[Result \"1/2-1/2\"]\n[UTCDate \"2024.03.10\"]\n[UTCTime \"06:57:50\"]\n[EndDate \"2024.03.10\"]\n[EndTime \"06:59:00\"]\n[ECO \"C20\"]\n[Opening \"King's Pawn Game: Synthetic Variation\"]\n\n1. e4 e5 2. Nf3 Nc6 1/2-1/2"
+    },
+    {
+      "uuid": "g08",
+      "url": "https://www.chess.com/game/live/10008",
+      "end_time": 1710054060,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "rapid",
+      "time_control": "600",
+      "white": {
+        "username": "Opponent1",
+        "rating": 1060,
+        "result": "abandoned"
+      },
+      "black": {
+        "username": "auditplayer",
+        "rating": 1080,
+        "result": "win"
+      },
+      "pgn": "[White \"Opponent1\"]\n[Black \"auditplayer\"]\n[Result \"0-1\"]\n[UTCDate \"2024.03.10\"]\n[UTCTime \"06:59:40\"]\n[EndDate \"2024.03.10\"]\n[EndTime \"07:01:00\"]\n[ECO \"C20\"]\n[Opening \"King's Pawn Game: Synthetic Variation\"]\n\n1. e4 e5 2. Nf3 Nc6 0-1"
+    },
+    {
+      "uuid": "g09",
+      "url": "https://www.chess.com/game/live/10009",
+      "end_time": 1730613540,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "rapid",
+      "time_control": "600",
+      "white": {
+        "username": "auditplayer",
+        "rating": 1090,
+        "result": "resigned"
+      },
+      "black": {
+        "username": "Opponent2",
+        "rating": 1080,
+        "result": "win"
+      },
+      "pgn": "[White \"auditplayer\"]\n[Black \"Opponent2\"]\n[Result \"0-1\"]\n[UTCDate \"2024.11.03\"]\n[UTCTime \"05:57:30\"]\n[EndDate \"2024.11.03\"]\n[EndTime \"05:59:00\"]\n[ECO \"C20\"]\n[Opening \"King's Pawn Game: Synthetic Variation\"]\n\n1. e4 e5 2. Nf3 Nc6 0-1"
+    },
+    {
+      "uuid": "g10",
+      "url": "https://www.chess.com/game/live/10010",
+      "end_time": 1730613660,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "rapid",
+      "time_control": "600",
+      "white": {
+        "username": "Opponent0",
+        "rating": 1100,
+        "result": "checkmated"
+      },
+      "black": {
+        "username": "auditplayer",
+        "result": "win"
+      },
+      "pgn": "[White \"Opponent0\"]\n[Black \"auditplayer\"]\n[Result \"0-1\"]\n[UTCDate \"2024.11.03\"]\n[UTCTime \"05:59:20\"]\n[EndDate \"2024.11.03\"]\n[EndTime \"06:01:00\"]\n[ECO \"C20\"]\n[Opening \"King's Pawn Game: Synthetic Variation\"]\n\n1. e4 e5 2. Nf3 Nc6 0-1"
+    },
+    {
+      "uuid": "g11",
+      "url": "https://www.chess.com/game/live/10011",
+      "end_time": 1735664340,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "blitz",
+      "time_control": "180",
+      "white": {
+        "username": "auditplayer",
+        "rating": 1110,
+        "result": "timeout"
+      },
+      "black": {
+        "username": "Opponent1",
+        "rating": 1120,
+        "result": "win"
+      },
+      "pgn": "[White \"auditplayer\"]\n[Black \"Opponent1\"]\n[Result \"0-1\"]\n[UTCDate \"2024.12.31\"]\n[UTCTime \"16:57:10\"]\n[EndDate \"2024.12.31\"]\n[EndTime \"16:59:00\"]\n[ECO \"C00\"]\n[Opening \"French Defense\"]\n\n1. e4 e5 2. Nf3 Nc6 0-1"
+    },
+    {
+      "uuid": "g12",
+      "url": "https://www.chess.com/game/live/10012",
+      "end_time": 1735664460,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "blitz",
+      "time_control": "180",
+      "white": {
+        "username": "Opponent2",
+        "rating": 1140,
+        "result": "abandoned"
+      },
+      "black": {
+        "username": "auditplayer",
+        "rating": 1120,
+        "result": "win"
+      },
+      "pgn": "[White \"Opponent2\"]\n[Black \"auditplayer\"]\n[Result \"0-1\"]\n[UTCDate \"2024.12.31\"]\n[UTCTime \"16:59:00\"]\n[EndDate \"2024.12.31\"]\n[EndTime \"17:01:00\"]\n[ECO \"C00\"]\n[Opening \"French Defense\"]\n\n1. e4 e5 2. Nf3 Nc6 0-1"
+    },
+    {
+      "uuid": "g13",
+      "url": "https://www.chess.com/game/live/10013",
+      "end_time": 1735774200,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "blitz",
+      "time_control": "180",
+      "white": {
+        "username": "auditplayer",
+        "rating": 1130,
+        "result": "agreed"
+      },
+      "black": {
+        "username": "Opponent0",
+        "rating": 1160,
+        "result": "agreed"
+      },
+      "pgn": "[White \"auditplayer\"]\n[Black \"Opponent0\"]\n[Result \"1/2-1/2\"]\n[UTCDate \"2025.01.01\"]\n[UTCTime \"23:27:50\"]\n[EndDate \"2025.01.01\"]\n[EndTime \"23:30:00\"]\n[ECO \"C00\"]\n[Opening \"French Defense\"]\n\n1. e4 e5 2. Nf3 Nc6 1/2-1/2"
+    },
+    {
+      "uuid": "g14",
+      "url": "https://www.chess.com/game/live/10014",
+      "end_time": 1735774800,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "blitz",
+      "time_control": "180",
+      "white": {
+        "username": "Opponent1",
+        "rating": 1180,
+        "result": "checkmated"
+      },
+      "black": {
+        "username": "auditplayer",
+        "rating": 1140,
+        "result": "win"
+      },
+      "pgn": "[White \"Opponent1\"]\n[Black \"auditplayer\"]\n[Result \"0-1\"]\n[UTCDate \"2025.01.01\"]\n[UTCTime \"23:37:40\"]\n[EndDate \"2025.01.01\"]\n[EndTime \"23:40:00\"]\n[ECO \"C00\"]\n[Opening \"French Defense\"]\n\n1. e4 e5 2. Nf3 Nc6 0-1"
+    },
+    {
+      "uuid": "g15",
+      "url": "https://www.chess.com/game/live/10015",
+      "end_time": 1735775400,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "blitz",
+      "time_control": "180",
+      "white": {
+        "username": "auditplayer",
+        "rating": 1150,
+        "result": "timeout"
+      },
+      "black": {
+        "username": "Opponent2",
+        "rating": 1200,
+        "result": "win"
+      },
+      "pgn": "[White \"auditplayer\"]\n[Black \"Opponent2\"]\n[Result \"0-1\"]\n[UTCDate \"2025.01.01\"]\n[UTCTime \"23:47:30\"]\n[EndDate \"2025.01.01\"]\n[EndTime \"23:50:00\"]\n[ECO \"C00\"]\n[Opening \"French Defense\"]\n\n1. e4 e5 2. Nf3 Nc6 0-1"
+    },
+    {
+      "uuid": "g16",
+      "url": "https://www.chess.com/game/live/10016",
+      "end_time": 1735777800,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "blitz",
+      "time_control": "180",
+      "white": {
+        "username": "Opponent0",
+        "rating": 1220,
+        "result": "abandoned"
+      },
+      "black": {
+        "username": "auditplayer",
+        "rating": 1160,
+        "result": "win"
+      },
+      "pgn": "[White \"Opponent0\"]\n[Black \"auditplayer\"]\n[Result \"0-1\"]\n[UTCDate \"2025.01.02\"]\n[UTCTime \"00:27:20\"]\n[EndDate \"2025.01.02\"]\n[EndTime \"00:30:00\"]\n[ECO \"C00\"]\n[Opening \"French Defense\"]\n\n1. e4 e5 2. Nf3 Nc6 0-1"
+    },
+    {
+      "uuid": "g17",
+      "url": "https://www.chess.com/game/live/10017",
+      "end_time": 1735778400,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "blitz",
+      "time_control": "180",
+      "white": {
+        "username": "auditplayer",
+        "rating": 1170,
+        "result": "50move"
+      },
+      "black": {
+        "username": "Opponent1",
+        "rating": 1240,
+        "result": "50move"
+      },
+      "pgn": "[White \"auditplayer\"]\n[Black \"Opponent1\"]\n[Result \"1/2-1/2\"]\n[UTCDate \"2025.01.02\"]\n[UTCTime \"00:37:10\"]\n[EndDate \"2025.01.02\"]\n[EndTime \"00:40:00\"]\n[ECO \"C00\"]\n[Opening \"French Defense\"]\n\n1. e4 e5 2. Nf3 Nc6 1/2-1/2"
+    },
+    {
+      "uuid": "g18",
+      "url": "https://www.chess.com/game/live/10018",
+      "end_time": 1735779000,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "blitz",
+      "time_control": "180",
+      "white": {
+        "username": "Opponent2",
+        "result": "checkmated"
+      },
+      "black": {
+        "username": "auditplayer",
+        "rating": 1180,
+        "result": "win"
+      },
+      "pgn": "[White \"Opponent2\"]\n[Black \"auditplayer\"]\n[Result \"0-1\"]\n[UTCDate \"2025.01.02\"]\n[UTCTime \"00:47:00\"]\n[EndDate \"2025.01.02\"]\n[EndTime \"00:50:00\"]\n[ECO \"C00\"]\n[Opening \"French Defense\"]\n\n1. e4 e5 2. Nf3 Nc6 0-1"
+    },
+    {
+      "uuid": "g19",
+      "url": "https://www.chess.com/game/live/10019",
+      "end_time": 1790703000,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "bullet",
+      "time_control": "60",
+      "white": {
+        "username": "auditplayer",
+        "rating": 1190,
+        "result": "win"
+      },
+      "black": {
+        "username": "Opponent0",
+        "rating": 1280,
+        "result": "timeout"
+      },
+      "pgn": "[White \"auditplayer\"]\n[Black \"Opponent0\"]\n[Result \"1-0\"]\n[UTCDate \"2026.09.29\"]\n[UTCTime \"17:26:50\"]\n[EndDate \"2026.09.29\"]\n[EndTime \"17:30:00\"]\n[ECO \"B20\"]\n[Opening \"Sicilian Defense\"]\n\n1. e4 e5 2. Nf3 Nc6 1-0"
+    },
+    {
+      "uuid": "g20",
+      "url": "https://www.chess.com/game/live/10020",
+      "end_time": 1790703600,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "bullet",
+      "time_control": "60",
+      "white": {
+        "username": "Opponent1",
+        "rating": 1300,
+        "result": "win"
+      },
+      "black": {
+        "username": "auditplayer",
+        "rating": 1200,
+        "result": "abandoned"
+      },
+      "pgn": "[White \"Opponent1\"]\n[Black \"auditplayer\"]\n[Result \"1-0\"]\n[UTCDate \"2026.09.29\"]\n[UTCTime \"17:36:40\"]\n[EndDate \"2026.09.29\"]\n[EndTime \"17:40:00\"]\n[ECO \"B20\"]\n[Opening \"Sicilian Defense\"]\n\n1. e4 e5 2. Nf3 Nc6 1-0"
+    },
+    {
+      "uuid": "g21",
+      "url": "https://www.chess.com/game/live/10021",
+      "end_time": 1790704200,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "bullet",
+      "time_control": "60",
+      "white": {
+        "username": "auditplayer",
+        "rating": 1210,
+        "result": "stalemate"
+      },
+      "black": {
+        "username": "Opponent2",
+        "rating": 1320,
+        "result": "stalemate"
+      },
+      "pgn": "[White \"auditplayer\"]\n[Black \"Opponent2\"]\n[Result \"1/2-1/2\"]\n[UTCDate \"2026.09.29\"]\n[UTCTime \"17:46:30\"]\n[EndDate \"2026.09.29\"]\n[EndTime \"17:50:00\"]\n[ECO \"B20\"]\n[Opening \"Sicilian Defense\"]\n\n1. e4 e5 2. Nf3 Nc6 1/2-1/2"
+    },
+    {
+      "uuid": "g22",
+      "url": "https://www.chess.com/game/live/10022",
+      "end_time": 1790789400,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "bullet",
+      "time_control": "60",
+      "white": {
+        "username": "Opponent0",
+        "rating": 1340,
+        "result": "checkmated"
+      },
+      "black": {
+        "username": "auditplayer",
+        "rating": 1220,
+        "result": "win"
+      },
+      "pgn": "[White \"Opponent0\"]\n[Black \"auditplayer\"]\n[Result \"0-1\"]\n[UTCDate \"2026.09.30\"]\n[UTCTime \"17:26:20\"]\n[EndDate \"2026.09.30\"]\n[EndTime \"17:30:00\"]\n[ECO \"B20\"]\n[Opening \"Sicilian Defense\"]\n\n1. e4 e5 2. Nf3 Nc6 0-1"
+    },
+    {
+      "uuid": "g23",
+      "url": "https://www.chess.com/game/live/10023",
+      "end_time": 1790790000,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "bullet",
+      "time_control": "60",
+      "white": {
+        "username": "auditplayer",
+        "rating": 1230,
+        "result": "timeout"
+      },
+      "black": {
+        "username": "Opponent1",
+        "rating": 1360,
+        "result": "win"
+      },
+      "pgn": "[White \"auditplayer\"]\n[Black \"Opponent1\"]\n[Result \"0-1\"]\n[ECO \"B20\"]\n[Opening \"Sicilian Defense\"]\n\n1. e4 e5 2. Nf3 Nc6 0-1"
+    },
+    {
+      "uuid": "g24",
+      "url": "https://www.chess.com/game/live/10024",
+      "end_time": 1790790600,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "bullet",
+      "time_control": "60",
+      "white": {
+        "username": "Opponent2",
+        "rating": 1380,
+        "result": "abandoned"
+      },
+      "black": {
+        "username": "auditplayer",
+        "rating": 1240,
+        "result": "win"
+      },
+      "pgn": "[White \"Opponent2\"]\n[Black \"auditplayer\"]\n[Result \"0-1\"]\n[UTCDate \"2026.09.30\"]\n[UTCTime \"19:00:00\"]\n[EndDate \"2026.09.30\"]\n[EndTime \"18:00:00\"]\n[ECO \"B20\"]\n[Opening \"Sicilian Defense\"]\n\n1. e4 e5 2. Nf3 Nc6 0-1"
+    },
+    {
+      "uuid": "g25",
+      "url": "https://www.chess.com/game/live/10025",
+      "end_time": 1790875800,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "daily",
+      "time_control": "1/86400",
+      "white": {
+        "username": "auditplayer",
+        "rating": 1250,
+        "result": "agreed"
+      },
+      "black": {
+        "username": "Opponent0",
+        "rating": 1400,
+        "result": "agreed"
+      },
+      "pgn": "[White \"auditplayer\"]\n[Black \"Opponent0\"]\n[Result \"1/2-1/2\"]\n[UTCDate \"2026.10.01\"]\n[UTCTime \"17:25:50\"]\n[EndDate \"2026.10.01\"]\n[EndTime \"17:30:00\"]\n\n1. e4 e5 2. Nf3 Nc6 1/2-1/2"
+    },
+    {
+      "uuid": "g26",
+      "url": "https://www.chess.com/game/live/10026",
+      "end_time": 1790876400,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "daily",
+      "time_control": "1/86400",
+      "white": {
+        "username": "Opponent1",
+        "rating": 1420,
+        "result": "checkmated"
+      },
+      "black": {
+        "username": "auditplayer",
+        "rating": 1260,
+        "result": "win"
+      },
+      "pgn": "[White \"Opponent1\"]\n[Black \"auditplayer\"]\n[Result \"0-1\"]\n[UTCDate \"2026.10.01\"]\n[UTCTime \"17:35:40\"]\n[EndDate \"2026.10.01\"]\n[EndTime \"17:40:00\"]\n\n1. e4 e5 2. Nf3 Nc6 0-1"
+    },
+    {
+      "uuid": "g27",
+      "url": "https://www.chess.com/game/live/10027",
+      "end_time": 1790877000,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "daily",
+      "time_control": "1/86400",
+      "white": {
+        "username": "auditplayer",
+        "rating": 1270,
+        "result": "timeout"
+      },
+      "black": {
+        "username": "Opponent2",
+        "rating": 1440,
+        "result": "win"
+      },
+      "pgn": "[White \"auditplayer\"]\n[Black \"Opponent2\"]\n[Result \"0-1\"]\n[UTCDate \"2026.10.01\"]\n[UTCTime \"17:45:30\"]\n[EndDate \"2026.10.01\"]\n[EndTime \"17:50:00\"]\n\n1. e4 e5 2. Nf3 Nc6 0-1"
+    },
+    {
+      "uuid": "g28",
+      "url": "https://www.chess.com/game/live/10028",
+      "end_time": 1790962200,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "daily",
+      "time_control": "1/86400",
+      "white": {
+        "username": "Opponent0",
+        "rating": 1460,
+        "result": "insufficient"
+      },
+      "black": {
+        "username": "auditplayer",
+        "rating": 1280,
+        "result": "insufficient"
+      },
+      "pgn": "[White \"Opponent0\"]\n[Black \"auditplayer\"]\n[Result \"1/2-1/2\"]\n[UTCDate \"2026.10.02\"]\n[UTCTime \"17:25:20\"]\n[EndDate \"2026.10.02\"]\n[EndTime \"17:30:00\"]\n\n1. e4 e5 2. Nf3 Nc6 1/2-1/2"
+    },
+    {
+      "uuid": "g29",
+      "url": "https://www.chess.com/game/live/10029",
+      "end_time": 1790962800,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "daily",
+      "time_control": "1/86400",
+      "white": {
+        "username": "auditplayer",
+        "rating": 1290,
+        "result": "win"
+      },
+      "black": {
+        "username": "Opponent1",
+        "rating": 1480,
+        "result": "resigned"
+      },
+      "pgn": "[White \"auditplayer\"]\n[Black \"Opponent1\"]\n[Result \"1-0\"]\n[UTCDate \"2026.10.02\"]\n[UTCTime \"17:35:10\"]\n[EndDate \"2026.10.02\"]\n[EndTime \"17:40:00\"]\n\n1. e4 e5 2. Nf3 Nc6 1-0"
+    },
+    {
+      "uuid": "g30",
+      "url": "https://www.chess.com/game/live/10030",
+      "end_time": 1790963400,
+      "rules": "chess",
+      "rated": false,
+      "time_class": "daily",
+      "time_control": "1/86400",
+      "white": {
+        "username": "Opponent2",
+        "rating": 1500,
+        "result": "timevsinsufficient"
+      },
+      "black": {
+        "username": "auditplayer",
+        "rating": 1300,
+        "result": "timevsinsufficient"
+      },
+      "pgn": "[White \"Opponent2\"]\n[Black \"auditplayer\"]\n[Result \"1/2-1/2\"]\n[UTCDate \"2026.10.02\"]\n[UTCTime \"17:45:00\"]\n[EndDate \"2026.10.02\"]\n[EndTime \"17:50:00\"]\n\n1. e4 e5 2. Nf3 Nc6 1/2-1/2"
+    },
+    {
+      "uuid": "g01",
+      "url": "https://www.chess.com/game/live/10001",
+      "end_time": 1704041940,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "rapid",
+      "time_control": "600",
+      "white": {
+        "username": "auditplayer",
+        "rating": 1010,
+        "result": "win"
+      },
+      "black": {
+        "username": "Opponent0",
+        "rating": 920,
+        "result": "resigned"
+      },
+      "pgn": "[White \"auditplayer\"]\n[Black \"Opponent0\"]\n[Result \"1-0\"]\n[UTCDate \"2023.12.31\"]\n[UTCTime \"16:58:50\"]\n[EndDate \"2023.12.31\"]\n[EndTime \"16:59:00\"]\n[ECO \"C20\"]\n[Opening \"King's Pawn Game: Synthetic Variation\"]\n\n1. e4 e5 2. Nf3 Nc6 1-0"
+    },
+    {
+      "uuid": "g30",
+      "url": "https://www.chess.com/game/live/10030",
+      "end_time": 1790963400,
+      "rules": "chess",
+      "rated": false,
+      "time_class": "daily",
+      "time_control": "1/86400",
+      "white": {
+        "username": "Opponent2",
+        "rating": 1500,
+        "result": "timevsinsufficient"
+      },
+      "black": {
+        "username": "auditplayer",
+        "rating": 1300,
+        "result": "timevsinsufficient"
+      },
+      "pgn": "[White \"Opponent2\"]\n[Black \"auditplayer\"]\n[Result \"1/2-1/2\"]\n[UTCDate \"2026.10.02\"]\n[UTCTime \"17:45:00\"]\n[EndDate \"2026.10.02\"]\n[EndTime \"17:50:00\"]\n\n1. e4 e5 2. Nf3 Nc6 1/2-1/2"
+    },
+    {
+      "uuid": "future",
+      "url": "https://www.chess.com/game/live/10001",
+      "end_time": 1893456000,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "rapid",
+      "time_control": "600",
+      "white": {
+        "username": "auditplayer",
+        "rating": 1010,
+        "result": "win"
+      },
+      "black": {
+        "username": "Opponent0",
+        "rating": 920,
+        "result": "resigned"
+      },
+      "pgn": "[White \"auditplayer\"]\n[Black \"Opponent0\"]\n[Result \"1-0\"]\n[UTCDate \"2023.12.31\"]\n[UTCTime \"16:58:50\"]\n[EndDate \"2023.12.31\"]\n[EndTime \"16:59:00\"]\n[ECO \"C20\"]\n[Opening \"King's Pawn Game: Synthetic Variation\"]\n\n1. e4 e5 2. Nf3 Nc6 1-0"
+    },
+    {
+      "uuid": "no-time",
+      "url": "https://www.chess.com/game/live/10001",
+      "end_time": null,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "rapid",
+      "time_control": "600",
+      "white": {
+        "username": "auditplayer",
+        "rating": 1010,
+        "result": "win"
+      },
+      "black": {
+        "username": "Opponent0",
+        "rating": 920,
+        "result": "resigned"
+      },
+      "pgn": "[White \"auditplayer\"]\n[Black \"Opponent0\"]\n[Result \"1-0\"]\n[UTCDate \"2023.12.31\"]\n[UTCTime \"16:58:50\"]\n[EndDate \"2023.12.31\"]\n[EndTime \"16:59:00\"]\n[ECO \"C20\"]\n[Opening \"King's Pawn Game: Synthetic Variation\"]\n\n1. e4 e5 2. Nf3 Nc6 1-0"
+    },
+    {
+      "uuid": "string-time",
+      "url": "https://www.chess.com/game/live/10001",
+      "end_time": "bad",
+      "rules": "chess",
+      "rated": true,
+      "time_class": "rapid",
+      "time_control": "600",
+      "white": {
+        "username": "auditplayer",
+        "rating": 1010,
+        "result": "win"
+      },
+      "black": {
+        "username": "Opponent0",
+        "rating": 920,
+        "result": "resigned"
+      },
+      "pgn": "[White \"auditplayer\"]\n[Black \"Opponent0\"]\n[Result \"1-0\"]\n[UTCDate \"2023.12.31\"]\n[UTCTime \"16:58:50\"]\n[EndDate \"2023.12.31\"]\n[EndTime \"16:59:00\"]\n[ECO \"C20\"]\n[Opening \"King's Pawn Game: Synthetic Variation\"]\n\n1. e4 e5 2. Nf3 Nc6 1-0"
+    },
+    {
+      "uuid": "variant",
+      "url": "https://www.chess.com/game/live/10001",
+      "end_time": 1704041940,
+      "rules": "chess960",
+      "rated": true,
+      "time_class": "rapid",
+      "time_control": "600",
+      "white": {
+        "username": "auditplayer",
+        "rating": 1010,
+        "result": "win"
+      },
+      "black": {
+        "username": "Opponent0",
+        "rating": 920,
+        "result": "resigned"
+      },
+      "pgn": "[White \"auditplayer\"]\n[Black \"Opponent0\"]\n[Result \"1-0\"]\n[UTCDate \"2023.12.31\"]\n[UTCTime \"16:58:50\"]\n[EndDate \"2023.12.31\"]\n[EndTime \"16:59:00\"]\n[ECO \"C20\"]\n[Opening \"King's Pawn Game: Synthetic Variation\"]\n\n1. e4 e5 2. Nf3 Nc6 1-0"
+    },
+    {
+      "uuid": "no-player",
+      "url": "https://www.chess.com/game/live/10001",
+      "end_time": 1704041940,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "rapid",
+      "time_control": "600",
+      "white": null,
+      "black": null,
+      "pgn": "[White \"auditplayer\"]\n[Black \"Opponent0\"]\n[Result \"1-0\"]\n[UTCDate \"2023.12.31\"]\n[UTCTime \"16:58:50\"]\n[EndDate \"2023.12.31\"]\n[EndTime \"16:59:00\"]\n[ECO \"C20\"]\n[Opening \"King's Pawn Game: Synthetic Variation\"]\n\n1. e4 e5 2. Nf3 Nc6 1-0"
+    },
+    {
+      "uuid": "unknown-result",
+      "url": "https://www.chess.com/game/live/10001",
+      "end_time": 1704041940,
+      "rules": "chess",
+      "rated": true,
+      "time_class": "rapid",
+      "time_control": "600",
+      "white": {
+        "username": "auditplayer",
+        "result": "unknown"
+      },
+      "black": {
+        "username": "other",
+        "result": "unknown"
+      },
+      "pgn": "[White \"auditplayer\"]\n[Black \"Opponent0\"]\n[Result \"1-0\"]\n[UTCDate \"2023.12.31\"]\n[UTCTime \"16:58:50\"]\n[EndDate \"2023.12.31\"]\n[EndTime \"16:59:00\"]\n[ECO \"C20\"]\n[Opening \"King's Pawn Game: Synthetic Variation\"]\n\n1. e4 e5 2. Nf3 Nc6 1-0"
+    },
+    null,
+    [],
+    {
+      "end_time": -1
+    }
+  ],
+  "puzzles": [
+    {
+      "id": "auditplayer:p01",
+      "username": "auditplayer",
+      "puzzleId": "repeatable-puzzle",
+      "attemptedAt": 1704041940000,
+      "result": "solved",
+      "localDate": "1999-01-01",
+      "ratingBefore": 1500,
+      "ratingAfter": 1500,
+      "ratingChange": 0,
+      "puzzleRating": null,
+      "source": "live_tracker",
+      "createdAt": 1
+    },
+    {
+      "id": "auditplayer:p02",
+      "username": "auditplayer",
+      "puzzleId": "repeatable-puzzle",
+      "attemptedAt": 1709139600000,
+      "result": "solved",
+      "localDate": "1999-01-01",
+      "ratingBefore": 1500,
+      "ratingAfter": 1500,
+      "ratingChange": 0,
+      "puzzleRating": null,
+      "source": "live_tracker",
+      "createdAt": 1
+    },
+    {
+      "id": "auditplayer:p03",
+      "username": "auditplayer",
+      "puzzleId": "repeatable-puzzle",
+      "attemptedAt": 1709226000000,
+      "result": "solved",
+      "localDate": "1999-01-01",
+      "ratingBefore": 1500,
+      "ratingAfter": 1500,
+      "ratingChange": 0,
+      "puzzleRating": null,
+      "source": "live_tracker",
+      "createdAt": 1
+    },
+    {
+      "id": "auditplayer:p04",
+      "username": "auditplayer",
+      "puzzleId": "repeatable-puzzle",
+      "attemptedAt": 1710158400000,
+      "result": "solved",
+      "localDate": "1999-01-01",
+      "ratingBefore": 1500,
+      "ratingAfter": 1500,
+      "ratingChange": 0,
+      "puzzleRating": null,
+      "source": "live_tracker",
+      "createdAt": 1
+    },
+    {
+      "id": "auditplayer:p05",
+      "username": "auditplayer",
+      "puzzleId": "repeatable-puzzle",
+      "attemptedAt": 1735691400000,
+      "result": "solved",
+      "localDate": "1999-01-01",
+      "ratingBefore": 1500,
+      "ratingAfter": 1500,
+      "ratingChange": 0,
+      "puzzleRating": null,
+      "source": "live_tracker",
+      "createdAt": 1
+    },
+    {
+      "id": "auditplayer:p06",
+      "username": "auditplayer",
+      "puzzleId": "repeatable-puzzle",
+      "attemptedAt": 1790616600000,
+      "result": "solved",
+      "localDate": "1999-01-01",
+      "ratingBefore": 1500,
+      "ratingAfter": 1500,
+      "ratingChange": 0,
+      "puzzleRating": null,
+      "source": "live_tracker",
+      "createdAt": 1
+    },
+    {
+      "id": "auditplayer:p07",
+      "username": "auditplayer",
+      "puzzleId": "repeatable-puzzle",
+      "attemptedAt": 1790789400000,
+      "result": "solved",
+      "localDate": "1999-01-01",
+      "ratingBefore": 1500,
+      "ratingAfter": 1500,
+      "ratingChange": 0,
+      "puzzleRating": null,
+      "source": "live_tracker",
+      "createdAt": 1
+    },
+    {
+      "id": "auditplayer:p08",
+      "username": "auditplayer",
+      "puzzleId": "repeatable-puzzle",
+      "attemptedAt": 1790875800000,
+      "result": "solved",
+      "localDate": "1999-01-01",
+      "ratingBefore": 1500,
+      "ratingAfter": 1500,
+      "ratingChange": 0,
+      "puzzleRating": null,
+      "source": "live_tracker",
+      "createdAt": 1
+    },
+    {
+      "id": "auditplayer:p09",
+      "username": "auditplayer",
+      "puzzleId": "repeatable-puzzle",
+      "attemptedAt": 1790962200000,
+      "result": "failed",
+      "localDate": "1999-01-01",
+      "ratingBefore": 1500,
+      "ratingAfter": 1500,
+      "ratingChange": 0,
+      "puzzleRating": null,
+      "source": "live_tracker",
+      "createdAt": 1
+    },
+    {
+      "id": "auditplayer:p10",
+      "username": "auditplayer",
+      "puzzleId": "repeatable-puzzle",
+      "attemptedAt": 1790962260000,
+      "result": "failed",
+      "localDate": "1999-01-01",
+      "ratingBefore": 1500,
+      "ratingAfter": 1500,
+      "ratingChange": 0,
+      "puzzleRating": null,
+      "source": "live_tracker",
+      "createdAt": 1
+    },
+    {
+      "id": "auditplayer:p11",
+      "username": "auditplayer",
+      "puzzleId": "repeatable-puzzle",
+      "attemptedAt": 1790962320000,
+      "result": "failed",
+      "localDate": "1999-01-01",
+      "ratingBefore": 1500,
+      "ratingAfter": 1500,
+      "ratingChange": 0,
+      "puzzleRating": null,
+      "source": "live_tracker",
+      "createdAt": 1
+    },
+    {
+      "id": "auditplayer:p12",
+      "username": "auditplayer",
+      "puzzleId": "repeatable-puzzle",
+      "attemptedAt": 1790962380000,
+      "result": "unknown",
+      "localDate": "1999-01-01",
+      "ratingBefore": 1500,
+      "ratingAfter": 1500,
+      "ratingChange": 0,
+      "puzzleRating": null,
+      "source": "live_tracker",
+      "createdAt": 1
+    },
+    {
+      "id": "auditplayer:p01",
+      "username": "auditplayer",
+      "puzzleId": "repeatable-puzzle",
+      "attemptedAt": 1704041940000,
+      "result": "solved",
+      "localDate": "1999-01-01",
+      "ratingBefore": 1500,
+      "ratingAfter": 1500,
+      "ratingChange": 0,
+      "puzzleRating": null,
+      "source": "live_tracker",
+      "createdAt": 1
+    },
+    {
+      "id": "future-puzzle",
+      "username": "auditplayer",
+      "puzzleId": "repeatable-puzzle",
+      "attemptedAt": 1893456000000,
+      "result": "solved",
+      "localDate": "1999-01-01",
+      "ratingBefore": 1500,
+      "ratingAfter": 1500,
+      "ratingChange": 0,
+      "puzzleRating": null,
+      "source": "live_tracker",
+      "createdAt": 1
+    }
+  ],
+  "evaluations": [
+    {
+      "id": "e1",
+      "gameUuid": "g01",
+      "best": {
+        "type": "cp",
+        "value": 300
+      },
+      "played": {
+        "type": "cp",
+        "value": 251
+      },
+      "phase": "opening"
+    },
+    {
+      "id": "e2",
+      "gameUuid": "g02",
+      "best": {
+        "type": "cp",
+        "value": 300
+      },
+      "played": {
+        "type": "cp",
+        "value": 250
+      },
+      "phase": "middlegame"
+    },
+    {
+      "id": "e3",
+      "gameUuid": "g03",
+      "best": {
+        "type": "cp",
+        "value": 300
+      },
+      "played": {
+        "type": "cp",
+        "value": 201
+      },
+      "phase": "endgame"
+    },
+    {
+      "id": "e4",
+      "gameUuid": "g04",
+      "best": {
+        "type": "cp",
+        "value": 300
+      },
+      "played": {
+        "type": "cp",
+        "value": 200
+      },
+      "phase": "opening"
+    },
+    {
+      "id": "e5",
+      "gameUuid": "g05",
+      "best": {
+        "type": "cp",
+        "value": 300
+      },
+      "played": {
+        "type": "cp",
+        "value": 101
+      },
+      "phase": "middlegame"
+    },
+    {
+      "id": "e6",
+      "gameUuid": "g06",
+      "best": {
+        "type": "cp",
+        "value": 300
+      },
+      "played": {
+        "type": "cp",
+        "value": 100
+      },
+      "phase": "endgame"
+    },
+    {
+      "id": "suppressed",
+      "gameUuid": "g07",
+      "best": {
+        "type": "cp",
+        "value": -800
+      },
+      "played": {
+        "type": "cp",
+        "value": -1100
+      },
+      "phase": "endgame"
+    },
+    {
+      "id": "lost-mate",
+      "gameUuid": "g08",
+      "best": {
+        "type": "mate",
+        "value": 3
+      },
+      "played": {
+        "type": "cp",
+        "value": 400
+      },
+      "phase": "middlegame"
+    },
+    {
+      "id": "allowed-mate",
+      "gameUuid": "g09",
+      "best": {
+        "type": "cp",
+        "value": 0
+      },
+      "played": {
+        "type": "mate",
+        "value": -2
+      },
+      "phase": "endgame"
+    }
+  ],
+  "provenance": "Synthetic raw PubAPI/recorded-puzzle/evaluation fixtures, no private account data."
+}

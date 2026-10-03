@@ -1,0 +1,285 @@
+{
+  "status": "PASS",
+  "cycles": 30,
+  "navigations": 240,
+  "idleSeconds": 60,
+  "samples": [
+    {
+      "cycle": 1,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 2,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 3,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 4,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 5,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 6,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 7,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 8,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 9,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 10,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 11,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 12,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 13,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 14,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 15,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 16,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 17,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 18,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 19,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 20,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 21,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 22,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 23,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 24,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 25,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 26,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 27,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 28,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 29,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    },
+    {
+      "cycle": 30,
+      "roots": 1,
+      "mutationObservers": 1,
+      "resizeObservers": 1,
+      "timers": 0,
+      "windowListenerAdds": 4,
+      "windowListenerRemoves": 0
+    }
+  ],
+  "afterDispose": {
+    "roots": 0,
+    "mutationObservers": 0,
+    "resizeObservers": 0,
+    "timers": 0
+  },
+  "scope": "Real DOM integration + real React heatmap in jsdom. Browser heap and authenticated native DOM are not measured."
+}

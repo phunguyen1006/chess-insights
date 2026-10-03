@@ -104,7 +104,7 @@ if (
   const stats = document.createElement("section");
   stats.className = "fixture-native-panel fixture-player-stats";
   stats.innerHTML =
-    "<h2>Player Stats</h2><p>Rapid Â· 1755</p><p>Blitz Â· 1630</p><p>Bullet Â· 1407</p><p>Daily Â· 1108</p>";
+    "<h2>Player Stats</h2><p>Rapid · 1755</p><p>Blitz · 1630</p><p>Bullet · 1407</p><p>Daily · 1108</p>";
   stats.style.minHeight = "300px";
   right.append(stats);
   if (new URLSearchParams(location.search).get("layout") === "columns-flat") {
@@ -120,7 +120,7 @@ if (new URLSearchParams(location.search).get("layout") === "challenge") {
   native.style.cssText =
     "height:100px;position:relative;box-sizing:border-box;padding:0";
   native.innerHTML =
-    '<div class="fixture-challenge-body" style="position:absolute;inset:12px"><span>â™ž erik Â· Standard Â· Rated</span><button class="fixture-button" style="float:right;padding:8px">Challenge</button><h2 class="recommended-match-title" style="position:absolute;bottom:0;margin:0;font-size:14px">Recommended Match</h2></div>';
+    '<div class="fixture-challenge-body" style="position:absolute;inset:12px"><span>♞ erik · Standard · Rated</span><button class="fixture-button" style="float:right;padding:8px">Challenge</button><h2 class="recommended-match-title" style="position:absolute;bottom:0;margin:0;font-size:14px">Recommended Match</h2></div>';
   left.style.cssText = "height:100px;max-height:100px;min-width:0";
   native.querySelector("button")!.addEventListener("click", (event) => {
     (event.currentTarget as HTMLElement).textContent =
@@ -440,7 +440,7 @@ for (let i = 0; i < 64; i++) {
 const historyRoot = document.getElementById("fixture-history")!;
 for (const g of games.slice(-4).reverse()) {
   const row = document.createElement("p");
-  row.textContent = `${g.result.toUpperCase()} Â· ${g.opponentUsername} Â· ${g.timeClass} Â· ${g.localDate}`;
+  row.textContent = `${g.result.toUpperCase()} · ${g.opponentUsername} · ${g.timeClass} · ${g.localDate}`;
   historyRoot.append(row);
 }
 document.getElementById("fixture-play")!.addEventListener("click", (event) => {
@@ -476,7 +476,7 @@ for (const [id, type] of [
 ] as const) {
   document.getElementById(id)!.addEventListener("click", () => {
     const output = document.getElementById("fixture-test-result")!;
-    output.textContent = "Testingâ€¦";
+    output.textContent = "Testing…";
     void chromeFixture.runtime
       .sendMessage({ type, username })
       .then((result) => {

@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "comparedMetrics": 1399,
+  "zones": [
+    "UTC",
+    "Asia/Bangkok",
+    "Etc/GMT+5",
+    "America/New_York"
+  ],
+  "goldenHandControls": "PASS",
+  "failures": []
+}

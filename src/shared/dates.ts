@@ -31,3 +31,17 @@ export const displayDate = (key: string): string =>
   });
 export const timezone = (): string =>
   Intl.DateTimeFormat().resolvedOptions().timeZone;
+// Completed public games cannot end in the future. Permit one minute of clock
+// skew, consistent with locally recorded puzzle completions.
+export function validCompletionTime(
+  seconds: unknown,
+  now = Date.now(),
+): seconds is number {
+  return (
+    typeof seconds === "number" &&
+    Number.isFinite(seconds) &&
+    seconds > 0 &&
+    Number.isFinite(new Date(seconds * 1000).getTime()) &&
+    seconds * 1000 <= now + 60_000
+  );
+}

@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.1.11 Release Candidate — 2026-10-04 (unreleased)
+
+### Fixed
+
+- Reject invalid future completion timestamps during normalization and cached reads without deleting stored history.
+- Keep ECO URL variations containing ellipses in their correct opening family, including previously cached archives.
+- Build heatmap quantile thresholds once per dataset, group puzzle months once and use indexed session membership to avoid repeated large scans.
+- Preserve Insights navigation and account controls when a view fails, with a retry fallback.
+- Validate runtime message actions and payload fields before dispatch or settings writes.
+- Suspend eligibility polling while the tab is hidden and refresh when it becomes visible.
+- Correct misencoded chart separators and fixture text.
+
+### Audit
+
+- Add a 30-game golden dataset, independently implemented Python calculations, four-timezone comparison reports, archive/network/lifecycle stress tests and release artifact checks.
+- Preserve database version 4, existing analyses/reviews, permissions and engine settings. No new feature or UI redesign.
+- See [FINAL-AUDIT.md](FINAL-AUDIT.md) for measured results and outstanding mandatory checks. This candidate is not a stable release.
+
 ## [0.1.10](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.10) — 2026-10-03
 
 ### Fixed

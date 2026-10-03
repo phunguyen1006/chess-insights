@@ -288,6 +288,7 @@ export function sessionAnalytics(
   const sessions: PlaySession[] = [];
   const performance: SessionAnalytics["performanceByGameNumber"] = [];
   let unknownIndex = 0;
+  let sessionIds = new Set<string>();
   for (const game of known) {
     const r = interval(game)!,
       previous = sessions.at(-1);
@@ -323,12 +324,14 @@ export function sessionAnalytics(
         timeControls: [],
       };
       sessions.push(session);
+      sessionIds = new Set<string>();
     }
     session.endTimestamp = Math.max(session.endTimestamp, r.endTimestamp!);
     session.durationSeconds =
       (session.endTimestamp - session.startTimestamp) / 1000;
     session.recordedSeconds += r.durationSeconds!;
     session.gameIds.push(game.id);
+    sessionIds.add(game.id);
     session.games++;
     const resultKey =
       game.result === "win"
@@ -344,7 +347,7 @@ export function sessionAnalytics(
     // Include only adjacent pool observations both belonging to this session.
     if (
       delta !== undefined &&
-      session.gameIds.includes(previousObservation.get(game.id) ?? "")
+      sessionIds.has(previousObservation.get(game.id) ?? "")
     )
       session.ratingChangeByPool[game.timeClass] =
         (session.ratingChangeByPool[game.timeClass] ?? 0) + delta;

@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { afterEach, beforeEach, expect, it, vi } from "vitest";
+import { afterAll, afterEach, beforeEach, expect, it, vi } from "vitest";
 import { ActivityHeatmap } from "../src/features/heatmap/ActivityHeatmap";
 import { PlayTimeActivityPage } from "../src/features/insights/pages/PlayTimeActivityPage";
 import { InsightsApp } from "../src/features/insights/InsightsApp";
@@ -12,6 +12,12 @@ import {
 } from "../src/analysis/playTime";
 import type { NormalizedGame, PuzzleAttempt } from "../src/shared/types";
 import type { DataState } from "../src/features/state/useData";
+
+// All fixture completions must precede the audit clock, including module-level
+// normalization. Never depend on the real day when testing future rejection.
+vi.useFakeTimers({ toFake: ["Date"] });
+vi.setSystemTime(new Date("2026-11-01T12:00:00Z"));
+afterAll(() => vi.useRealTimers());
 
 const local = vi.hoisted(() => ({
   records: [] as GameDurationRecord[],

@@ -11,6 +11,8 @@ import type { NormalizedGame } from "../src/shared/types";
 
 let container: HTMLDivElement, root: ReturnType<typeof createRoot>;
 beforeEach(() => {
+  vi.useFakeTimers({ toFake: ["Date"] });
+  vi.setSystemTime(new Date("2026-11-01T12:00:00Z"));
   vi.stubGlobal("IS_REACT_ACT_ENVIRONMENT", true);
   vi.stubGlobal(
     "ResizeObserver",
@@ -27,6 +29,7 @@ afterEach(async () => {
   await act(() => root.unmount());
   container.remove();
   vi.unstubAllGlobals();
+  vi.useRealTimers();
 });
 function game(
   id: string,
