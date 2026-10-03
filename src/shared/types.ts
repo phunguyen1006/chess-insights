@@ -128,7 +128,14 @@ export type Request =
   | {
       type: "ci:analysis";
       username: string;
-      action: "state" | "clocks" | "enqueue" | "pause" | "cancel" | "review";
+      action:
+        | "state"
+        | "selection"
+        | "clocks"
+        | "enqueue"
+        | "pause"
+        | "cancel"
+        | "review";
       ids?: string[];
       grade?: import("../analysis/types").Grade;
       correct?: boolean;

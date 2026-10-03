@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.10](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.10) — 2026-10-03
+
+### Fixed
+
+- Read saved Stockfish results immediately, independently of PGN eligibility scans and public archive downloads. Avoid showing an empty bank before storage responds.
+- Allow analysis of cached unanalyzed games while older archives synchronize in the background, rather than disabling Analyze with “Loading history…”.
+- Report the account's saved analysis count when period/pool filters hide historical results. Existing results, review schedules and paused queues remain intact and compatible games are skipped.
+- Coalesce overlapping state/selection polls, cache preview counts by archive and analysis revisions, reuse eligibility across deserialized archive snapshots, and reject stale state replies after queue actions.
+- Ignore pre-start polling replies during Resume so an old paused snapshot cannot stop the newly opened engine host.
+- Remove the Time page subtitle and two calculation-progress rows requested in the UI cleanup; parsing and cached totals continue in the background.
+
+The database, engine version, node budget and analysis format remain unchanged. See [verification and manual integration checks](docs/QA-0.1.10.md).
+
 ## [0.1.9](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.9) — 2026-10-03
 
 ### Changed

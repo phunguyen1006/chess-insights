@@ -22,6 +22,48 @@ const selectionGames = new Map<
   string,
   { version: number; games: NormalizedGame[] }
 >();
+const previews = new Map<
+  string,
+  {
+    key: string;
+    value: Promise<NonNullable<AnalysisState["selection"]>>;
+  }
+>();
+async function selectionPreview(username: string, analyses: EngineAnalysis[]) {
+  const user = await getUser(username);
+  const key = JSON.stringify([
+    user?.version,
+    analyses.map((a) => [
+      a.id,
+      a.analysisVersion,
+      a.engineVersion,
+      a.nodes,
+      a.source,
+    ]),
+  ]);
+  const previous = previews.get(username);
+  if (user && previous?.key === key) return previous.value;
+  const value = (async () => {
+    const selected = await selectAnalysisGames(
+      await cachedSelectionGames(username),
+      analyses,
+    );
+    return {
+      total: selected.total,
+      analyzed: selected.analyzed,
+      pending: selected.pending.length,
+      skipped: selected.skipped,
+    };
+  })();
+  const entry = { key, value };
+  if (previews.size >= 4 && !previews.has(username))
+    previews.delete(previews.keys().next().value!);
+  previews.set(username, entry);
+  void value.catch(() => {
+    if (previews.get(username) === entry) previews.delete(username);
+  });
+  return value;
+}
 async function cachedSelectionGames(username: string) {
   const user = await getUser(username);
   const cached = selectionGames.get(username);
@@ -138,6 +180,12 @@ export async function analysisRequest(
   const { username, action } = message;
   if (action === "clocks") return analyzeClocks(username, message.ids ?? []);
   const state = await analysisState(username, message.includeClocks === true);
+  // Saved results must be readable before the expensive PGN eligibility scan.
+  if (action === "state" && !message.includeSelection) return state;
+  if (action === "selection") {
+    state.selection = await selectionPreview(username, state.analyses);
+    return state;
+  }
   if (action === "enqueue") {
     if (["running", "initializing"].includes(state.queue?.status ?? ""))
       throw new Error(
@@ -212,16 +260,7 @@ export async function analysisRequest(
   }
   const next = await analysisState(username, message.includeClocks === true);
   if (message.includeSelection) {
-    const selected = await selectAnalysisGames(
-      await cachedSelectionGames(username),
-      next.analyses,
-    );
-    next.selection = {
-      total: selected.total,
-      analyzed: selected.analyzed,
-      pending: selected.pending.length,
-      skipped: selected.skipped,
-    };
+    next.selection = await selectionPreview(username, next.analyses);
   }
   return next;
 }

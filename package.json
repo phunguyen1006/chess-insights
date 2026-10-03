@@ -1,6 +1,6 @@
 {
   "name": "chess-insights",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "private": true,
   "description": "Local-first Chess.com activity analytics, rated puzzle tracking, and historical game review for Chrome and Edge.",
   "license": "GPL-3.0-only",

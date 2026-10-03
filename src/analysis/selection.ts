@@ -10,8 +10,8 @@ import { storedGameReplay } from "./engine";
 
 // Polling progress must not replay thousands of PGNs every second. Keep only
 // lightweight eligibility results; source and player changes invalidate them.
-const eligibility = new WeakMap<
-  NormalizedGame,
+const eligibility = new Map<
+  string,
   { pgn: string | null; key: string; source: string; eligible: boolean }
 >();
 export async function selectAnalysisGames(
@@ -33,7 +33,8 @@ export async function selectAnalysisGames(
       game.url,
       game.playerColor,
     ]);
-    const replay = eligibility.get(game);
+    const cacheId = `${game.username}:${game.id}`;
+    const replay = eligibility.get(cacheId);
     const reusable = replay?.key === key && replay.pgn === game.pgn;
     const source = reusable ? replay.source : pgnFingerprint(game.pgn ?? "");
     const previous = cached.get(game.id);
@@ -49,7 +50,11 @@ export async function selectAnalysisGames(
       } catch {
         eligible = false;
       }
-      eligibility.set(game, { pgn: game.pgn, key, source, eligible });
+      // Archive updates deserialize new objects. Reuse unchanged PGNs by ID,
+      // with a bounded cache and exact source/player invalidation.
+      if (eligibility.size >= 10000 && !eligibility.has(cacheId))
+        eligibility.delete(eligibility.keys().next().value!);
+      eligibility.set(cacheId, { pgn: game.pgn, key, source, eligible });
       if (++parsed >= 12 || performance.now() - batchStart >= 16) {
         await new Promise<void>((resolve) => setTimeout(resolve, 0));
         parsed = 0;
