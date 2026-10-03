@@ -123,7 +123,7 @@ export function Trend({
     runs.filter((run) => run.length === 1).map((run) => run[0].i),
   );
   const display = (d: Datum) =>
-    `${d.label}: ${number(d.value)}${percent ? "%" : ""}${d.detail ? ` · ${d.detail}` : ""}`;
+    `${d.label}: ${number(d.value)}${percent ? "%" : ""}${d.detail ? ` Â· ${d.detail}` : ""}`;
   return (
     <div ref={size.ref} className={compact ? "ci-spark" : "ci-chart ci-trend"}>
       <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={label}>
@@ -137,8 +137,12 @@ export function Trend({
         </desc>
         <defs>
           <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
-            <stop stopColor="#42b8e8" stopOpacity=".2" />
-            <stop offset="1" stopColor="#42b8e8" stopOpacity=".08" />
+            <stop stopColor="var(--ci-chart-color, #42b8e8)" stopOpacity=".2" />
+            <stop
+              offset="1"
+              stopColor="var(--ci-chart-color, #42b8e8)"
+              stopOpacity=".08"
+            />
           </linearGradient>
         </defs>
         {!compact &&
@@ -149,7 +153,7 @@ export function Trend({
                 x2={right}
                 y1={bottom - t * (bottom - top)}
                 y2={bottom - t * (bottom - top)}
-                stroke="#f0f0f0"
+                stroke="var(--ci-track)"
               />
               <text x="2" y={bottom - t * (bottom - top) + 4}>
                 {number(low + t * (high - low))}
@@ -170,7 +174,12 @@ export function Trend({
                 />
               );
             })}
-        <path d={path} fill="none" stroke="#42b8e8" strokeWidth="2" />
+        <path
+          d={path}
+          fill="none"
+          stroke="var(--ci-chart-color, #42b8e8)"
+          strokeWidth="2"
+        />
         {sampled
           .filter(({ d }) => d.value !== null)
           .map(({ d, i }) => {
@@ -183,7 +192,7 @@ export function Trend({
                 r={activePoint === i || singleton.has(i) ? 4 : 8}
                 fill={
                   activePoint === i || singleton.has(i)
-                    ? "#42b8e8"
+                    ? "var(--ci-chart-color, #42b8e8)"
                     : "transparent"
                 }
                 tabIndex={0}
@@ -269,7 +278,7 @@ export function Donut({
             const fraction = (d.value ?? 0) / total,
               start = offset;
             offset += fraction;
-            const detail = `${d.label}: ${d.value} ${unit} · ${(fraction * 100).toFixed(1)}%${d.detail ? ` · ${d.detail}` : ""}`;
+            const detail = `${d.label}: ${d.value} ${unit} Â· ${(fraction * 100).toFixed(1)}%${d.detail ? ` Â· ${d.detail}` : ""}`;
             return (
               <circle
                 key={d.label}
@@ -337,13 +346,13 @@ export interface Outcome {
 export function Stacked({ data }: { data: Outcome[] }) {
   return (
     <div className="ci-stacked">
-      <p className="ci-note">Wins (green) · Draws (gray) · Losses (red)</p>
+      <p className="ci-note">Wins (green) Â· Draws (gray) Â· Losses (red)</p>
       {data.map((d) => (
         <div className="ci-stack-row" key={d.label}>
           <div className="ci-row">
             <strong>{d.label}</strong>
             <span>
-              {d.games} games · {d.winRate.toFixed(1)}% wins
+              {d.games} games Â· {d.winRate.toFixed(1)}% wins
             </span>
           </div>
           <div className="ci-stack-track">
@@ -363,7 +372,7 @@ export function Stacked({ data }: { data: Outcome[] }) {
             ))}
           </div>
           <small>
-            {d.wins} W · {d.draws} D · {d.losses} L
+            {d.wins} W Â· {d.draws} D Â· {d.losses} L
           </small>
         </div>
       ))}
@@ -386,7 +395,7 @@ export function Columns({ data, label }: { data: Datum[]; label: string }) {
               x2={W - 12}
               y1={195 - t * 165}
               y2={195 - t * 165}
-              stroke="#e4e2de"
+              stroke="var(--ci-border)"
             />
             <text x="2" y={199 - t * 165}>
               {number(t * max)}
@@ -396,7 +405,7 @@ export function Columns({ data, label }: { data: Datum[]; label: string }) {
         {data.map((d, i) => {
           const width = (W - 46) / Math.max(1, data.length),
             h = ((d.value ?? 0) / max) * 165,
-            text = `${d.label}: ${number(d.value)} games${d.detail ? ` · ${d.detail}` : ""}`;
+            text = `${d.label}: ${number(d.value)} games${d.detail ? ` Â· ${d.detail}` : ""}`;
           return (
             <g key={d.label}>
               <rect
@@ -465,7 +474,7 @@ export function Scatter({
               x2={W - 12}
               y1={200 - t * 165}
               y2={200 - t * 165}
-              stroke="#e4e2de"
+              stroke="var(--ci-border)"
             />
             <text x="4" y={204 - t * 165}>
               {number(t * maxY)}
@@ -481,7 +490,7 @@ export function Scatter({
           </g>
         ))}
         {data.map((d, i) => {
-          const text = `${d.label}: ${xLabel} ${number(d.x)} · ${yLabel} ${number(d.y)}${percent ? "%" : ""}${d.detail ? ` · ${d.detail}` : ""}`;
+          const text = `${d.label}: ${xLabel} ${number(d.x)} Â· ${yLabel} ${number(d.y)}${percent ? "%" : ""}${d.detail ? ` Â· ${d.detail}` : ""}`;
           return (
             <circle
               key={i}

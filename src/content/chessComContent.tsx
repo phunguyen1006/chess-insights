@@ -12,6 +12,7 @@ import { playTimeDebug } from "../features/state/usePlayTime";
 import { send } from "../features/state/client";
 import { observePage } from "./dom/pageObserver";
 import { installPuzzleTracker } from "./puzzles/tracker";
+import { useAppearance } from "../features/state/useAppearance";
 const puzzleTracker = installPuzzleTracker();
 const roots = new Map<HTMLElement, Root>();
 function syncTheme(element: HTMLElement) {
@@ -34,20 +35,18 @@ function syncTheme(element: HTMLElement) {
       }
     }
   }
-  const bg = getComputedStyle(document.body).backgroundColor;
-  const rgba = bg.match(/\d+(?:\.\d+)?/g)?.map(Number);
-  const dark =
-    document.body.matches('.dark-mode,.dark,[data-theme="dark"]') ||
-    document.documentElement.matches('.dark-mode,.dark,[data-theme="dark"]') ||
-    !!(
-      rgba &&
-      rgba.length >= 3 &&
-      rgba[3] !== 0 &&
-      rgba.slice(0, 3).reduce((a, b) => a + b) / 3 < 95
-    );
-  element.classList.toggle("ci-theme-dark", dark);
 }
-function Surface({ kind }: { kind: "home" | "insights" }) {
+function Surface({
+  kind,
+  element,
+}: {
+  kind: "home" | "insights";
+  element: HTMLElement;
+}) {
+  const appearance = useAppearance();
+  useEffect(() => {
+    element.classList.toggle("ci-theme-dark", appearance.theme === "dark");
+  }, [appearance.theme, element]);
   const state = useData(),
     [detected, setDetected] = useState(detectUsername());
   useEffect(() => {
@@ -75,7 +74,7 @@ const mount = (element: HTMLElement, kind: "home" | "insights") => {
   syncTheme(element);
   const root = createRoot(element);
   roots.set(element, root);
-  root.render(<Surface kind={kind} />);
+  root.render(<Surface kind={kind} element={element} />);
 };
 const integration = integrate({
   home: (root) => mount(root, "home"),
@@ -118,7 +117,7 @@ if (import.meta.env.DEV)
       getMistakeAnalysisStatus: () => ({
         ...analysisDebug.mistakes,
         totalHistoricalGames: analysisDebug.totalHistoricalGames,
-        selectedScope: analysisDebug.queue?.selected ?? 20,
+        selectedScope: "unanalyzed",
         mistakesFound: analysisDebug.mistakesFound,
         selectedGames: analysisDebug.queue?.selected ?? 0,
         gamesWithPgn: analysisDebug.queue?.withPgn ?? 0,

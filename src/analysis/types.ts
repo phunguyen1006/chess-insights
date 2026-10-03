@@ -94,6 +94,12 @@ export interface EngineStatus {
   error: string | null;
 }
 export interface AnalysisState {
+  selection?: {
+    total: number;
+    analyzed: number;
+    pending: number;
+    skipped: number;
+  };
   clocks: ClockAnalysis[];
   analyses: EngineAnalysis[];
   mistakes: Mistake[];

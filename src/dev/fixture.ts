@@ -2,7 +2,10 @@ import type { Request, Reply, Snapshot, RawGame } from "../shared/types";
 import { normalizeGame } from "../data/normalize/normalizeGame";
 import { gameForSnapshot } from "../data/sync/syncManager";
 import source from "./data/public-games.json";
-import { analysisRequest } from "../data/storage/analysisRepository";
+import {
+  analysisRequest,
+  updateAnalysisQueue,
+} from "../data/storage/analysisRepository";
 import { database, transactionDone } from "../data/storage/database";
 import { LocalEngine, storedGameReplay } from "../analysis/engine";
 import { installNavigationFixture } from "./navigationFixture";
@@ -101,7 +104,7 @@ if (
   const stats = document.createElement("section");
   stats.className = "fixture-native-panel fixture-player-stats";
   stats.innerHTML =
-    "<h2>Player Stats</h2><p>Rapid · 1755</p><p>Blitz · 1630</p><p>Bullet · 1407</p><p>Daily · 1108</p>";
+    "<h2>Player Stats</h2><p>Rapid Â· 1755</p><p>Blitz Â· 1630</p><p>Bullet Â· 1407</p><p>Daily Â· 1108</p>";
   stats.style.minHeight = "300px";
   right.append(stats);
   if (new URLSearchParams(location.search).get("layout") === "columns-flat") {
@@ -117,7 +120,7 @@ if (new URLSearchParams(location.search).get("layout") === "challenge") {
   native.style.cssText =
     "height:100px;position:relative;box-sizing:border-box;padding:0";
   native.innerHTML =
-    '<div class="fixture-challenge-body" style="position:absolute;inset:12px"><span>♞ erik · Standard · Rated</span><button class="fixture-button" style="float:right;padding:8px">Challenge</button><h2 class="recommended-match-title" style="position:absolute;bottom:0;margin:0;font-size:14px">Recommended Match</h2></div>';
+    '<div class="fixture-challenge-body" style="position:absolute;inset:12px"><span>â™ž erik Â· Standard Â· Rated</span><button class="fixture-button" style="float:right;padding:8px">Challenge</button><h2 class="recommended-match-title" style="position:absolute;bottom:0;margin:0;font-size:14px">Recommended Match</h2></div>';
   left.style.cssText = "height:100px;max-height:100px;min-width:0";
   native.querySelector("button")!.addEventListener("click", (event) => {
     (event.currentTarget as HTMLElement).textContent =
@@ -152,25 +155,41 @@ const snapshot: Snapshot = {
 };
 let username = source.username;
 let trackPuzzleActivity = true;
+let theme: "light" | "dark" =
+  localStorage.getItem("ci-fixture-theme") === "dark" ? "dark" : "light";
 const storageListeners = new Set<
-  (changes: Record<string, chrome.storage.StorageChange>) => void
+  (changes: Record<string, chrome.storage.StorageChange>, area: string) => void
 >();
 const fixtureChannel = new BroadcastChannel("chess-insights-puzzle-fixture");
 fixtureChannel.onmessage = (e) => {
   const changes = e.data as Record<string, chrome.storage.StorageChange>;
   const next = changes["chessInsights.settings"]?.newValue as
-    { trackPuzzleActivity?: boolean } | undefined;
-  if (next) trackPuzzleActivity = next.trackPuzzleActivity !== false;
-  storageListeners.forEach((l) => l(changes));
+    { trackPuzzleActivity?: boolean; theme?: "light" | "dark" } | undefined;
+  if (next) {
+    trackPuzzleActivity = next.trackPuzzleActivity !== false;
+    theme = next.theme === "dark" ? "dark" : "light";
+    localStorage.setItem("ci-fixture-theme", theme);
+  }
+  storageListeners.forEach((l) => l(changes, "local"));
 };
 const notifyFixtureChange = (
   changes: Record<string, chrome.storage.StorageChange>,
 ) => {
-  storageListeners.forEach((l) => l(changes));
+  storageListeners.forEach((l) => l(changes, "local"));
   fixtureChannel.postMessage(changes);
 };
-const fixtureTx = (await database()).transaction("games", "readwrite");
+const fixtureTx = (await database()).transaction(
+  ["games", "users"],
+  "readwrite",
+);
 for (const game of games) fixtureTx.objectStore("games").put(game);
+fixtureTx.objectStore("users").put({
+  username: source.username,
+  archives: source.archives,
+  indexFetchedAt: source.fetchedAt,
+  lastSync: snapshot.lastSync,
+  version: snapshot.version,
+});
 await transactionDone(fixtureTx);
 const listeners = new Set<(message: unknown) => void>();
 const chromeFixture = {
@@ -255,10 +274,10 @@ const chromeFixture = {
           trackPuzzleActivity = message.enabled;
           notifyFixtureChange({
             "chessInsights.settings": {
-              newValue: { username, trackPuzzleActivity },
+              newValue: { username, trackPuzzleActivity, theme },
             },
           });
-          return { ok: true, data: { username, trackPuzzleActivity } };
+          return { ok: true, data: { username, trackPuzzleActivity, theme } };
         }
         case "ci:puzzle-clear": {
           await clearPuzzleHistory(message.username);
@@ -305,6 +324,13 @@ const chromeFixture = {
           }
         }
         case "ci:analysis":
+          if (["pause", "cancel"].includes(message.action))
+            await updateAnalysisQueue(message.username, (current) => ({
+              ...current,
+              engine: current.engine
+                ? { ...current.engine, running: false }
+                : undefined,
+            }));
           return { ok: true, data: await analysisRequest(message) };
         case "ci:engine-open": {
           const token = crypto.randomUUID();
@@ -327,8 +353,17 @@ const chromeFixture = {
               message: "Engine host uses its own local authorization.",
             },
           };
+        case "ci:theme-setting":
+          theme = message.theme;
+          localStorage.setItem("ci-fixture-theme", theme);
+          notifyFixtureChange({
+            "chessInsights.settings": {
+              newValue: { username, trackPuzzleActivity, theme },
+            },
+          });
+          return { ok: true, data: { username, trackPuzzleActivity, theme } };
         case "ci:settings":
-          return { ok: true, data: { username, trackPuzzleActivity } };
+          return { ok: true, data: { username, trackPuzzleActivity, theme } };
         case "ci:snapshot":
         case "ci:sync":
           return {
@@ -361,10 +396,16 @@ const chromeFixture = {
   storage: {
     onChanged: {
       addListener: (
-        l: (changes: Record<string, chrome.storage.StorageChange>) => void,
+        l: (
+          changes: Record<string, chrome.storage.StorageChange>,
+          area: string,
+        ) => void,
       ) => storageListeners.add(l),
       removeListener: (
-        l: (changes: Record<string, chrome.storage.StorageChange>) => void,
+        l: (
+          changes: Record<string, chrome.storage.StorageChange>,
+          area: string,
+        ) => void,
       ) => storageListeners.delete(l),
     },
   },
@@ -392,7 +433,7 @@ for (let i = 0; i < 64; i++) {
 const historyRoot = document.getElementById("fixture-history")!;
 for (const g of games.slice(-4).reverse()) {
   const row = document.createElement("p");
-  row.textContent = `${g.result.toUpperCase()} · ${g.opponentUsername} · ${g.timeClass} · ${g.localDate}`;
+  row.textContent = `${g.result.toUpperCase()} Â· ${g.opponentUsername} Â· ${g.timeClass} Â· ${g.localDate}`;
   historyRoot.append(row);
 }
 document.getElementById("fixture-play")!.addEventListener("click", (event) => {
@@ -428,7 +469,7 @@ for (const [id, type] of [
 ] as const) {
   document.getElementById(id)!.addEventListener("click", () => {
     const output = document.getElementById("fixture-test-result")!;
-    output.textContent = "Testing…";
+    output.textContent = "Testingâ€¦";
     void chromeFixture.runtime
       .sendMessage({ type, username })
       .then((result) => {

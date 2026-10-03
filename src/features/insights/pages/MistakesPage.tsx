@@ -16,23 +16,28 @@ const fixtureRuntime = import.meta.env.DEV && location.hostname === "127.0.0.1";
 export function MistakesPage({
   username,
   games,
+  loadingHistory = false,
 }: {
   username: string;
   games: NormalizedGame[];
+  loadingHistory?: boolean;
 }) {
-  const { state, error, request } = useAnalysis(username, games),
+  const { state, error, request } = useAnalysis(
+      username,
+      games,
+      false,
+      0,
+      true,
+    ),
     [view, setView] = useState("overview"),
     [severity, setSeverity] = useState("all"),
     [phase, setPhase] = useState("all"),
     [reviewState, setReviewState] = useState("all"),
-    [scope, setScope] = useState("20"),
-    [specific, setSpecific] = useState(""),
     [selected, setSelected] = useState(""),
     [engineError, setEngineError] = useState(""),
     [bankLimit, setBankLimit] = useState(30),
     [starting, setStarting] = useState(false),
     [grading, setGrading] = useState(false),
-    [reanalyze, setReanalyze] = useState(false),
     [reviewQueue, setReviewQueue] = useState<string[]>([]),
     [reviewIndex, setReviewIndex] = useState(0),
     [correctCount, setCorrectCount] = useState(0);
@@ -60,9 +65,9 @@ export function MistakesPage({
         void request("state")
           .then((s) => {
             if (
-              !fixtureRuntime &&
               !owned.current &&
-              ["running", "initializing"].includes(s.queue?.status ?? "")
+              (["running", "initializing"].includes(s.queue?.status ?? "") ||
+                (s.queue?.status === "paused" && s.queue.engine?.running))
             ) {
               void send<{ active: boolean }>({
                 type: "ci:engine-status",
@@ -168,29 +173,11 @@ export function MistakesPage({
     }
   };
   const enqueue = async () => {
-    if (starting) return;
+    if (starting || opening.current || loadingHistory) return;
     setStarting(true);
-    const sorted = [...games].sort((a, b) => b.endTime - a.endTime);
-    const chosen =
-      scope === "game"
-        ? sorted.filter((g) => g.id === (specific || sorted[0]?.id))
-        : scope === "month"
-          ? sorted.filter((g) =>
-              g.localDate.startsWith(
-                new Date().toLocaleDateString("sv").slice(0, 7),
-              ),
-            )
-          : scope === "more"
-            ? sorted
-                .filter((g) => !state.analyses.some((a) => a.id === g.id))
-                .slice(0, 20)
-            : scope === "period"
-              ? sorted
-              : sorted.slice(0, Number(scope));
     try {
       const s = await request("enqueue", {
-        ids: chosen.map((g) => g.id),
-        force: reanalyze,
+        scope: "unanalyzed",
       });
       if (import.meta.env.DEV)
         console.debug("[Chess Insights] Analyze selection", s.queue);
@@ -305,31 +292,10 @@ export function MistakesPage({
       <div className="ci-filters">
         <Select
           label="Analyze scope"
-          value={scope}
-          options={[
-            ["10", "Recent 10 games"],
-            ["20", "Recent 20 games"],
-            ["more", "Next 20 unanalyzed games"],
-            ["month", "Current month"],
-            ["period", "Selected period"],
-            ["game", "Specific game"],
-          ]}
-          onChange={setScope}
+          value="unanalyzed"
+          options={[["unanalyzed", "Unanalyzed games"]]}
+          onChange={() => undefined}
         />
-        {scope === "game" && (
-          <Select
-            label="Specific completed game"
-            value={
-              specific ||
-              [...games].sort((a, b) => b.endTime - a.endTime)[0]?.id ||
-              ""
-            }
-            options={[...games]
-              .reverse()
-              .map((g) => [g.id, `${g.localDate} · ${g.opponentUsername}`])}
-            onChange={setSpecific}
-          />
-        )}
         <button
           className="ci-primary"
           onClick={() =>
@@ -340,6 +306,13 @@ export function MistakesPage({
           }
           disabled={
             starting ||
+            (!(
+              state.queue?.ids.length &&
+              ["paused", "error"].includes(state.queue.status)
+            ) &&
+              (loadingHistory ||
+                !state.selection ||
+                state.selection.pending === 0)) ||
             (state.queue?.status === "paused" && state.queue.engine?.running) ||
             ["running", "initializing"].includes(state.queue?.status ?? "")
           }
@@ -352,18 +325,14 @@ export function MistakesPage({
                 ? "Resume Analysis"
                 : engineError || state.queue?.status === "error"
                   ? "Retry Analysis"
-                  : state.queue?.status === "idle" && state.queue.total > 0
-                    ? "Analysis Complete"
-                    : `Analyze ${scope === "10" || scope === "20" ? `Recent ${scope} Games` : "selected games"}`}
+                  : loadingHistory
+                    ? "Loading history…"
+                    : !state.selection
+                      ? "Checking games…"
+                      : state.selection.pending === 0
+                        ? "No unanalyzed games"
+                        : `Analyze ${number(state.selection.pending)} games`}
         </button>
-        <label className="ci-field">
-          <span>Reanalyze cached games</span>
-          <input
-            type="checkbox"
-            checked={reanalyze}
-            onChange={(e) => setReanalyze(e.target.checked)}
-          />
-        </label>
         <button
           disabled={!filtered.some((m) => due(m.id))}
           onClick={() => {
@@ -386,6 +355,14 @@ export function MistakesPage({
           Start Review
         </button>
       </div>
+      <p className="ci-note" role="status">
+        {loadingHistory
+          ? "Loading full public game history…"
+          : state.selection
+            ? `${number(state.selection.pending)} games ready to analyze · ${number(state.selection.analyzed)} already analyzed · ${number(state.selection.skipped)} unavailable or unsupported`
+            : "Checking completed game PGNs…"}{" "}
+        All cached history; page filters do not limit analysis.
+      </p>
       <div ref={host} />
       {state.queue && (
         <p className="ci-status ci-analysis-progress" role="status">
