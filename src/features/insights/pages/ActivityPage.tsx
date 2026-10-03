@@ -126,14 +126,16 @@ export function ActivityPage(props: {
         <p className="ci-note">
           {mode === "all"
             ? "Active days include games or puzzles. Each activity is normalized separately; the darker level is shown."
-            : "Dates before local tracking began are unknown, shown with stripes."}
+            : "Dates before local tracking began are unknown unless saved attempts were restored. Striped dates have no recorded history."}
         </p>
       </Panel>
       {!attempts.length && (
         <Panel title="Puzzle activity">
           <p>
             Puzzle tracking starts when you complete rated puzzles with this
-            extension installed. Earlier puzzle history is not available.
+            extension installed. Earlier puzzle history is not available from
+            Chess.com. If you have a saved puzzle backup, restore it in
+            Settings.
           </p>
           <p>
             {trackingSince
@@ -231,12 +233,19 @@ export function ActivityPage(props: {
       {date && (
         <Panel title={displayDate(date)}>
           <p>
-            {puzzleHistoryKnown(date, trackingSince)
+            {puzzleHistoryKnown(date, trackingSince) ||
+            attempts.some((a) => a.localDate === date)
               ? detail(
                   puzzleResults(attempts.filter((a) => a.localDate === date)),
                 )
               : "Puzzle history not tracked yet"}
           </p>
+          {!puzzleHistoryKnown(date, trackingSince) &&
+            attempts.some((a) => a.localDate === date) && (
+              <p className="ci-note">
+                Restored records; other attempts may be missing.
+              </p>
+            )}
           {mode === "all" && (
             <GameList
               games={games.filter((g) => g.localDate === date)}

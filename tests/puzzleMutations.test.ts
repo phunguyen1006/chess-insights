@@ -5,6 +5,9 @@ const state = vi.hoisted(() => ({
   settings: { trackPuzzleActivity: true } as Settings,
   settingGate: null as Promise<void> | null,
   clearGate: null as Promise<void> | null,
+  importGate: null as Promise<void> | null,
+  importBackup: vi.fn(async () => ({ imported: 1, skipped: 0, total: 1 })),
+  exportBackup: vi.fn(async () => ({ attempts: [] })),
   save: vi.fn(async () => true),
   clear: vi.fn(async () => undefined),
   start: vi.fn(async () => ({ puzzleTrackingStartedAt: Date.now() })),
@@ -25,6 +28,13 @@ vi.mock("../src/data/storage/puzzleRepository", () => ({
   },
   startPuzzleTracking: state.start,
 }));
+vi.mock("../src/data/storage/puzzleBackupRepository", () => ({
+  importPuzzleBackup: async () => {
+    await state.importGate;
+    return state.importBackup();
+  },
+  exportPuzzleBackup: state.exportBackup,
+}));
 let handleMessage: typeof import("../src/background/serviceWorker").handleMessage;
 beforeAll(async () => {
   vi.stubGlobal("chrome", {
@@ -37,6 +47,7 @@ beforeEach(() => {
   state.settings = { trackPuzzleActivity: true };
   state.settingGate = null;
   state.clearGate = null;
+  state.importGate = null;
   vi.clearAllMocks();
 });
 afterAll(() => vi.unstubAllGlobals());
@@ -92,4 +103,50 @@ it("continues accepting valid puzzle messages after one mutation fails", async (
     ok: true,
     data: true,
   });
+});
+it("serializes imports with Clear and backup export without enabling tracking", async () => {
+  state.settings.trackPuzzleActivity = false;
+  let finish!: () => void;
+  state.importGate = new Promise<void>((resolve) => {
+    finish = resolve;
+  });
+  const imported = handleMessage({
+    type: "ci:puzzle-import",
+    username: "alice",
+    text: "{}",
+  });
+  const cleared = handleMessage({ type: "ci:puzzle-clear", username: "alice" });
+  const exported = handleMessage({
+    type: "ci:puzzle-export",
+    username: "alice",
+  });
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  expect(state.clear).not.toHaveBeenCalled();
+  expect(state.exportBackup).not.toHaveBeenCalled();
+  finish();
+  expect(await imported).toMatchObject({ ok: true, data: { imported: 1 } });
+  await Promise.all([cleared, exported]);
+  expect(state.importBackup.mock.invocationCallOrder[0]).toBeLessThan(
+    state.clear.mock.invocationCallOrder[0],
+  );
+  expect(state.clear.mock.invocationCallOrder[0]).toBeLessThan(
+    state.exportBackup.mock.invocationCallOrder[0],
+  );
+  expect(state.settings.trackPuzzleActivity).toBe(false);
+  expect(state.start).not.toHaveBeenCalled();
+});
+it("rejects a failed backup without broadcasting an update and allows the next request", async () => {
+  state.importGate = Promise.reject(new Error("Invalid backup"));
+  expect(
+    await handleMessage({
+      type: "ci:puzzle-import",
+      username: "alice",
+      text: "{}",
+    }),
+  ).toMatchObject({ ok: false, error: { message: "Invalid backup" } });
+  expect(chrome.storage.local.set).not.toHaveBeenCalled();
+  state.importGate = null;
+  expect(
+    await handleMessage({ type: "ci:puzzle-export", username: "alice" }),
+  ).toMatchObject({ ok: true });
 });

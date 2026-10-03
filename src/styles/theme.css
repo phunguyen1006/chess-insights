@@ -343,6 +343,38 @@
   margin: 10px 0 !important;
   line-height: 1.6;
 }
+.ci-backup {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  overflow-wrap: anywhere;
+}
+.ci-backup > * {
+  min-width: 0;
+}
+.ci-backup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+}
+.ci-backup-actions > *,
+.ci-backup-actions input {
+  max-width: 100%;
+  min-width: 0;
+}
+.ci-backup-actions button,
+.ci-backup-actions input {
+  min-height: 44px;
+}
+.ci-backup-preview {
+  padding: 14px;
+  border: 1px solid var(--ci-border);
+  border-radius: 6px;
+}
+.ci-backup-preview .ci-backup-actions {
+  margin-top: 12px;
+}
 .ci-stat-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -1316,6 +1348,22 @@
     grid-template-columns: minmax(0, 1fr) !important;
   }
 }
-.ci-scope .ci-puzzle-unknown { background: repeating-linear-gradient(135deg, #efefec, #efefec 3px, #e5e5e1 3px, #e5e5e1 4px); }
-.ci-scope .ci-activity-modes { display:flex; gap:6px; flex-wrap:wrap; margin:12px 0; }
-.ci-scope .ci-activity-modes [aria-pressed="true"] { background:var(--ci-native-green,#81b64c);color:white; }
+.ci-scope .ci-puzzle-unknown {
+  background: repeating-linear-gradient(
+    135deg,
+    #efefec,
+    #efefec 3px,
+    #e5e5e1 3px,
+    #e5e5e1 4px
+  );
+}
+.ci-scope .ci-activity-modes {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+.ci-scope .ci-activity-modes [aria-pressed="true"] {
+  background: var(--ci-native-green, #81b64c);
+  color: white;
+}

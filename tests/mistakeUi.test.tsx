@@ -20,6 +20,7 @@ vi.mock("../src/features/state/useAnalysis", () => ({
 vi.mock("../src/features/state/client", () => ({ send: mock.send }));
 import { MistakesPage } from "../src/features/insights/pages/MistakesPage";
 import { normalizeGame } from "../src/data/normalize/normalizeGame";
+import type { Mistake } from "../src/analysis/types";
 let root: ReturnType<typeof createRoot>, container: HTMLDivElement;
 beforeEach(() => {
   vi.stubGlobal("IS_REACT_ACT_ENVIRONMENT", true);
@@ -43,6 +44,54 @@ afterEach(async () => {
   vi.unstubAllGlobals();
   vi.restoreAllMocks();
 });
+function reviewFixture(count: number) {
+  const game = normalizeGame(
+    {
+      uuid: "review-session",
+      end_time: 1790000000,
+      rules: "chess",
+      white: { username: "alice", result: "win" },
+      black: { username: "bob", result: "resigned" },
+    },
+    "alice",
+  )!;
+  mock.state.analyses = [
+    {
+      id: game.id,
+      username: "alice",
+      analysisVersion: 1,
+      engineVersion: "test",
+      nodes: 20000,
+      analyzedAt: 1,
+      source: "test",
+    },
+  ];
+  mock.state.mistakes = Array.from({ length: count }, (_, index): Mistake => ({
+    id: `${game.id}:${index * 2 + 1}:v1`,
+    username: "alice",
+    gameId: game.id,
+    ply: index * 2 + 1,
+    moveNumber: index + 1,
+    playerColor: "white",
+    fenBefore: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    playedMoveUci: "e2e4",
+    playedMoveSan: "e4",
+    bestMoveUci: "d2d4",
+    bestMoveSan: "d4",
+    evalBest: { type: "cp", value: 100 },
+    evalPlayed: { type: "cp", value: -150 },
+    centipawnLoss: 250,
+    mateTransition: null,
+    severity: "blunder",
+    phase: "opening",
+    opening: null,
+    createdAt: 1,
+    bestLine: ["d4"],
+    thinkSeconds: null,
+    inPressure: null,
+  }));
+  return game;
+}
 it("shows a primary recent-20 empty-state CTA without zero-filled charts", async () => {
   await act(() => root.render(<MistakesPage username="alice" games={[]} />));
   expect(container.textContent).toContain("No games analyzed yet.");
@@ -66,6 +115,33 @@ it("exposes failed initialization and a retry instead of silently showing zeros"
   expect(container.querySelector("button.ci-primary")?.textContent).toBe(
     "Retry Analysis",
   );
+});
+it("retries the failed pending queue instead of replacing it with the selected scope", async () => {
+  vi.spyOn(document, "hidden", "get").mockReturnValue(false);
+  mock.state.queue = {
+    id: "alice",
+    username: "alice",
+    ids: Array.from({ length: 70 }, (_, index) => `pending-${index}`),
+    completed: 30,
+    total: 100,
+    status: "error",
+    error: "Stockfish timed out.",
+  };
+  mock.request.mockClear();
+  mock.request.mockResolvedValue(mock.state);
+  mock.send.mockResolvedValue({ token: "resume-failed-queue" });
+  await act(() => root.render(<MistakesPage username="alice" games={[]} />));
+  const primary =
+    container.querySelector<HTMLButtonElement>("button.ci-primary")!;
+  expect(primary.textContent).toBe("Retry Analysis");
+  await act(() => primary.click());
+  expect(mock.send).toHaveBeenCalledWith({
+    type: "ci:engine-open",
+    username: "alice",
+  });
+  expect(mock.request).not.toHaveBeenCalledWith("enqueue", expect.anything());
+  expect(mock.state.queue).toMatchObject({ completed: 30, total: 100 });
+  expect(mock.state.queue.ids).toHaveLength(70);
 });
 it("disables duplicate startup/running clicks and exposes real progress", async () => {
   mock.state.queue = {
@@ -258,3 +334,57 @@ it("stops startup if the tab becomes hidden while authorization is pending", asy
   expect(mock.request).toHaveBeenCalledWith("pause");
   expect(container.querySelector("iframe")).toBeNull();
 });
+it.each(["close", "restart", "select"] as const)(
+  "does not let a pending grade overwrite review navigation after %s",
+  async (navigation) => {
+    const game = reviewFixture(3);
+    let finish!: () => void;
+    mock.request.mockClear();
+    mock.request.mockImplementation((action: string) =>
+      action === "review"
+        ? new Promise<void>((resolve) => {
+            finish = resolve;
+          })
+        : Promise.resolve(mock.state),
+    );
+    await act(() =>
+      root.render(<MistakesPage username="alice" games={[game]} />),
+    );
+    const button = (label: string) =>
+      [...container.querySelectorAll<HTMLButtonElement>("button")].find(
+        (element) => element.textContent === label,
+      )!;
+    await act(() => button("Start Review").click());
+    await act(() => button("Reveal answer").click());
+    await act(() => button("Good").click());
+    if (navigation === "close") await act(() => button("Close review").click());
+    else if (navigation === "restart")
+      await act(() => button("Start Review").click());
+    else
+      await act(() =>
+        [
+          ...container.querySelectorAll<HTMLButtonElement>(
+            ".ci-mistake-card button",
+          ),
+        ][2].click(),
+      );
+    await act(async () => finish());
+    expect(
+      mock.request.mock.calls.filter(([action]) => action === "review"),
+    ).toHaveLength(1);
+    if (navigation === "close") {
+      expect(container.querySelector(".ci-review-layout")).toBeNull();
+      expect(container.textContent).not.toContain("Review 2 / 3");
+    } else if (navigation === "restart") {
+      expect(container.textContent).toContain("Review position · Move 1");
+      expect(container.textContent).toContain("Review 1 / 3");
+      expect(container.textContent).not.toContain("Review 2 / 3");
+      expect(
+        container.querySelector(".ci-review-layout")?.textContent,
+      ).not.toContain("Best:");
+    } else {
+      expect(container.textContent).toContain("Review position · Move 3");
+      expect(container.textContent).not.toContain("Review position · Move 2");
+    }
+  },
+);

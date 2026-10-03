@@ -42,6 +42,7 @@ export function MistakesPage({
     owned = useRef(false),
     active = useRef(false),
     generation = useRef(0),
+    reviewSession = useRef(0),
     opening = useRef(false),
     savingReview = useRef(false);
   const stop = async () => {
@@ -231,10 +232,18 @@ export function MistakesPage({
   ].sort();
   const nextReview = async (grade: Grade, correct: boolean) => {
     if (!current || savingReview.current) return;
+    const session = reviewSession.current;
+    const gen = generation.current;
     savingReview.current = true;
     setGrading(true);
     try {
       await request("review", { mistakeId: current.id, grade, correct });
+      if (
+        session !== reviewSession.current ||
+        gen !== generation.current ||
+        !active.current
+      )
+        return;
       if (reviewQueue.length) {
         const next = reviewIndex + 1;
         setReviewIndex(next);
@@ -317,7 +326,8 @@ export function MistakesPage({
         <button
           className="ci-primary"
           onClick={() =>
-            void (state.queue?.status === "paused" && state.queue.ids.length
+            void (state.queue?.ids.length &&
+            ["paused", "error"].includes(state.queue.status)
               ? startEngine()
               : enqueue())
           }
@@ -350,6 +360,7 @@ export function MistakesPage({
         <button
           disabled={!filtered.some((m) => due(m.id))}
           onClick={() => {
+            reviewSession.current++;
             const ids = filtered
               .filter((m) => due(m.id))
               .sort(
@@ -458,10 +469,11 @@ export function MistakesPage({
       {current && (
         <ReviewBoard
           onClose={() => {
+            reviewSession.current++;
             setSelected("");
             setReviewQueue([]);
           }}
-          key={current.id}
+          key={`${reviewSession.current}:${current.id}`}
           mistake={current}
           game={gameMap.get(current.gameId)!}
           review={reviews.get(current.id)}
@@ -625,6 +637,7 @@ export function MistakesPage({
                     </p>
                     <button
                       onClick={() => {
+                        reviewSession.current++;
                         setReviewQueue([]);
                         setSelected(m.id);
                       }}

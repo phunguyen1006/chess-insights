@@ -7,25 +7,26 @@ A standalone Chrome / Edge extension for Chess.com activity analytics, locally t
 
 ## Install
 
-Download **[chess-insights-v0.1.6.zip](https://github.com/phunguyen1006/chess-insights/releases/download/v0.1.6/chess-insights-v0.1.6.zip)** from the [release page](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.6). Extract it to a permanent folder. In `edge://extensions` or `chrome://extensions`, enable **Developer mode**, choose **Load unpacked**, and select the folder containing `manifest.json`.
+Download **[chess-insights-v0.1.7.zip](https://github.com/phunguyen1006/chess-insights/releases/download/v0.1.7/chess-insights-v0.1.7.zip)** from the [release page](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.7). Extract it to a permanent folder. In `edge://extensions` or `chrome://extensions`, enable **Developer mode**, choose **Load unpacked**, and select the folder containing `manifest.json`.
 
 Use your normal browser profile and Chess.com session. The extension does not require a separate login. If account detection fails, enter your public Chess.com username in the Connect form.
 
-**Upgrading an existing installation:** replace the files in the same extension folder, then reload the existing extension and Chess.com. Keep the same folder and extension identity; uninstalling or loading another folder can lose access to local history. The database migration preserves existing game, engine, clock and review data.
+**Upgrading an existing installation:** replace the files in the same extension folder, then reload the existing extension and Chess.com. Keep the same folder and extension identity; uninstalling or loading another folder can lose access to local history. v0.1.7 keeps the existing database schema and data. Once installed, save a puzzle backup from Settings before future upgrades or storage changes.
 
 GitHub's automatic **Source code** archives contain development source and must be built first. They are not the installable extension. See [installation, upgrades and checksums](docs/INSTALL.md).
 
-**v0.1.6 is a preview release.** Automated tests and local fixtures pass; final authenticated Chess.com DOM integration and offscreen-engine delivery still need manual browser verification; desktop and 390px local fixtures pass. See [verification evidence and checklist](docs/VERIFICATION.md).
+**v0.1.7 is a preview release.** Automated tests cover the new exports, puzzle restore and review fixes. Final authenticated Chess.com DOM integration and offscreen-engine delivery still need manual browser verification. See [verification evidence and checklist](docs/VERIFICATION.md).
 
 ## Features
 
 - **Homepage activity:** green/white annual heatmap, full width below Play Online and above Recommended Match + Daily Puzzle; games and locally tracked puzzles, year selection, streaks, tooltips and date navigation.
 - **Persistent Insights navigation:** sidebar entry between Stats and Train, with eight analytics sections.
 - **Overview / Activity:** activity summaries, game filters, outcomes, streaks, and All Activity / Games / Puzzles views.
+- **Game CSV export:** download the current filtered cached games, with 16 columns and spreadsheet-safe UTF-8 output.
 - **Rating / Openings / Opponents / Results:** separate rating pools, rolling averages, opening and head-to-head comparisons, sample-size thresholds, termination and timeout statistics.
 - **Time Management:** clock coverage, thinking-time distributions, phase comparisons and historical per-game details from PGN clocks.
 - **Mistake Bank:** bundled local Stockfish, explicit historical-game analysis, pause/resume queue, classified mistakes, answer reveal and scheduled reviews.
-- **Settings:** account selection, puzzle tracking toggle and separately confirmed puzzle-only history clearing.
+- **Settings:** account selection, puzzle tracking toggle, puzzle JSON backup/restore and separately confirmed puzzle-only history clearing.
 
 ![Homepage activity on the local integration fixture](docs/images/home-activity.png)
 
@@ -37,17 +38,19 @@ Screenshots show a local fixture with public game records and synthetic puzzle c
 
 **Games:** the public [Chess.com Published-Data API](https://www.chess.com/news/view/published-data-api) provides completed game archives. Requests are serialized, cached by account and month, and retried with bounded backoff. Public updates may lag behind the website. Standard chess is supported; unsupported variants and unfinished records are excluded.
 
-**Puzzles:** the extension records completed rated puzzle attempts from visible sidebar completion metadata while tracking is enabled. Tracking starts separately for each identifiable account. **Previous puzzle history cannot be recovered by this release**, and attempts missed while tracking is disabled cannot be reconstructed. Pre-tracking dates are unknown, rather than represented as zero activity.
+**Puzzles:** the extension records completed rated puzzle attempts from visible sidebar completion metadata while tracking is enabled. Tracking starts separately for each identifiable account. **Earlier history cannot be retrieved from Chess.com**, and attempts missed while tracking is disabled cannot be reconstructed. A saved Chess Insights puzzle backup can restore attempts that the extension previously recorded. Dates before the current tracking boundary remain unknown unless restored records exist; those records can be incomplete.
 
 Rated `/puzzles/rated` and `/puzzles/training` pages with suitable completion metadata are supported. Daily Puzzle, Puzzle Rush, Puzzle Battle and review/problem routes are excluded. Rerenders and refreshes are deduplicated; viewing a solution does not turn a failed attempt into a success. Ambiguous completion metadata is skipped conservatively. No puzzle engine, hints, solutions or board positions are read.
 
 Puzzle success rate is solved / (solved + failed); unknown outcomes are excluded from its denominator. Rating history uses observed metadata, when available. Puzzle tracking can be disabled without deleting history; confirmed clearing affects only the selected account's puzzle data.
 
+**Exports:** Settings → Puzzle history backup downloads the selected account's recorded attempts as JSON. Import validates the file and account, previews its contents, then adds missing attempt IDs without replacing existing attempts. Limits are 20 MB per file and 50,000 attempts in the merged account history. Import preserves the current tracking/Clear boundary and tracking setting; it does not establish continuous coverage for older dates. This backup excludes games, engine analysis, review schedules and settings. The game CSV contains only games already cached and matching the current filters; exporting does not fetch additional archives. See [backup and restore steps](docs/INSTALL.md#back-up-and-restore-puzzle-history).
+
 **Engine:** Stockfish 18.0.8 lite runs locally in one worker for completed stored games, on demand. It is not Chess.com's cloud Game Review. Analysis uses 16 MB hash and 20,000 nodes per position; classifications are approximate extension heuristics (50–99 cp inaccuracy, 100–199 cp mistake, ≥200 cp blunder, with mate handling). Engine analysis is restricted to historical routes and stops when leaving the review context. Review intervals are 1 / 3 / 7 / 21 days.
 
 ## Privacy and permissions
 
-Game archives, puzzle attempts, settings, analyses and review schedules stay in extension storage. There is no telemetry, cloud account, upload of local game history, or private Chess.com endpoint access. PubAPI receives the public username and archive requests.
+Game archives, puzzle attempts, settings, analyses and review schedules stay in extension storage. There is no telemetry, cloud account, upload of local game history, or private Chess.com endpoint access. PubAPI receives the public username and archive requests. Exports are downloaded to your device; imported puzzle files are processed locally. Backup and CSV files contain account/activity data, so share them only when intended.
 
 Requested permissions are:
 

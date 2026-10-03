@@ -18,6 +18,8 @@ import { usePuzzleData } from "../state/usePuzzleData";
 import type { ActivityMode } from "../../analytics/puzzles";
 import { PuzzleSettings } from "./components/PuzzleSettings";
 import { puzzleResults } from "../../analytics/puzzles";
+import { PuzzleBackupSettings } from "./components/PuzzleBackupSettings";
+import { GameExport } from "./components/GameExport";
 export function InsightsApp({
   state,
   detected,
@@ -112,7 +114,11 @@ export function InsightsApp({
               <button onClick={() => setEditing(!editing)}>
                 Switch account
               </button>
-              <button onClick={() => setSettingsOpen((v) => !v)}>
+              <button
+                aria-expanded={settingsOpen}
+                aria-controls="ci-settings"
+                onClick={() => setSettingsOpen((v) => !v)}
+              >
                 Settings
               </button>
               <button
@@ -170,7 +176,15 @@ export function InsightsApp({
         </Panel>
       ) : (
         <>
-          {settingsOpen && <PuzzleSettings key={username} state={puzzles} />}
+          {settingsOpen && (
+            <div id="ci-settings" key={username}>
+              <PuzzleBackupSettings
+                username={username}
+                onImported={puzzles.reload}
+              />
+              <PuzzleSettings state={puzzles} />
+            </div>
+          )}
           <div className="ci-sync" role="status">
             {loading
               ? "Syncing…"
@@ -212,6 +226,22 @@ export function InsightsApp({
                 {data.games.length.toLocaleString()} games cached. Historical
                 years load when selected; choose All time to load full history.
               </p>
+              {(section !== "activity" || activityMode === "games") && (
+                <GameExport
+                  key={username}
+                  username={username}
+                  games={
+                    section === "results" && route?.termination
+                      ? games.filter(
+                          (g) =>
+                            g.termination === route.termination &&
+                            g.result === "loss",
+                        )
+                      : games
+                  }
+                  loading={loading}
+                />
+              )}
             </>
           }
           {loading && !data.games.length ? (

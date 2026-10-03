@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.1.7](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.7) — 2026-10-03
+
+Puzzle-history portability, filtered game export and review-session fixes. No new permissions or database schema changes.
+
+### Added
+
+- Download a per-account puzzle JSON backup and preview a validated import before merging missing attempts. Existing attempt IDs, tracking settings and the current tracking/Clear boundary are preserved.
+- Reject malformed, mismatched-account and conflicting backup records; enforce 20 MB and 50,000-attempt limits and roll back failed imports without partial writes.
+- Show restored attempts before the current tracking boundary while marking their coverage as potentially incomplete. Backups restore saved records only; they do not retrieve earlier history from Chess.com or include games, analyses, reviews or settings.
+- Export the current filtered cached games as a 16-column UTF-8 CSV, with quoting, spreadsheet formula protection and account/filter change guards.
+
+### Fixed
+
+- Resume the existing pending engine queue from the primary Retry button instead of replacing it with a newly selected scope.
+- Ignore late grading responses after closing or changing a review session, and reset the revealed answer when starting another review.
+
+### Validation
+
+258 tests in 32 files pass, plus typecheck and ESLint. See [QA evidence and manual scope](docs/QA-0.1.7.md) for build and browser verification.
+
 ## [0.1.6](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.6)
 
 Project-wide correctness and regression-test pass. No new permissions or database schema changes.

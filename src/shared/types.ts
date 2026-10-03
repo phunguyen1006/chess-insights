@@ -114,6 +114,8 @@ export interface ApiError {
 }
 export type Reply<T> = { ok: true; data: T } | { ok: false; error: ApiError };
 export type Request =
+  | { type: "ci:puzzle-export"; username: string }
+  | { type: "ci:puzzle-import"; username: string; text: string }
   | { type: "ci:puzzles"; username: string }
   | { type: "ci:puzzle-start"; username: string }
   | { type: "ci:puzzle-save"; attempt: PuzzleAttempt }

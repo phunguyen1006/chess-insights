@@ -189,9 +189,10 @@ export function ActivityHeatmap({
                 const list = days.get(date) ?? [],
                   intensity =
                     (mode === "games" ? intensities : levels).get(date) ?? 0;
-                const known = puzzleHistoryKnown(date, trackingSince),
-                  puzzles = puzzleDays.get(date)?.length ?? 0;
-                const label = `${displayDate(date)} — ${mode === "puzzles" ? "" : `${list.length} games`}${mode === "games" ? "" : ` · ${known ? `${puzzles} puzzle attempts` : "Puzzle history not tracked yet"}`}`;
+                const tracked = puzzleHistoryKnown(date, trackingSince),
+                  puzzles = puzzleDays.get(date)?.length ?? 0,
+                  known = tracked || puzzles > 0;
+                const label = `${displayDate(date)} — ${mode === "puzzles" ? "" : `${list.length} games`}${mode === "games" ? "" : ` · ${known ? `${puzzles} puzzle attempts${!tracked ? " recorded; history may be incomplete" : ""}` : "Puzzle history not tracked yet"}`}`;
                 return (
                   <button
                     key={date}
@@ -281,7 +282,8 @@ export function ActivityHeatmap({
             </div>
           )}
           {mode !== "games" &&
-            (puzzleHistoryKnown(tooltip.date, trackingSince) ? (
+            (puzzleHistoryKnown(tooltip.date, trackingSince) ||
+            puzzleDays.has(tooltip.date) ? (
               (() => {
                 const p = puzzleResults(puzzleDays.get(tooltip.date) ?? []);
                 return (
@@ -305,6 +307,11 @@ export function ActivityHeatmap({
                             : `${p.successRate.toFixed(1)}% success`}
                         </div>
                       </>
+                    )}
+                    {!puzzleHistoryKnown(tooltip.date, trackingSince) && (
+                      <div>
+                        Restored records; other attempts may be missing.
+                      </div>
                     )}
                   </>
                 );

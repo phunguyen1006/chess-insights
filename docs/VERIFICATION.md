@@ -1,6 +1,10 @@
 # Verification
 
-## Current version — 0.1.6
+## Current version — 0.1.7
+
+Puzzle JSON backup/merge, filtered game CSV export and Mistake Bank retry/review fixes are covered by **258 tests in 32 files**, typecheck, ESLint and production build verification. Local browser checks verified real JSON/CSV downloads, importing and retaining an older puzzle attempt, filtered CSV contents and desktop/390px backup settings. See [0.1.7 QA evidence and manual scope](QA-0.1.7.md).
+
+## Previous version — 0.1.6
 
 The project-wide QA pass fixed reproduced data, puzzle, engine, navigation, account-state and release-packaging failures. **209 tests / 29 files**, typecheck and ESLint pass. Local desktop and 390px checks now pass, including all Insights sections; real bundled Stockfish WASM initializes and evaluates a position. See [the full QA report](QA-0.1.6.md) for causes, tests, measurements and remaining authenticated/offscreen manual scope.
 

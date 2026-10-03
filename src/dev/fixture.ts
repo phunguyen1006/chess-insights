@@ -12,6 +12,10 @@ import {
   clearPuzzleHistory,
 } from "../data/storage/puzzleRepository";
 import { installPuzzleFixture } from "./puzzleFixture";
+import {
+  exportPuzzleBackup,
+  importPuzzleBackup,
+} from "../data/storage/puzzleBackupRepository";
 if (!import.meta.env.DEV) throw new Error("Fixtures are development-only.");
 // Native structural contract from the user's authenticated layout report:
 // full-width auto-placed hero, auto-placed left column, right column row 2/span 2.
@@ -159,6 +163,30 @@ const chromeFixture = {
     getURL: (path: string) => new URL(path, location.origin).href,
     sendMessage: async (message: Request): Promise<Reply<unknown>> => {
       switch (message.type) {
+        case "ci:puzzle-export":
+          return { ok: true, data: await exportPuzzleBackup(message.username) };
+        case "ci:puzzle-import": {
+          try {
+            const data = await importPuzzleBackup(
+              message.username,
+              message.text,
+            );
+            notifyFixtureChange({
+              "chessInsights.puzzleChange": {
+                newValue: {
+                  username: message.username,
+                  token: crypto.randomUUID(),
+                },
+              },
+            });
+            return { ok: true, data };
+          } catch (error) {
+            return {
+              ok: false,
+              error: { code: "BACKUP", message: String(error) },
+            };
+          }
+        }
         case "ci:puzzles":
           return { ok: true, data: await puzzleSnapshot(message.username) };
         case "ci:puzzle-start": {

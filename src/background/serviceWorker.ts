@@ -28,6 +28,10 @@ import {
   savePuzzleAttempt,
   clearPuzzleHistory,
 } from "../data/storage/puzzleRepository";
+import {
+  exportPuzzleBackup,
+  importPuzzleBackup,
+} from "../data/storage/puzzleBackupRepository";
 async function notifyPuzzleChange(username: string) {
   // An event token wakes all open content scripts without tabs permission or polling.
   await chrome.storage.local.set({
@@ -48,6 +52,18 @@ export async function handleMessage(
 ): Promise<Reply<unknown>> {
   try {
     switch (message.type) {
+      case "ci:puzzle-export":
+        return await mutatePuzzles(async () => ({
+          ok: true,
+          data: await exportPuzzleBackup(cleanUsername(message.username)),
+        }));
+      case "ci:puzzle-import":
+        return await mutatePuzzles(async () => {
+          const username = cleanUsername(message.username);
+          const data = await importPuzzleBackup(username, message.text);
+          await notifyPuzzleChange(username);
+          return { ok: true, data };
+        });
       case "ci:puzzles":
         return {
           ok: true,
