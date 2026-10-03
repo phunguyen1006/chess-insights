@@ -1,5 +1,5 @@
 export const DB_NAME = "chess-insights-db";
-export const DB_VERSION = 3;
+export const DB_VERSION = 4;
 export const SETTINGS_KEY = "chessInsights.settings";
 export const CURRENT_MONTH_TTL = 5 * 60_000;
 export const MANUAL_REFRESH_COOLDOWN = 30_000;

@@ -23,6 +23,11 @@ import { getGames } from "../data/storage/gameRepository";
 import { storedGameReplay } from "../analysis/engine";
 import { historicalInsightsUrl } from "../analysis/safety";
 import {
+  durationSnapshot,
+  ensureGameDurations,
+  type DurationProgress,
+} from "../data/storage/durationRepository";
+import {
   puzzleSnapshot,
   startPuzzleTracking,
   savePuzzleAttempt,
@@ -49,9 +54,23 @@ function mutatePuzzles(
 export async function handleMessage(
   message: Request,
   onProgress?: () => void,
+  onDurationProgress?: (progress: DurationProgress) => void,
 ): Promise<Reply<unknown>> {
   try {
     switch (message.type) {
+      case "ci:durations":
+        if (!["cache", "analyze"].includes(message.action))
+          throw new ApiFailure("INVALID_REQUEST", "Invalid duration action.");
+        return {
+          ok: true,
+          data:
+            message.action === "cache"
+              ? await durationSnapshot(cleanUsername(message.username))
+              : await ensureGameDurations(
+                  cleanUsername(message.username),
+                  onDurationProgress,
+                ),
+        };
       case "ci:puzzle-export":
         return await mutatePuzzles(async () => ({
           ok: true,
@@ -284,6 +303,16 @@ chrome.runtime.onMessage.addListener((message: Request, sender, reply) => {
     })();
     return true;
   }
-  void handleMessage(message, notify).then(reply);
+  const durationNotify = (progress: DurationProgress) => {
+    if (sender.tab?.id !== undefined && "username" in message)
+      void chrome.tabs
+        .sendMessage(sender.tab.id, {
+          type: "ci:duration-progress",
+          username: message.username,
+          progress,
+        })
+        .catch(() => undefined);
+  };
+  void handleMessage(message, notify, durationNotify).then(reply);
   return true;
 });

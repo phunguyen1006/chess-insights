@@ -4,15 +4,13 @@ import type { Grade } from "../../../analysis/types";
 import { useAnalysis } from "../../state/useAnalysis";
 import { send } from "../../state/client";
 import { liveContext } from "../../../analysis/safety";
+import { Select, Bars, Empty, number } from "../components/Common";
+import { Trend, Scatter } from "../components/Charts";
 import {
-  Panel,
-  Stats,
-  Select,
-  Bars,
-  Empty,
-  number,
-} from "../components/Common";
-import { Donut, Trend, Scatter } from "../components/Charts";
+  ChessSection as Panel,
+  StatSummaryRow as Stats,
+  SecondarySidebar,
+} from "../components/NativeStats";
 import { ReviewBoard } from "../components/ReviewBoard";
 const fixtureRuntime = import.meta.env.DEV && location.hostname === "127.0.0.1";
 export function MistakesPage({
@@ -23,6 +21,7 @@ export function MistakesPage({
   games: NormalizedGame[];
 }) {
   const { state, error, request } = useAnalysis(username, games),
+    [view, setView] = useState("overview"),
     [severity, setSeverity] = useState("all"),
     [phase, setPhase] = useState("all"),
     [reviewState, setReviewState] = useState("all"),
@@ -208,9 +207,17 @@ export function MistakesPage({
     now = Date.now();
   const due = (id: string) =>
     !reviews.has(id) || reviews.get(id)!.nextReviewAt <= now;
+  const activeSeverity =
+    view === "blunders"
+      ? "blunder"
+      : view === "mistakes"
+        ? "mistake"
+        : view === "inaccuracies"
+          ? "inaccuracy"
+          : severity;
   const filtered = all.filter(
     (m) =>
-      (severity === "all" || m.severity === severity) &&
+      (activeSeverity === "all" || m.severity === activeSeverity) &&
       (phase === "all" || m.phase === phase) &&
       (reviewState === "all" ||
         (reviewState === "due" && due(m.id)) ||
@@ -373,6 +380,7 @@ export function MistakesPage({
             setReviewIndex(0);
             setCorrectCount(0);
             setSelected(ids[0]);
+            setView("review");
           }}
         >
           Start Review
@@ -380,7 +388,7 @@ export function MistakesPage({
       </div>
       <div ref={host} />
       {state.queue && (
-        <p className="ci-status" role="status">
+        <p className="ci-status ci-analysis-progress" role="status">
           {state.queue.status === "initializing"
             ? "Loading engine…"
             : state.queue.status === "running"
@@ -439,226 +447,299 @@ export function MistakesPage({
         </p>
       )}
       {error && <p className="ci-status">{error}</p>}
-      <div className="ci-filters">
-        <Select
-          label="Severity"
-          value={severity}
-          options={["all", "blunder", "mistake", "inaccuracy"]}
-          onChange={setSeverity}
+      <div className="ci-advanced-layout">
+        <SecondarySidebar
+          label="Mistake statistics"
+          value={view}
+          items={[
+            ["overview", "Overview"],
+            ["blunders", "Blunders"],
+            ["mistakes", "Mistakes"],
+            ["inaccuracies", "Inaccuracies"],
+            ["phase", "By Phase"],
+            ["review", "Review"],
+          ]}
+          onChange={setView}
         />
-        <Select
-          label="Phase"
-          value={phase}
-          options={["all", "opening", "middlegame", "endgame"]}
-          onChange={setPhase}
-        />
-        <Select
-          label="Review state"
-          value={reviewState}
-          options={["all", "due", "new", "mastered"]}
-          onChange={setReviewState}
-        />
-      </div>
-      {reviewQueue.length > 0 && (
-        <p className="ci-status">
-          {reviewIndex < reviewQueue.length
-            ? `Review ${reviewIndex + 1} / ${reviewQueue.length}`
-            : `${reviewQueue.length} reviewed · ${correctCount} correct first try · ${reviewQueue.length - correctCount} need more practice`}
-        </p>
-      )}
-      {current && (
-        <ReviewBoard
-          onClose={() => {
-            reviewSession.current++;
-            setSelected("");
-            setReviewQueue([]);
-          }}
-          key={`${reviewSession.current}:${current.id}`}
-          mistake={current}
-          game={gameMap.get(current.gameId)!}
-          review={reviews.get(current.id)}
-          saving={grading}
-          onGrade={(grade, correct) => void nextReview(grade, correct)}
-        />
-      )}
-      {!!analyzed.length && (
-        <>
-          <div className="ci-two-columns">
-            <Panel title="Severity distribution">
-              <p className="ci-note">{coverage}</p>
-              <Donut
-                unit="mistakes"
-                palette={["#b77f77", "#c7a06a", "#c4b878"]}
-                label="Chess Insights mistake severity"
-                data={["blunder", "mistake", "inaccuracy"].map((label) => ({
-                  label,
-                  value: filtered.filter((m) => m.severity === label).length,
-                }))}
+        <div className="ci-advanced-content">
+          <div className="ci-filters">
+            {!["blunders", "mistakes", "inaccuracies"].includes(view) && (
+              <Select
+                label="Severity"
+                value={severity}
+                options={["all", "blunder", "mistake", "inaccuracy"]}
+                onChange={setSeverity}
               />
-            </Panel>
-            <Panel title="Mistakes by phase">
-              <p className="ci-note">{coverage}</p>
-              <Bars
-                rows={["opening", "middlegame", "endgame"].map((p) => [
-                  p,
-                  filtered.filter((m) => m.phase === p).length,
-                ])}
-              />
-            </Panel>
-          </div>
-          <Panel title="Mistakes by time control">
-            <p className="ci-note">{coverage}</p>
-            <div className="ci-severity-pools">
-              {["rapid", "blitz", "bullet", "daily"].map((pool) => {
-                const ms = filtered.filter(
-                  (m) => gameMap.get(m.gameId)?.timeClass === pool,
-                );
-                return (
-                  <div key={pool}>
-                    <strong>{pool}</strong>
-                    <div
-                      className="ci-severity-stack"
-                      role="img"
-                      aria-label={`${pool}: ${ms.length} mistakes`}
-                    >
-                      {["blunder", "mistake", "inaccuracy"].map((s) => {
-                        const n = ms.filter((m) => m.severity === s).length;
-                        return n > 0 ? (
-                          <span
-                            key={s}
-                            className={`ci-severity-${s}`}
-                            style={{ flex: n }}
-                            title={`${s}: ${n}`}
-                          >
-                            {n}
-                          </span>
-                        ) : null;
-                      })}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <p className="ci-note">
-              Red: blunder · Orange: mistake · Yellow: inaccuracy
-            </p>
-          </Panel>
-          <Panel title="Mistakes per analyzed game">
-            <p className="ci-note">{coverage}</p>
-            <Trend
-              label="Monthly mistakes per analyzed game"
-              data={months.map((month) => {
-                const n = analyzed.filter((a) =>
-                  gameMap.get(a.id)!.localDate.startsWith(month),
-                ).length;
-                return {
-                  label: month,
-                  value:
-                    filtered.filter((m) =>
-                      gameMap.get(m.gameId)!.localDate.startsWith(month),
-                    ).length / n,
-                  detail: `${n} analyzed games`,
-                };
-              })}
+            )}
+            <Select
+              label="Phase"
+              value={phase}
+              options={["all", "opening", "middlegame", "endgame"]}
+              onChange={setPhase}
             />
-          </Panel>
-          <Panel title="Think time vs centipawn loss">
-            <p className="ci-note">{coverage}</p>
-            {timed.length >= 5 ? (
-              <Scatter
-                label="Mistake think time and evaluation loss"
-                xLabel="Think time (seconds)"
-                yLabel="Centipawn loss"
-                data={timed.map((m) => ({
-                  label: `${gameMap.get(m.gameId)!.opponentUsername} · ${m.moveNumber}. ${m.playedMoveSan}`,
-                  x: m.thinkSeconds!,
-                  y: m.centipawnLoss!,
-                  detail: m.severity,
-                }))}
-              />
-            ) : (
-              <Empty>
-                At least 5 mistakes with valid timing and centipawn evaluations
-                are needed. Mate transitions are excluded.
-              </Empty>
-            )}
-          </Panel>
-          <Panel title="Mistakes and time pressure">
-            <p>
-              {coverage}. {pressureMistakes.length} / {pressureKnown.length}{" "}
-              clock-covered mistakes occurred in pressure;{" "}
-              {pressureMistakes.filter((m) => m.severity === "blunder").length}{" "}
-              blunders.{" "}
-              {
-                all.filter((m) => m.thinkSeconds !== null && m.thinkSeconds < 2)
-                  .length
-              }{" "}
-              mistakes followed moves under 2s, out of{" "}
-              {all.filter((m) => m.thinkSeconds !== null).length} with timing.
-              Associations only.
+            <Select
+              label="Review state"
+              value={reviewState}
+              options={["all", "due", "new", "mastered"]}
+              onChange={setReviewState}
+            />
+          </div>
+          {reviewQueue.length > 0 && (
+            <p className="ci-status">
+              {reviewIndex < reviewQueue.length
+                ? `Review ${reviewIndex + 1} / ${reviewQueue.length}`
+                : `${reviewQueue.length} reviewed · ${correctCount} correct first try · ${reviewQueue.length - correctCount} need more practice`}
             </p>
-          </Panel>
-          <Panel title="Mistakes">
-            {!filtered.length ? (
-              <Empty>
-                {analyzed.length
-                  ? !all.length
-                    ? "No mistakes exceeded the current classification thresholds."
-                    : "No mistakes match these filters."
-                  : "Choose completed games and start local analysis."}
-              </Empty>
-            ) : (
-              filtered.slice(0, bankLimit).map((m) => {
-                const g = gameMap.get(m.gameId)!;
-                return (
-                  <article className="ci-mistake-card" key={m.id}>
-                    <span
-                      className={`ci-severity-badge ci-severity-${m.severity}`}
+          )}
+          {current && view === "review" && (
+            <ReviewBoard
+              onClose={() => {
+                reviewSession.current++;
+                setSelected("");
+                setReviewQueue([]);
+              }}
+              key={`${reviewSession.current}:${current.id}`}
+              mistake={current}
+              game={gameMap.get(current.gameId)!}
+              review={reviews.get(current.id)}
+              saving={grading}
+              onGrade={(grade, correct) => void nextReview(grade, correct)}
+            />
+          )}
+          {!!analyzed.length && (
+            <>
+              {view === "overview" && (
+                <>
+                  <div className="ci-primary-stat">
+                    <strong>{number(filtered.length)}</strong>
+                    <span>Mistakes detected</span>
+                    <small>{coverage}</small>
+                  </div>
+                  <Panel title="Severity distribution">
+                    <p className="ci-note">{coverage}</p>
+                    <div
+                      className="ci-severity-bars"
+                      role="group"
+                      aria-label="Chess Insights mistake severity"
                     >
-                      {m.severity}
-                    </span>
-                    <p>
-                      {g.localDate} · {g.timeClass} · {m.playerColor} · vs{" "}
-                      {g.opponentUsername}
-                    </p>
-                    <strong>
-                      Move {m.moveNumber} · You played {m.playedMoveSan}
-                    </strong>
-                    <p>
-                      {m.centipawnLoss === null
-                        ? m.mateTransition
-                        : `${number(m.centipawnLoss)} cp loss`}{" "}
-                      · {m.phase} ·{" "}
-                      {reviews.get(m.id)?.mastered
-                        ? "Mastered"
-                        : due(m.id)
-                          ? "Due"
-                          : "Scheduled"}
-                    </p>
-                    <button
-                      onClick={() => {
-                        reviewSession.current++;
-                        setReviewQueue([]);
-                        setSelected(m.id);
-                      }}
-                    >
-                      Review Position
-                    </button>{" "}
-                    <a href={g.url} target="_blank" rel="noreferrer">
-                      Open Game →
-                    </a>
-                  </article>
-                );
-              })
-            )}
-            {bankLimit < filtered.length && (
-              <button onClick={() => setBankLimit((n) => n + 30)}>
-                Show more
-              </button>
-            )}
-          </Panel>
-        </>
-      )}
+                      <Bars
+                        rows={[
+                          ["Blunders", "blunder"],
+                          ["Mistakes", "mistake"],
+                          ["Inaccuracies", "inaccuracy"],
+                        ].map(([label, category]) => [
+                          label,
+                          filtered.filter(
+                            (mistake) => mistake.severity === category,
+                          ).length,
+                        ])}
+                      />
+                    </div>
+                  </Panel>
+                </>
+              )}
+              {view === "phase" && (
+                <Panel title="Mistakes by phase">
+                  <p className="ci-note">{coverage}</p>
+                  <Bars
+                    rows={["opening", "middlegame", "endgame"].map((p) => [
+                      p,
+                      filtered.filter((m) => m.phase === p).length,
+                    ])}
+                  />
+                </Panel>
+              )}
+              {["blunders", "mistakes", "inaccuracies"].includes(view) && (
+                <div className="ci-primary-stat">
+                  <strong>{number(filtered.length)}</strong>
+                  <span>{view[0].toUpperCase() + view.slice(1)}</span>
+                  <small>{coverage}</small>
+                </div>
+              )}
+              <details className="ci-mistake-analytics">
+                <summary>More mistake analytics</summary>
+                {view !== "phase" && (
+                  <Panel title="Mistakes by phase">
+                    <p className="ci-note">{coverage}</p>
+                    <Bars
+                      rows={["opening", "middlegame", "endgame"].map((p) => [
+                        p,
+                        filtered.filter((mistake) => mistake.phase === p)
+                          .length,
+                      ])}
+                    />
+                  </Panel>
+                )}
+                <Panel title="Mistakes by time control">
+                  <p className="ci-note">{coverage}</p>
+                  <div className="ci-severity-pools">
+                    {["rapid", "blitz", "bullet", "daily"].map((pool) => {
+                      const ms = filtered.filter(
+                        (m) => gameMap.get(m.gameId)?.timeClass === pool,
+                      );
+                      return (
+                        <div key={pool}>
+                          <strong>{pool}</strong>
+                          <div
+                            className="ci-severity-stack"
+                            role="img"
+                            aria-label={`${pool}: ${ms.length} mistakes`}
+                          >
+                            {["blunder", "mistake", "inaccuracy"].map((s) => {
+                              const n = ms.filter(
+                                (m) => m.severity === s,
+                              ).length;
+                              return n > 0 ? (
+                                <span
+                                  key={s}
+                                  className={`ci-severity-${s}`}
+                                  style={{ flex: n }}
+                                  title={`${s}: ${n}`}
+                                >
+                                  {n}
+                                </span>
+                              ) : null;
+                            })}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <p className="ci-note">
+                    Red: blunder · Orange: mistake · Yellow: inaccuracy
+                  </p>
+                </Panel>
+                <Panel title="Mistakes per analyzed game">
+                  <p className="ci-note">{coverage}</p>
+                  <Trend
+                    label="Monthly mistakes per analyzed game"
+                    data={months.map((month) => {
+                      const n = analyzed.filter((a) =>
+                        gameMap.get(a.id)!.localDate.startsWith(month),
+                      ).length;
+                      return {
+                        label: month,
+                        value:
+                          filtered.filter((m) =>
+                            gameMap.get(m.gameId)!.localDate.startsWith(month),
+                          ).length / n,
+                        detail: `${n} analyzed games`,
+                      };
+                    })}
+                  />
+                </Panel>
+                <Panel title="Think time vs centipawn loss">
+                  <p className="ci-note">{coverage}</p>
+                  {timed.length >= 5 ? (
+                    <Scatter
+                      label="Mistake think time and evaluation loss"
+                      xLabel="Think time (seconds)"
+                      yLabel="Centipawn loss"
+                      data={timed.map((m) => ({
+                        label: `${gameMap.get(m.gameId)!.opponentUsername} · ${m.moveNumber}. ${m.playedMoveSan}`,
+                        x: m.thinkSeconds!,
+                        y: m.centipawnLoss!,
+                        detail: m.severity,
+                      }))}
+                    />
+                  ) : (
+                    <Empty>
+                      At least 5 mistakes with valid timing and centipawn
+                      evaluations are needed. Mate transitions are excluded.
+                    </Empty>
+                  )}
+                </Panel>
+                <Panel title="Mistakes and time pressure">
+                  <p>
+                    {coverage}. {pressureMistakes.length} /{" "}
+                    {pressureKnown.length} clock-covered mistakes occurred in
+                    pressure;{" "}
+                    {
+                      pressureMistakes.filter((m) => m.severity === "blunder")
+                        .length
+                    }{" "}
+                    blunders.{" "}
+                    {
+                      all.filter(
+                        (m) => m.thinkSeconds !== null && m.thinkSeconds < 2,
+                      ).length
+                    }{" "}
+                    mistakes followed moves under 2s, out of{" "}
+                    {all.filter((m) => m.thinkSeconds !== null).length} with
+                    timing. Associations only.
+                  </p>
+                </Panel>
+              </details>
+              <details
+                className="ci-mistake-positions"
+                open={view !== "overview"}
+              >
+                <summary>Review positions ({number(filtered.length)})</summary>
+                <Panel title="Mistakes">
+                  {!filtered.length ? (
+                    <Empty>
+                      {analyzed.length
+                        ? !all.length
+                          ? "No mistakes exceeded the current classification thresholds."
+                          : "No mistakes match these filters."
+                        : "Choose completed games and start local analysis."}
+                    </Empty>
+                  ) : (
+                    filtered.slice(0, bankLimit).map((m) => {
+                      const g = gameMap.get(m.gameId)!;
+                      return (
+                        <article className="ci-mistake-card" key={m.id}>
+                          <span
+                            className={`ci-severity-badge ci-severity-${m.severity}`}
+                          >
+                            {m.severity}
+                          </span>
+                          <p>
+                            {g.localDate} · {g.timeClass} · {m.playerColor} · vs{" "}
+                            {g.opponentUsername}
+                          </p>
+                          <strong>
+                            Move {m.moveNumber} · You played {m.playedMoveSan}
+                          </strong>
+                          <p>
+                            {m.centipawnLoss === null
+                              ? m.mateTransition
+                              : `${number(m.centipawnLoss)} cp loss`}{" "}
+                            · {m.phase} ·{" "}
+                            {reviews.get(m.id)?.mastered
+                              ? "Mastered"
+                              : due(m.id)
+                                ? "Due"
+                                : "Scheduled"}
+                          </p>
+                          <button
+                            onClick={() => {
+                              reviewSession.current++;
+                              setReviewQueue([]);
+                              setSelected(m.id);
+                              setView("review");
+                            }}
+                          >
+                            Review Position
+                          </button>{" "}
+                          <a href={g.url} target="_blank" rel="noreferrer">
+                            Open Game →
+                          </a>
+                        </article>
+                      );
+                    })
+                  )}
+                  {bankLimit < filtered.length && (
+                    <button onClick={() => setBankLimit((n) => n + 30)}>
+                      Show more
+                    </button>
+                  )}
+                </Panel>
+              </details>
+            </>
+          )}
+        </div>
+      </div>
       <p className="ci-note">
         Chess Insights classification: inaccuracy 50–99cp, mistake 100–199cp,
         blunder ≥200cp; forced-mate transitions handled separately. Ordinary

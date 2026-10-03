@@ -32,6 +32,7 @@ export function database(): Promise<IDBDatabase> {
         "mistakes",
         "mistakeReviews",
         "analysisQueue",
+        "gameDurationAnalysis",
       ]) {
         if (!db.objectStoreNames.contains(name)) {
           const store = db.createObjectStore(name, { keyPath: "id" });

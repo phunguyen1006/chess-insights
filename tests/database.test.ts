@@ -25,7 +25,7 @@ it("closes an abandoned blocked-upgrade connection when the old tab finally clos
   // another live connection behind after the user retries the upgrade.
   expect(() => abandoned.result.transaction("games")).toThrow();
   const retry = await database();
-  expect(retry.version).toBe(3);
+  expect(retry.version).toBe(4);
   expect(await database()).toBe(retry);
   retry.close();
   vi.unstubAllGlobals();

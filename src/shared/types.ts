@@ -45,6 +45,8 @@ export interface NormalizedGame {
   openingName: string | null;
   variation: string | null;
   pgn: string | null;
+  /** Opaque source fingerprint carried by snapshots that redact the PGN. */
+  durationFingerprint?: string;
 }
 export interface Archive {
   id: string;
@@ -121,6 +123,7 @@ export type Request =
   | { type: "ci:puzzle-save"; attempt: PuzzleAttempt }
   | { type: "ci:puzzle-setting"; enabled: boolean }
   | { type: "ci:puzzle-clear"; username: string }
+  | { type: "ci:durations"; username: string; action: "cache" | "analyze" }
   | {
       type: "ci:analysis";
       username: string;

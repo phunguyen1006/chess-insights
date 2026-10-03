@@ -9,7 +9,9 @@ export const number = (n: number | null | undefined) =>
     ? "—"
     : n.toLocaleString(undefined, { maximumFractionDigits: 1 });
 export const signed = (n: number | null | undefined) =>
-  n === null || n === undefined ? "—" : `${n >= 0 ? "+" : ""}${number(n)}`;
+  n === null || n === undefined
+    ? "—"
+    : `${n < 0 ? "↓" : "↑"} ${number(Math.abs(n))}`;
 export function Panel({
   title,
   children,
@@ -20,7 +22,7 @@ export function Panel({
   return (
     <section className="ci-panel">
       <h3>{title}</h3>
-      {children}
+      <div className="ci-panel-body">{children}</div>
     </section>
   );
 }
@@ -97,11 +99,13 @@ export function FilterBar({
   onChange,
   onPeriod,
   activityOnly = false,
+  hideColor = false,
 }: {
   filters: Filters;
   onChange: (filters: Filters) => void;
   onPeriod: (period: string, start: string, end: string) => void;
   activityOnly?: boolean;
+  hideColor?: boolean;
 }) {
   const [period, setPeriod] = useState("year");
   useEffect(() => {
@@ -115,73 +119,90 @@ export function FilterBar({
   const set = (key: keyof Filters, value: string) =>
     onChange({ ...filters, [key]: value });
   return (
-    <div className="ci-filters">
-      <Select
-        label="Period"
-        value={period}
-        options={[
-          ["year", "Current year"],
-          ["all", "All time"],
-          ["30", "Last 30 days"],
-          ["3m", "Last 3 months"],
-          ["6m", "Last 6 months"],
-          ["12m", "Last 12 months"],
-          ["custom", "Custom"],
-        ]}
-        onChange={(value) => {
-          setPeriod(value);
-          const now = new Date(),
-            end = localDate(now),
-            startDate = new Date(now);
-          if (value === "30") startDate.setDate(startDate.getDate() - 29);
-          else if (value.endsWith("m")) {
-            const day = startDate.getDate();
-            startDate.setDate(1);
-            startDate.setMonth(startDate.getMonth() - parseInt(value));
-            const lastDay = new Date(
-              startDate.getFullYear(),
-              startDate.getMonth() + 1,
-              0,
-            ).getDate();
-            startDate.setDate(Math.min(day, lastDay));
-          } else if (value === "year") startDate.setMonth(0, 1);
-          const start =
-            value === "all" || value === "custom" ? "" : localDate(startDate);
-          onChange({
-            ...filters,
-            start,
-            end: value === "all" || value === "custom" ? "" : end,
-          });
-          onPeriod(value, start, end);
-        }}
-      />
-      {!activityOnly && (
-        <>
+    <div className="ci-filters ci-stats-filters">
+      <div className="ci-primary-filters">
+        {!activityOnly && (
           <Select
             label="Time control"
             value={filters.timeClass}
-            options={["all", ...POOLS]}
+            options={[
+              ["all", "All Stats"],
+              ...POOLS.map(
+                (p) => [p, p[0].toUpperCase() + p.slice(1)] as [string, string],
+              ),
+            ]}
             onChange={(v) => set("timeClass", v)}
           />
-          <Select
-            label="Rated"
-            value={filters.rated}
-            options={["all", "rated", "unrated"]}
-            onChange={(v) => set("rated", v)}
-          />
-          <Select
-            label="Color"
-            value={filters.color}
-            options={["all", "white", "black"]}
-            onChange={(v) => set("color", v)}
-          />
-          <Select
-            label="Result"
-            value={filters.result}
-            options={["all", "win", "draw", "loss"]}
-            onChange={(v) => set("result", v)}
-          />
-        </>
+        )}
+        <Select
+          label="Period"
+          value={period}
+          options={[
+            ["year", "Current year"],
+            ["all", "All time"],
+            ["7", "7 days"],
+            ["30", "Last 30 days"],
+            ["90", "90 days"],
+            ["3m", "Last 3 months"],
+            ["6m", "Last 6 months"],
+            ["12m", "Last 12 months"],
+            ["custom", "Custom"],
+          ]}
+          onChange={(value) => {
+            setPeriod(value);
+            const now = new Date(),
+              end = localDate(now),
+              startDate = new Date(now);
+            if (["7", "30", "90"].includes(value))
+              startDate.setDate(startDate.getDate() - Number(value) + 1);
+            else if (value.endsWith("m")) {
+              const day = startDate.getDate();
+              startDate.setDate(1);
+              startDate.setMonth(startDate.getMonth() - parseInt(value));
+              const lastDay = new Date(
+                startDate.getFullYear(),
+                startDate.getMonth() + 1,
+                0,
+              ).getDate();
+              startDate.setDate(Math.min(day, lastDay));
+            } else if (value === "year") startDate.setMonth(0, 1);
+            const start =
+              value === "all" || value === "custom" ? "" : localDate(startDate);
+            onChange({
+              ...filters,
+              start,
+              end: value === "all" || value === "custom" ? "" : end,
+            });
+            onPeriod(value, start, end);
+          }}
+        />
+      </div>
+      {!activityOnly && (
+        <details className="ci-secondary-filters">
+          <summary>More filters</summary>
+          <div className="ci-filters">
+            <Select
+              label="Rated"
+              value={filters.rated}
+              options={["all", "rated", "unrated"]}
+              onChange={(v) => set("rated", v)}
+            />
+            {!hideColor && (
+              <Select
+                label="Color"
+                value={filters.color}
+                options={["all", "white", "black"]}
+                onChange={(v) => set("color", v)}
+              />
+            )}
+            <Select
+              label="Result"
+              value={filters.result}
+              options={["all", "win", "draw", "loss"]}
+              onChange={(v) => set("result", v)}
+            />
+          </div>
+        </details>
       )}
       {period === "custom" && (
         <>
@@ -219,9 +240,11 @@ export function FilterBar({
 export function Bars({
   rows,
   compact = false,
+  valueFormat = number,
 }: {
   rows: [string, number, string?][];
   compact?: boolean;
+  valueFormat?: (value: number) => string;
 }) {
   const max = Math.max(1, ...rows.map((r) => r[1]));
   return (
@@ -232,12 +255,12 @@ export function Bars({
           <div
             className="ci-bar-track"
             tabIndex={0}
-            title={`${label}: ${number(n)}${detail ? ` · ${detail}` : ""}`}
-            aria-label={`${label}: ${number(n)}${detail ? ` · ${detail}` : ""}`}
+            title={`${label}: ${valueFormat(n)}${detail ? ` · ${detail}` : ""}`}
+            aria-label={`${label}: ${valueFormat(n)}${detail ? ` · ${detail}` : ""}`}
           >
             <div style={{ width: `${(n / max) * 100}%` }} />
           </div>
-          <strong>{number(n)}</strong>
+          <strong>{valueFormat(n)}</strong>
           {detail && !compact && <small>{detail}</small>}
         </div>
       ))}

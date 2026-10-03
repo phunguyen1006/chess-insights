@@ -7,17 +7,23 @@ A standalone Chrome / Edge extension for Chess.com activity analytics, locally t
 
 ## Install
 
-Download **[chess-insights-v0.1.7.zip](https://github.com/phunguyen1006/chess-insights/releases/download/v0.1.7/chess-insights-v0.1.7.zip)** from the [release page](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.7). Extract it to a permanent folder. In `edge://extensions` or `chrome://extensions`, enable **Developer mode**, choose **Load unpacked**, and select the folder containing `manifest.json`.
+Download **[chess-insights-v0.1.8.zip](https://github.com/phunguyen1006/chess-insights/releases/download/v0.1.8/chess-insights-v0.1.8.zip)** from the [release page](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.8). Extract it to a permanent folder. In `edge://extensions` or `chrome://extensions`, enable **Developer mode**, choose **Load unpacked**, and select the folder containing `manifest.json`.
 
 Use your normal browser profile and Chess.com session. The extension does not require a separate login. If account detection fails, enter your public Chess.com username in the Connect form.
 
-**Upgrading an existing installation:** replace the files in the same extension folder, then reload the existing extension and Chess.com. Keep the same folder and extension identity; uninstalling or loading another folder can lose access to local history. v0.1.7 keeps the existing database schema and data. Once installed, save a puzzle backup from Settings before future upgrades or storage changes.
+**Upgrading an existing installation:** replace the files in the same extension folder, then reload the existing extension and Chess.com. Keep the same folder and extension identity; uninstalling or loading another folder can lose access to local history. v0.1.8 adds a duration cache through an additive database upgrade, preserving existing games, puzzles and analysis. Save a puzzle backup from Settings before upgrades or storage changes.
 
 GitHub's automatic **Source code** archives contain development source and must be built first. They are not the installable extension. See [installation, upgrades and checksums](docs/INSTALL.md).
 
-**v0.1.7 is a preview release.** Automated tests cover the new exports, puzzle restore and review fixes. Final authenticated Chess.com DOM integration and offscreen-engine delivery still need manual browser verification. See [verification evidence and checklist](docs/VERIFICATION.md).
+**v0.1.8 is a preview release.** It adds recorded Play Time, Sessions and a native Stats interface. Authenticated Chess.com DOM integration and extension offscreen-engine delivery still need manual browser verification. See [implementation and visual QA](docs/QA-0.1.8.md).
+
+![Native Stats Rating page — local fixture with public game data](docs/images/native-stats/rating-preview.png)
 
 ## Features
+
+- **Native Stats interface:** cyan rating/activity trends, compact summary rows, gray Highlights sections, primary control/period selectors and contextual filters. Detailed analytics remain available in expandable sections.
+- **Play Time:** observed duration from completed real-time PGNs, duration coverage, time heatmap, control comparisons, longest games and daily/monthly highlights. Daily and puzzle solving time are excluded.
+- **Sessions:** observed start/end intervals grouped by a 30-minute gap; session spans, distributions, recent sessions and results by game number. Clock-only durations cannot establish a session interval.
 
 - **Homepage activity:** green/white annual heatmap, full width below Play Online and above Recommended Match + Daily Puzzle; games and locally tracked puzzles, year selection, streaks, tooltips and date navigation.
 - **Persistent Insights navigation:** sidebar entry between Stats and Train, with eight analytics sections.
@@ -61,7 +67,7 @@ Requested permissions are:
 | `https://www.chess.com/*` | Insert the UI and observe eligible puzzle completions |
 | `https://api.chess.com/*` | Fetch public profiles and game archives               |
 
-No cookies, browsing-history or webRequest permissions are requested. Local IndexedDB version 3 adds puzzle stores without clearing previous stores. Data is isolated by Chess.com username.
+No cookies, browsing-history or webRequest permissions are requested. IndexedDB version 4 adds a duration cache without clearing previous stores. Data is isolated by Chess.com username.
 
 ## Development
 
@@ -90,9 +96,9 @@ npm run release:pack
 
 Content-script React views communicate through typed runtime messages with a background service worker. Public archives are normalized into extension-origin IndexedDB; pure analytics operate on cached snapshots. The offscreen host reads completed historical PGNs for local engine analysis. Semantic DOM anchors, unique roots and mutation/navigation handling integrate with Chess.com's changing page layout.
 
-Main modules: `src/content/dom`, `src/features`, `src/background`, `src/data`, `src/analytics`, `src/analysis`. Database version 3 preserves games, archives, users, analytics caches, clock analyses, engine analyses, mistakes, reviews and queues, and adds `puzzleAttempts` / `puzzleTrackingState`.
+Main modules: `src/content/dom`, `src/features`, `src/background`, `src/data`, `src/analytics`, `src/analysis`. Database version 4 preserves all 11 existing stores and adds `gameDurationAnalysis`. Duration records have a parser version and PGN fingerprint; analysis runs lazily in small yielding batches, and cached statistics appear first.
 
-Dates use the browser's local timezone. Heatmap counts use independent nonzero-count quantiles for games and puzzles. Rating differences are differences between archive observations, not guaranteed post-game gains. Time analysis requires supported PGN clock annotations; missing intervals remain unknown. Chess.com layout/language changes can require adapter updates. Engine statistics cover analyzed games only.
+Dates use the browser's local timezone. Heatmap counts use independent nonzero-count quantiles for games and puzzles; the separate Play Time heatmap uses recorded seconds. Rating differences are differences between archive observations, not guaranteed post-game gains. Duration sources are validated Start/End headers, sufficiently complete clocks, then complete elapsed-time annotations; missing durations remain unknown. Session span includes breaks and is distinct from summed game time. See [five real-PGN validations](docs/PLAY-TIME-VALIDATION.md). Chess.com layout/language changes can require adapter updates. Engine statistics cover analyzed games only.
 
 See [verified checks and remaining manual tests](docs/VERIFICATION.md), [contributing and release procedure](CONTRIBUTING.md), and [changelog](CHANGELOG.md). Report reproducible problems through [GitHub Issues](https://github.com/phunguyen1006/chess-insights/issues), without posting private account data.
 

@@ -20,6 +20,9 @@ import { PuzzleSettings } from "./components/PuzzleSettings";
 import { puzzleResults } from "../../analytics/puzzles";
 import { PuzzleBackupSettings } from "./components/PuzzleBackupSettings";
 import { GameExport } from "./components/GameExport";
+import { usePlayTime, playTimeDebug } from "../state/usePlayTime";
+import { playTimeSummary, sessionAnalytics } from "../../analytics/playTime";
+import { SegmentedControl } from "./components/NativeStats";
 export function InsightsApp({
   state,
   detected,
@@ -36,7 +39,16 @@ export function InsightsApp({
     });
   const { data, username, loading, error, refresh } = state;
   const puzzles = usePuzzleData(username);
-  const [activityMode, setActivityMode] = useState<ActivityMode>("all"),
+  const [activityMode, setActivityMode] = useState<ActivityMode | "playTime">(
+      () => {
+        const value = new URLSearchParams(
+          location.hash.split("?")[1] ?? "",
+        ).get("activity");
+        return value && ["all", "games", "puzzles", "playTime"].includes(value)
+          ? (value as ActivityMode | "playTime")
+          : "all";
+      },
+    ),
     [settingsOpen, setSettingsOpen] = useState(false);
   const periodGames = useMemo(
     () =>
@@ -60,7 +72,14 @@ export function InsightsApp({
   );
   const puzzleStats = puzzleResults(periodPuzzles);
   useEffect(() => {
-    const update = () => setRoute(readRoute());
+    const update = () => {
+      setRoute(readRoute());
+      const mode = new URLSearchParams(location.hash.split("?")[1] ?? "").get(
+        "activity",
+      );
+      if (mode && ["all", "games", "puzzles", "playTime"].includes(mode))
+        setActivityMode(mode as ActivityMode | "playTime");
+    };
     window.addEventListener("hashchange", update);
     return () => window.removeEventListener("hashchange", update);
   }, []);
@@ -76,6 +95,24 @@ export function InsightsApp({
     [data.games, filters],
   );
   const section = route?.section ?? "overview";
+  const duration = usePlayTime(
+    username,
+    data.version,
+    section === "overview" ||
+      section === "time" ||
+      (section === "activity" && activityMode === "playTime"),
+  );
+  useEffect(() => {
+    if (!import.meta.env.DEV) return;
+    playTimeDebug.username = username;
+    playTimeDebug.coverage = playTimeSummary(games, duration.records);
+    playTimeDebug.sessions = sessionAnalytics(
+      games,
+      duration.records,
+      30,
+      data.games,
+    );
+  }, [username, games, duration.records, data.games]);
   const loadPeriod = (period: string, start: string, end: string) => {
     const from = Number(start.slice(0, 4)),
       to = Number(end.slice(0, 4));
@@ -185,22 +222,6 @@ export function InsightsApp({
               <PuzzleSettings state={puzzles} />
             </div>
           )}
-          <div className="ci-sync" role="status">
-            {loading
-              ? "Syncing…"
-              : error
-                ? "Unable to refresh — showing cached data"
-                : "● Synced"}
-            {!!data.lastSync && (
-              <span>
-                {" "}
-                · Last updated {new Date(data.lastSync).toLocaleString()}
-              </span>
-            )}
-            {!data.lastSync && !loading && (
-              <span> · No successful sync yet</span>
-            )}
-          </div>
           {error && (
             <p className="ci-status">
               {error}
@@ -216,32 +237,19 @@ export function InsightsApp({
             <>
               <FilterBar
                 filters={filters}
+                hideColor={
+                  section === "rating" ||
+                  section === "openings" ||
+                  section === "results"
+                }
                 activityOnly={
-                  section === "activity" && activityMode !== "games"
+                  section === "activity" &&
+                  activityMode !== "games" &&
+                  activityMode !== "playTime"
                 }
                 onChange={setFilters}
                 onPeriod={loadPeriod}
               />
-              <p className="ci-note">
-                {data.games.length.toLocaleString()} games cached. Historical
-                years load when selected; choose All time to load full history.
-              </p>
-              {(section !== "activity" || activityMode === "games") && (
-                <GameExport
-                  key={username}
-                  username={username}
-                  games={
-                    section === "results" && route?.termination
-                      ? games.filter(
-                          (g) =>
-                            g.termination === route.termination &&
-                            g.result === "loss",
-                        )
-                      : games
-                  }
-                  loading={loading}
-                />
-              )}
             </>
           }
           {loading && !data.games.length ? (
@@ -255,54 +263,61 @@ export function InsightsApp({
             <>
               {section === "overview" && (
                 <>
-                  {puzzleStats.attempts > 0 && (
-                    <Panel title="Puzzle Activity">
-                      <p>
-                        {puzzleStats.attempts.toLocaleString()} attempts ·{" "}
-                        {puzzleStats.successRate === null
-                          ? "Success rate unavailable"
-                          : `${puzzleStats.successRate.toFixed(1)}% success`}
-                      </p>
-                    </Panel>
-                  )}
                   <OverviewPage
                     games={games}
                     allGames={data.games}
                     filters={filters}
+                    durationRecords={duration.records}
+                    durationLoading={duration.loading}
                   />
+                  {puzzleStats.attempts > 0 && (
+                    <p className="ci-note">
+                      Puzzle activity: {puzzleStats.attempts.toLocaleString()}{" "}
+                      attempts ·{" "}
+                      {puzzleStats.successRate === null
+                        ? "Success rate unavailable"
+                        : `${puzzleStats.successRate.toFixed(1)}% success`}{" "}
+                      <a href="#chess-insights/activity?activity=puzzles">
+                        View puzzles →
+                      </a>
+                    </p>
+                  )}
                 </>
               )}
               {section === "activity" && (
                 <>
-                  <div
-                    className="ci-activity-modes"
-                    role="group"
-                    aria-label="Activity mode"
-                  >
-                    {(
-                      [
-                        ["all", "All Activity"],
-                        ["games", "Games"],
-                        ["puzzles", "Puzzles"],
-                      ] as const
-                    ).map(([value, label]) => (
-                      <button
-                        key={value}
-                        aria-pressed={activityMode === value}
-                        onClick={() => setActivityMode(value)}
-                      >
-                        {label}
-                      </button>
-                    ))}
-                  </div>
+                  <SegmentedControl
+                    label="Activity mode"
+                    value={activityMode}
+                    options={[
+                      ["all", "All Activity"],
+                      ["games", "Games"],
+                      ["puzzles", "Puzzles"],
+                      ["playTime", "Play Time"],
+                    ]}
+                    onChange={(value) => {
+                      setActivityMode(value as ActivityMode | "playTime");
+                      const params = new URLSearchParams(
+                        location.hash.split("?")[1] ?? "",
+                      );
+                      params.set("activity", value);
+                      location.hash = `chess-insights/activity?${params}`;
+                    }}
+                  />
                   <ActivityPage
-                    games={activityMode === "games" ? games : periodGames}
+                    games={
+                      activityMode === "games" || activityMode === "playTime"
+                        ? games
+                        : periodGames
+                    }
                     mode={activityMode}
                     attempts={periodPuzzles}
                     trackingSince={
                       puzzles.data.tracking?.puzzleTrackingStartedLocalDate
                     }
                     allGames={data.games}
+                    durationRecords={duration.records}
+                    durationLoading={duration.loading}
                     years={[
                       ...new Set([
                         ...data.years,
@@ -328,17 +343,38 @@ export function InsightsApp({
               {section === "rating" && (
                 <RatingPage
                   games={games}
+                  color={filters.color}
+                  onColorChange={(color) =>
+                    setFilters((f) => ({ ...f, color }))
+                  }
                   allGames={data.games}
                   selectedControl={filters.timeClass}
                 />
               )}
-              {section === "openings" && <OpeningsPage games={games} />}
+              {section === "openings" && (
+                <OpeningsPage
+                  games={games}
+                  color={filters.color}
+                  onColorChange={(color) =>
+                    setFilters((f) => ({ ...f, color }))
+                  }
+                />
+              )}
               {section === "opponents" && (
                 <OpponentsPage games={games} allGames={data.games} />
               )}
               {section === "results" && (
                 <>
-                  <a href="#chess-insights/time">View Time Management →</a>
+                  <SegmentedControl
+                    label="Results color"
+                    value={filters.color}
+                    options={[
+                      ["all", "All Games"],
+                      ["white", "White"],
+                      ["black", "Black"],
+                    ]}
+                    onChange={(color) => setFilters((f) => ({ ...f, color }))}
+                  />
                   {route?.termination && (
                     <p className="ci-status">
                       Timeout losses{" "}
@@ -358,6 +394,9 @@ export function InsightsApp({
                         : games
                     }
                   />
+                  <p className="ci-note">
+                    <a href="#chess-insights/time">View Time Management →</a>
+                  </p>
                 </>
               )}
               {section === "time" && (
@@ -366,6 +405,11 @@ export function InsightsApp({
                   key={username}
                   username={username}
                   games={games}
+                  ratingSource={data.games}
+                  durationRecords={duration.records}
+                  durationLoading={duration.loading}
+                  durationProcessed={duration.processed}
+                  durationTotal={duration.total}
                   onTimeout={() => {
                     setFilters((f) => ({ ...f, result: "loss" }));
                     location.hash =
@@ -382,6 +426,45 @@ export function InsightsApp({
               )}
             </>
           )}
+          {duration.error && (
+            <p role="status">Play time unavailable: {duration.error}</p>
+          )}
+          <footer className="ci-status-footer">
+            <div className="ci-sync" role="status">
+              {loading
+                ? "Syncing…"
+                : error
+                  ? "Unable to refresh — showing cached data"
+                  : data.lastSync
+                    ? "Synced"
+                    : "No successful sync yet"}
+              {!!data.lastSync &&
+                ` · Last updated ${new Date(data.lastSync).toLocaleString()}`}
+            </div>
+            <details className="ci-details">
+              <summary>History, exports and data coverage</summary>
+              <p>
+                {data.games.length.toLocaleString()} games cached. Historical
+                years load when selected; choose All time to load full history.
+                Archive ratings are historical observations, not current live
+                ratings.
+              </p>
+              <GameExport
+                key={username}
+                username={username}
+                games={
+                  section === "results" && route?.termination
+                    ? games.filter(
+                        (g) =>
+                          g.termination === route.termination &&
+                          g.result === "loss",
+                      )
+                    : games
+                }
+                loading={loading}
+              />
+            </details>
+          </footer>
         </>
       )}
     </div>

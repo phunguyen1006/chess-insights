@@ -50,6 +50,7 @@ it("creates existing and additive analysis stores", async () =>
     "analyticsCache",
     "archives",
     "engineAnalysis",
+    "gameDurationAnalysis",
     "games",
     "mistakeReviews",
     "mistakes",
