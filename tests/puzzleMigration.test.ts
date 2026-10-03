@@ -42,7 +42,7 @@ it("upgrades a populated v2 database without changing any game, archive, engine 
   old.close();
   const { database, idbResult } = await import("../src/data/storage/database");
   const db = await database();
-  expect(db.version).toBe(3);
+  expect(db.version).toBe(4);
   for (const name of stores)
     expect(
       await idbResult(

@@ -1,6 +1,10 @@
 # Verification
 
-## Current version — 0.1.7
+## Current version — 0.1.8
+
+Observed Play Time, Sessions, additive duration caching and the native Stats redesign pass **333 tests in 43 files**, typecheck, ESLint and the verified production build. Real public PGNs independently validate duration calculations. Desktop and 390px screenshots were inspected across the main pages, and bundled local Stockfish completed a historical game/review flow. See [the full implementation, screenshots, automated results and authenticated manual scope](QA-0.1.8.md).
+
+## Previous version — 0.1.7
 
 Puzzle JSON backup/merge, filtered game CSV export and Mistake Bank retry/review fixes are covered by **258 tests in 32 files**, typecheck, ESLint and production build verification. Local browser checks verified real JSON/CSV downloads, importing and retaining an older puzzle attempt, filtered CSV contents and desktop/390px backup settings. See [0.1.7 QA evidence and manual scope](QA-0.1.7.md).
 

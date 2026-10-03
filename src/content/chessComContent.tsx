@@ -8,6 +8,7 @@ import { detectUsername, homepageTarget } from "./dom/chessDom";
 import { integrate } from "./dom/integration";
 import "../styles/theme.css";
 import { analysisDebug } from "../features/state/useAnalysis";
+import { playTimeDebug } from "../features/state/usePlayTime";
 import { send } from "../features/state/client";
 import { observePage } from "./dom/pageObserver";
 import { installPuzzleTracker } from "./puzzles/tracker";
@@ -101,6 +102,19 @@ if (import.meta.env.DEV)
       remountHeatmap: integration.remountHeatmap,
       getHeatmapGeometry: integration.getHeatmapGeometry,
       getTimeCoverage: () => analysisDebug.time,
+      getPlayTimeCoverage: () => ({
+        username: playTimeDebug.username,
+        ...playTimeDebug.coverage,
+        progress: playTimeDebug.progress,
+      }),
+      getSessionAnalyticsStatus: () => ({
+        username: playTimeDebug.username,
+        ...playTimeDebug.sessions,
+        firstSession:
+          playTimeDebug.sessions?.sessions.at(0)?.startTimestamp ?? null,
+        lastSession:
+          playTimeDebug.sessions?.sessions.at(-1)?.endTimestamp ?? null,
+      }),
       getMistakeAnalysisStatus: () => ({
         ...analysisDebug.mistakes,
         totalHistoricalGames: analysisDebug.totalHistoricalGames,

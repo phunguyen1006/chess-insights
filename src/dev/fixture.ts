@@ -1,5 +1,6 @@
 import type { Request, Reply, Snapshot, RawGame } from "../shared/types";
 import { normalizeGame } from "../data/normalize/normalizeGame";
+import { gameForSnapshot } from "../data/sync/syncManager";
 import source from "./data/public-games.json";
 import { analysisRequest } from "../data/storage/analysisRepository";
 import { database, transactionDone } from "../data/storage/database";
@@ -13,10 +14,25 @@ import {
 } from "../data/storage/puzzleRepository";
 import { installPuzzleFixture } from "./puzzleFixture";
 import {
+  durationSnapshot,
+  ensureGameDurations,
+} from "../data/storage/durationRepository";
+import {
   exportPuzzleBackup,
   importPuzzleBackup,
 } from "../data/storage/puzzleBackupRepository";
 if (!import.meta.env.DEV) throw new Error("Fixtures are development-only.");
+if (new URLSearchParams(location.search).get("presentation") === "stats") {
+  const referenceTheme = document.createElement("style");
+  referenceTheme.textContent = `
+    nav.fixture-sidebar { background:#fff;color:#262522; }
+    nav.fixture-sidebar a { color:#5d5b57;font-size:12px;font-weight:400; }
+    nav.fixture-sidebar a:hover,nav.fixture-sidebar .ci-sidebar-link[aria-current="page"] { background:#f1f1f1; }
+    .fixture-notice,[aria-label="Puzzle development controls"] { display:none!important; }
+    nav.fixture-sidebar .brand { color:#262522; }
+  `;
+  document.head.append(referenceTheme);
+}
 // Native structural contract from the user's authenticated layout report:
 // full-width auto-placed hero, auto-placed left column, right column row 2/span 2.
 if (new URLSearchParams(location.search).get("layout") === "reported-grid") {
@@ -124,7 +140,7 @@ const games = (source.games as RawGame[])
   .filter((g): g is NonNullable<typeof g> => g !== null)
   .sort((a, b) => a.endTime - b.endTime);
 const snapshot: Snapshot = {
-  games,
+  games: games.map(gameForSnapshot),
   years: [
     ...new Set([
       new Date().getFullYear(),
@@ -163,6 +179,22 @@ const chromeFixture = {
     getURL: (path: string) => new URL(path, location.origin).href,
     sendMessage: async (message: Request): Promise<Reply<unknown>> => {
       switch (message.type) {
+        case "ci:durations":
+          return {
+            ok: true,
+            data:
+              message.action === "cache"
+                ? await durationSnapshot(message.username)
+                : await ensureGameDurations(message.username, (progress) =>
+                    listeners.forEach((listener) =>
+                      listener({
+                        type: "ci:duration-progress",
+                        username: message.username,
+                        progress,
+                      }),
+                    ),
+                  ),
+          };
         case "ci:puzzle-export":
           return { ok: true, data: await exportPuzzleBackup(message.username) };
         case "ci:puzzle-import": {

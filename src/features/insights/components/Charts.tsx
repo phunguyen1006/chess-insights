@@ -56,6 +56,7 @@ export function Trend({
   tall?: boolean;
 }) {
   const [hover, setHover] = useState<string | null>(null),
+    [activePoint, setActivePoint] = useState<number | null>(null),
     id = useId();
   const values = data.flatMap((d) => (d.value === null ? [] : [d.value]));
   const size = useChartWidth(!!values.length);
@@ -88,7 +89,14 @@ export function Trend({
   const step = Math.max(1, Math.ceil(data.length / 180));
   const sampled = data
     .map((d, i) => ({ d, i }))
-    .filter(({ i }) => i % step === 0 || i === data.length - 1);
+    .filter(
+      ({ d, i }) =>
+        d.value === null ||
+        data[i - 1]?.value === null ||
+        data[i + 1]?.value === null ||
+        i % step === 0 ||
+        i === data.length - 1,
+    );
   let connected = false;
   const path = sampled
     .map(({ d, i }) => {
@@ -102,10 +110,22 @@ export function Trend({
       return `${cmd}${p.join(",")}`;
     })
     .join(" ");
+  const runs: { d: Datum; i: number }[][] = [];
+  for (const mark of sampled) {
+    if (mark.d.value === null) {
+      if (runs.at(-1)?.length) runs.push([]);
+    } else {
+      if (!runs.length) runs.push([]);
+      runs.at(-1)!.push(mark);
+    }
+  }
+  const singleton = new Set(
+    runs.filter((run) => run.length === 1).map((run) => run[0].i),
+  );
   const display = (d: Datum) =>
     `${d.label}: ${number(d.value)}${percent ? "%" : ""}${d.detail ? ` · ${d.detail}` : ""}`;
   return (
-    <div ref={size.ref} className={compact ? "ci-spark" : "ci-chart"}>
+    <div ref={size.ref} className={compact ? "ci-spark" : "ci-chart ci-trend"}>
       <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={label}>
         <title>{label}</title>
         <desc>
@@ -117,8 +137,8 @@ export function Trend({
         </desc>
         <defs>
           <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
-            <stop stopColor="#81b64c" stopOpacity=".3" />
-            <stop offset="1" stopColor="#81b64c" stopOpacity=".03" />
+            <stop stopColor="#42b8e8" stopOpacity=".2" />
+            <stop offset="1" stopColor="#42b8e8" stopOpacity=".08" />
           </linearGradient>
         </defs>
         {!compact &&
@@ -129,7 +149,7 @@ export function Trend({
                 x2={right}
                 y1={bottom - t * (bottom - top)}
                 y2={bottom - t * (bottom - top)}
-                stroke="#e4e2de"
+                stroke="#f0f0f0"
               />
               <text x="2" y={bottom - t * (bottom - top) + 4}>
                 {number(low + t * (high - low))}
@@ -137,13 +157,20 @@ export function Trend({
               </text>
             </g>
           ))}
-        {area && values.length > 1 && !data.some((d) => d.value === null) && (
-          <path
-            d={`${path} L${right},${bottom - ((0 - low) / (high - low)) * (bottom - top)} L${left},${bottom - ((0 - low) / (high - low)) * (bottom - top)} Z`}
-            fill={`url(#${id})`}
-          />
-        )}
-        <path d={path} fill="none" stroke="#5d9239" strokeWidth="2.5" />
+        {area &&
+          runs
+            .filter((run) => run.length > 1)
+            .map((run) => {
+              const points = run.map(({ d, i }) => point(d, i));
+              return (
+                <path
+                  key={run[0].i}
+                  d={`M${points.map((p) => p.join(",")).join(" L")} L${points.at(-1)![0]},${bottom} L${points[0][0]},${bottom} Z`}
+                  fill={`url(#${id})`}
+                />
+              );
+            })}
+        <path d={path} fill="none" stroke="#42b8e8" strokeWidth="2" />
         {sampled
           .filter(({ d }) => d.value !== null)
           .map(({ d, i }) => {
@@ -153,14 +180,30 @@ export function Trend({
                 key={i}
                 cx={cx}
                 cy={cy}
-                r={compact ? 2 : 4}
-                fill="#5d9239"
+                r={activePoint === i || singleton.has(i) ? 4 : 8}
+                fill={
+                  activePoint === i || singleton.has(i)
+                    ? "#42b8e8"
+                    : "transparent"
+                }
                 tabIndex={0}
                 aria-label={display(d)}
-                onFocus={() => setHover(display(d))}
-                onBlur={() => setHover(null)}
-                onMouseEnter={() => setHover(display(d))}
-                onMouseLeave={() => setHover(null)}
+                onFocus={() => {
+                  setHover(display(d));
+                  setActivePoint(i);
+                }}
+                onBlur={() => {
+                  setHover(null);
+                  setActivePoint(null);
+                }}
+                onMouseEnter={() => {
+                  setHover(display(d));
+                  setActivePoint(i);
+                }}
+                onMouseLeave={() => {
+                  setHover(null);
+                  setActivePoint(null);
+                }}
               >
                 <title>{display(d)}</title>
               </circle>
@@ -187,7 +230,11 @@ export function Trend({
               </text>
             ))}
       </svg>
-      {!compact && <Detail text={hover} />}
+      {!compact && (
+        <div className="ci-trend-tooltip" role="status">
+          {hover}
+        </div>
+      )}
     </div>
   );
 }

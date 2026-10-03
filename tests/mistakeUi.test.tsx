@@ -92,6 +92,85 @@ function reviewFixture(count: number) {
   }));
   return game;
 }
+it("organizes historical mistakes into six native sections with severity bars and filtered positions", async () => {
+  const game = reviewFixture(3);
+  mock.state.mistakes[1].severity = "mistake";
+  mock.state.mistakes[1].phase = "middlegame";
+  mock.state.mistakes[2].severity = "inaccuracy";
+  mock.state.mistakes[2].phase = "endgame";
+  await act(() =>
+    root.render(<MistakesPage username="alice" games={[game]} />),
+  );
+  const nav = container.querySelector('nav[aria-label="Mistake statistics"]')!;
+  expect(
+    [...nav.querySelectorAll("button")].map((button) => button.textContent),
+  ).toEqual([
+    "Overview",
+    "Blunders",
+    "Mistakes",
+    "Inaccuracies",
+    "By Phase",
+    "Review",
+  ]);
+  expect(container.querySelector(".ci-donut")).toBeNull();
+  expect(
+    [...container.querySelectorAll(".ci-severity-bars .ci-bar-row strong")].map(
+      (value) => value.textContent,
+    ),
+  ).toEqual(["1", "1", "1"]);
+  await act(() =>
+    [...nav.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent === "Blunders")!
+      .click(),
+  );
+  expect(container.querySelectorAll(".ci-mistake-card")).toHaveLength(1);
+  expect(container.querySelector(".ci-mistake-card")?.textContent).toContain(
+    "Move 1",
+  );
+  expect(container.querySelector('select[aria-label="Severity"]')).toBeNull();
+  await act(() =>
+    [...nav.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent === "Inaccuracies")!
+      .click(),
+  );
+  expect(container.querySelectorAll(".ci-mistake-card")).toHaveLength(1);
+  expect(container.querySelector(".ci-mistake-card")?.textContent).toContain(
+    "Move 3",
+  );
+  await act(() =>
+    [...nav.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent === "By Phase")!
+      .click(),
+  );
+  expect(container.querySelectorAll(".ci-mistake-card")).toHaveLength(3);
+  expect(
+    container.querySelector(
+      'nav[aria-label="Mistake statistics"] button[aria-current="page"]',
+    )?.textContent,
+  ).toBe("By Phase");
+  expect(mock.state.mistakes).toHaveLength(3);
+});
+it("starts a review from the active severity section without changing the stored bank", async () => {
+  const game = reviewFixture(2);
+  mock.state.mistakes[1].severity = "inaccuracy";
+  await act(() =>
+    root.render(<MistakesPage username="alice" games={[game]} />),
+  );
+  const button = (label: string) =>
+    [...container.querySelectorAll<HTMLButtonElement>("button")].find(
+      (entry) => entry.textContent === label,
+    )!;
+  await act(() => button("Blunders").click());
+  await act(() => button("Start Review").click());
+  expect(
+    container.querySelector(
+      'nav[aria-label="Mistake statistics"] button[aria-current="page"]',
+    )?.textContent,
+  ).toBe("Review");
+  expect(container.textContent).toContain("Review 1 / 1");
+  expect(container.textContent).toContain("Review position · Move 1");
+  expect(mock.state.mistakes).toHaveLength(2);
+});
 it("shows a primary recent-20 empty-state CTA without zero-filled charts", async () => {
   await act(() => root.render(<MistakesPage username="alice" games={[]} />));
   expect(container.textContent).toContain("No games analyzed yet.");

@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.1.8](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.8) — 2026-10-03
+
+Observed Play Time, Sessions and an Insights redesign following Chess.com's native Stats composition. No new permissions or dependencies.
+
+### Added
+
+- Validated PGN Start/End, clock reconstruction and elapsed-move duration sources; explicit coverage, Daily exclusion and unavailable values instead of nominal-control estimates.
+- Additive IndexedDB v4 duration cache with parser/fingerprint invalidation, yielding batches, cached-first rendering and account/stale-reply protection.
+- Overview Play Time, a separate Activity duration heatmap, monthly/pool/distribution/longest-game charts and Play Time Highlights.
+- Observed-interval Sessions with a 30-minute gap, separate span/game time, coverage, per-pool rating changes and performance by game number.
+
+### Changed
+
+- Native-style shared shell, pool/period selectors, green tab underlines, cyan area trends, compact summary rows, gray Highlights headers and structured tables.
+- Rating adds color segments, Highlights and Average Opponent Rating. Time uses Overview / Play Time / Clock Usage / Time Pressure / Sessions.
+- Results, Openings, Opponents and Mistakes emphasize semantic horizontal comparisons, table rows and contextual detail sections. Existing clock analytics, engine queues, review and puzzle features remain available.
+
+### Validation
+
+333 tests in 43 files pass, plus typecheck, ESLint and production build verification. Public PGN duration calculations, additive migrations, cache/runtime/session regressions, desktop/390px visual checks and real local Stockfish review are documented in [the implementation and QA report](docs/QA-0.1.8.md).
+
 ## [0.1.7](https://github.com/phunguyen1006/chess-insights/releases/tag/v0.1.7) — 2026-10-03
 
 Puzzle-history portability, filtered game export and review-session fixes. No new permissions or database schema changes.

@@ -51,7 +51,7 @@ it("upgrades populated v1 history additively and caches/version-checks derived d
   old.close();
   const { database, idbResult } = await import("../src/data/storage/database");
   const db = await database();
-  expect(db.version).toBe(3);
+  expect(db.version).toBe(4);
   expect(
     await idbResult(db.transaction("games").objectStore("games").get(game.id)),
   ).toEqual(game);

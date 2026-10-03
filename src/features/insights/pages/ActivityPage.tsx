@@ -17,6 +17,8 @@ import { openInsights } from "../../../content/dom/routing";
 import { Panel, Stats, Select, GameList, number } from "../components/Common";
 import { Columns, Trend } from "../components/Charts";
 import { monthlySeries } from "../../../analytics/visuals";
+import type { GameDurationRecord } from "../../../analysis/playTime";
+import { PlayTimeActivityPage } from "./PlayTimeActivityPage";
 export function ActivityPage(props: {
   games: NormalizedGame[];
   allGames: NormalizedGame[];
@@ -25,8 +27,10 @@ export function ActivityPage(props: {
   onYear: (year: number) => void;
   selectedControl?: string;
   attempts?: PuzzleAttempt[];
-  mode?: ActivityMode;
+  mode?: ActivityMode | "playTime";
   trackingSince?: string;
+  durationRecords?: GameDurationRecord[];
+  durationLoading?: boolean;
 }) {
   const {
     games,
@@ -69,6 +73,7 @@ export function ActivityPage(props: {
   );
   const detail = (r: ReturnType<typeof puzzleResults>, activeDays?: number) =>
     `${r.attempts} attempts · ${r.solved} solved · ${r.failed} failed · ${r.resolved} resolved · ${r.successRate === null ? "No resolved attempts" : `${r.successRate.toFixed(1)}% success`}${activeDays === undefined ? "" : ` · ${activeDays} active days`}`;
+  if (mode === "playTime") return <PlayTimeActivityPage {...props}/>;
   if (mode === "games") return <GameActivityPage {...props} />;
   return (
     <>

@@ -43,7 +43,7 @@ it("keeps All Activity independent of game filters and hides those filters in Pu
   const button = (label: string) =>
     [
       ...container.querySelectorAll<HTMLButtonElement>(
-        ".ci-activity-modes button",
+        '[role="group"][aria-label="Activity mode"] button',
       ),
     ].find((b) => b.textContent === label)!;
   expect(container.querySelector('select[aria-label="Color"]')).toBeNull();
@@ -194,20 +194,23 @@ beforeEach(() => {
   vi.stubGlobal("IS_REACT_ACT_ENVIRONMENT", true);
   vi.stubGlobal("chrome", {
     runtime: {
+      onMessage: { addListener: vi.fn(), removeListener: vi.fn() },
       sendMessage: async (message: { type: string }) => ({
         ok: true,
         data:
-          message.type === "ci:puzzles"
-            ? { attempts: [], tracking: null }
-            : message.type === "ci:settings"
-              ? { trackPuzzleActivity: true }
-              : {
-                  clocks: [],
-                  analyses: [],
-                  mistakes: [],
-                  reviews: [],
-                  queue: null,
-                },
+          message.type === "ci:durations"
+            ? []
+            : message.type === "ci:puzzles"
+              ? { attempts: [], tracking: null }
+              : message.type === "ci:settings"
+                ? { trackPuzzleActivity: true }
+                : {
+                    clocks: [],
+                    analyses: [],
+                    mistakes: [],
+                    reviews: [],
+                    queue: null,
+                  },
       }),
     },
     storage: { onChanged: { addListener: vi.fn(), removeListener: vi.fn() } },
@@ -251,12 +254,52 @@ it("shows a loading state rather than invented zero statistics before archives a
 });
 it("renders Results with real counts and no fabricated outcomes", async () => {
   await act(() => root.render(<ResultsPage games={[g]} />));
-  expect(container.querySelector(".ci-donut-total")?.textContent).toBe("1");
-  expect(container.textContent).toContain("No games for this breakdown.");
+  expect(container.querySelector(".ci-summary-row strong")?.textContent).toBe(
+    "1",
+  );
+  expect(container.textContent).toContain("No losses in this period.");
   expect(container.textContent).toContain("No draws in this period.");
   expect(
-    container.querySelector('svg[aria-label="How you win"]'),
+    container.querySelector('[role="group"][aria-label="How you win"]'),
   ).not.toBeNull();
+});
+it("keeps Results color segments synchronized with the shared filters and counts", async () => {
+  history.replaceState(null, "", "/home#chess-insights/results");
+  const state: DataState = {
+    data: {
+      games: [
+        g,
+        { ...g, id: "black-result", playerColor: "black", result: "loss" },
+      ],
+      years: [2026],
+      lastSync: 1,
+      version: 1,
+    },
+    username: "alice",
+    settingsLoaded: true,
+    loading: false,
+    error: "",
+    refresh: vi.fn(),
+    connect: vi.fn(),
+  };
+  await act(() => root.render(<InsightsApp state={state} detected="alice" />));
+  const values = () =>
+    [
+      ...container.querySelectorAll(".ci-results-hero .ci-summary-row strong"),
+    ].map((n) => n.textContent);
+  const segment = (label: string) =>
+    [
+      ...container.querySelectorAll<HTMLButtonElement>(
+        '[aria-label="Results color"] button',
+      ),
+    ].find((n) => n.textContent === label)!;
+  expect(values()).toEqual(["2", "1", "0", "1"]);
+  expect(container.querySelector('select[aria-label="Color"]')).toBeNull();
+  await act(() => segment("Black").click());
+  expect(values()).toEqual(["1", "0", "0", "1"]);
+  expect(segment("Black").getAttribute("aria-pressed")).toBe("true");
+  await act(() => segment("All Games").click());
+  expect(values()).toEqual(["2", "1", "0", "1"]);
 });
 it("renders every day with accessible labels and supports focus tooltips", async () => {
   await act(() =>
@@ -285,7 +328,9 @@ it("keeps cached statistics and offers Retry on a refresh failure", async () => 
   location.hash = "chess-insights/overview";
   await act(() => root.render(<InsightsApp state={state} detected="alice" />));
   expect(container.textContent).toContain("showing cached data");
-  expect(container.textContent).toContain("Total games");
+  expect(container.querySelector(".ci-summary-row strong")?.textContent).toBe(
+    "1",
+  );
   expect(container.textContent).toContain("Network unavailable");
   expect(
     [...container.querySelectorAll("button")].some(

@@ -13,7 +13,11 @@ import { calendar, displayDate } from "../../shared/dates";
 import { byDay, getHeatmapIntensity } from "../../analytics/activity";
 import { results } from "../../analytics/results";
 import { observedDeltas, dayRatingChanges } from "../../analytics/ratings";
-export type HeatmapMetric = "games" | "wins" | "winRate" | "rating";
+import type { GameDurationRecord } from "../../analysis/playTime";
+import { playTimeSummary } from "../../analytics/playTime";
+import { formatDuration, percentage } from "../insights/components/NativeStats";
+export type HeatmapMetric =
+  "games" | "wins" | "winRate" | "rating" | "playTime";
 export function ActivityHeatmap({
   games,
   year,
@@ -23,8 +27,9 @@ export function ActivityHeatmap({
   ratingSource = games,
   compact = false,
   attempts = [],
-  mode = "games",
+  mode: requestedMode = "games",
   trackingSince,
+  durationRecords = [],
 }: {
   games: NormalizedGame[];
   year: number;
@@ -36,10 +41,26 @@ export function ActivityHeatmap({
   attempts?: PuzzleAttempt[];
   mode?: ActivityMode;
   trackingSince?: string;
+  durationRecords?: GameDurationRecord[];
 }) {
+  const mode = metric === "playTime" ? "games" : requestedMode;
   const weeks = useMemo(() => calendar(year), [year]),
     days = useMemo(() => byDay(games), [games]);
   const puzzleDays = useMemo(() => puzzlesByDay(attempts), [attempts]);
+  const durationDays = useMemo(
+    () =>
+      new Map(
+        playTimeSummary(games, durationRecords).byDay.map((day) => [
+          day.date,
+          day,
+        ]),
+      ),
+    [games, durationRecords],
+  );
+  const durationValues = useMemo(
+    () => [...durationDays.values()].map((day) => day.durationSeconds),
+    [durationDays],
+  );
   const levels = useMemo(
     () =>
       mode === "all"
@@ -68,6 +89,14 @@ export function ActivityHeatmap({
       new Map(
         [...days].map(([date, list]) => {
           const r = results(list);
+          if (metric === "playTime")
+            return [
+              date,
+              getHeatmapIntensity(
+                durationDays.get(date)?.durationSeconds ?? 0,
+                durationValues,
+              ),
+            ];
           if (metric === "rating") {
             const change = dayRatingChanges(list, deltas).get(pool);
             return [
@@ -86,7 +115,7 @@ export function ActivityHeatmap({
           ];
         }),
       ),
-    [days, deltas, metric, pool, values],
+    [days, deltas, metric, pool, values, durationDays, durationValues],
   );
   const container = useRef<HTMLDivElement>(null),
     tooltipRef = useRef<HTMLDivElement>(null),
@@ -192,12 +221,20 @@ export function ActivityHeatmap({
                 const tracked = puzzleHistoryKnown(date, trackingSince),
                   puzzles = puzzleDays.get(date)?.length ?? 0,
                   known = tracked || puzzles > 0;
-                const label = `${displayDate(date)} — ${mode === "puzzles" ? "" : `${list.length} games`}${mode === "games" ? "" : ` · ${known ? `${puzzles} puzzle attempts${!tracked ? " recorded; history may be incomplete" : ""}` : "Puzzle history not tracked yet"}`}`;
+                const duration = durationDays.get(date);
+                const missingDuration =
+                  metric === "playTime" &&
+                  !!duration?.eligibleGames &&
+                  !duration.games;
+                const label =
+                  metric === "playTime"
+                    ? `${displayDate(date)} — ${missingDuration ? "Duration unavailable" : formatDuration(duration?.durationSeconds ?? 0)} · ${duration?.games ?? 0}/${duration?.eligibleGames ?? 0} games with duration`
+                    : `${displayDate(date)} — ${mode === "puzzles" ? "" : `${list.length} games`}${mode === "games" ? "" : ` · ${known ? `${puzzles} puzzle attempts${!tracked ? " recorded; history may be incomplete" : ""}` : "Puzzle history not tracked yet"}`}`;
                 return (
                   <button
                     key={date}
                     type="button"
-                    className={`ci-cell ci-level-${intensity}${mode === "puzzles" && !known ? " ci-puzzle-unknown" : ""}`}
+                    className={`ci-cell ci-level-${intensity}${mode === "puzzles" && !known ? " ci-puzzle-unknown" : ""}${missingDuration ? " ci-duration-unknown" : ""}`}
                     aria-label={label}
                     aria-describedby={
                       tooltip?.date === date ? "ci-calendar-tooltip" : undefined
@@ -276,6 +313,43 @@ export function ActivityHeatmap({
           style={{ left: tooltip.x, top: tooltip.y }}
         >
           <strong>{displayDate(tooltip.date)}</strong>
+          {metric === "playTime" &&
+            (() => {
+              const day = playTimeSummary(tooltipGames, durationRecords);
+              return (
+                <>
+                  <div>
+                    {day.withDuration
+                      ? `${formatDuration(day.totalRecordedSeconds)} recorded play time`
+                      : day.eligibleRealtimeGames
+                        ? "Duration unavailable"
+                        : "No recorded real-time games"}
+                  </div>
+                  <div>
+                    {day.withDuration}/{day.eligibleRealtimeGames} games with
+                    duration ·{" "}
+                    {percentage(
+                      day.eligibleRealtimeGames ? day.coverage * 100 : null,
+                    )}{" "}
+                    coverage
+                  </div>
+                  {day.byControl
+                    .filter((row) => row.eligibleGames)
+                    .map((row) => (
+                      <div key={row.pool}>
+                        {row.pool}:{" "}
+                        {row.games
+                          ? formatDuration(row.durationSeconds)
+                          : "unavailable"}{" "}
+                        · {row.games}/{row.eligibleGames} games
+                      </div>
+                    ))}
+                  {day.dailyExcluded > 0 && (
+                    <div>{day.dailyExcluded} Daily games excluded</div>
+                  )}
+                </>
+              );
+            })()}
           {mode !== "puzzles" && (
             <div>
               {stats.games ? `${stats.games} games` : "No recorded games"}
@@ -319,7 +393,7 @@ export function ActivityHeatmap({
             ) : (
               <div>Puzzle history not tracked yet</div>
             ))}
-          {mode !== "puzzles" && stats.games > 0 && (
+          {metric !== "playTime" && mode !== "puzzles" && stats.games > 0 && (
             <>
               <div>
                 {stats.wins} wins · {stats.losses} losses · {stats.draws} draws

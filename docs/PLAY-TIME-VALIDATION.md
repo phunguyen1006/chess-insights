@@ -1,0 +1,21 @@
+# Play Time parser validation
+
+These completed games come from the repository's public Chess.com PubAPI fixture for `erik`, captured without a member login. The stored original PGNs in `src/dev/data/public-games.json` include UTCDate/UTCTime, StartTime, EndDate, EndTime, TimeControl and all observed move clocks. `tests/playTimePublicValidation.test.ts` checks these independent manual calculations against both parser paths.
+
+For the entire saved fixture: 193 completed standard games, 121 Daily excluded, 72 eligible real-time games with 72 observed header durations (100% coverage). Recorded play time is 11,573 seconds, or **3h 12m 53s**; the known-game average is **2m 40.7s**. There are 53 reconstructed sessions with 72/72 interval coverage, an average span of 4m 26.3s, and a longest span of 28m 51s. The fixture contains 71 Bullet and one Rapid game; it makes no claim about the authenticated user's totals.
+
+| Public completed game                                        | UTC start            | UTC end              | Manual header duration | Clock plies | Final White clock | Final Black clock | Manual reconstructed clock duration |
+| ------------------------------------------------------------ | -------------------- | -------------------- | ---------------------: | ----------: | ----------------: | ----------------: | ----------------------------------: |
+| [147462360030](https://www.chess.com/game/live/147462360030) | Jan 1, 2026 19:26:51 | Jan 1, 2026 19:30:27 |                   216s |          92 |              5.0s |              9.6s |                              197.4s |
+| [147471819418](https://www.chess.com/game/live/147471819418) | Jan 2, 2026 00:57:43 | Jan 2, 2026 00:59:18 |                    95s |          43 |             45.4s |             37.0s |                               80.6s |
+| [147472983586](https://www.chess.com/game/live/147472983586) | Jan 2, 2026 01:52:25 | Jan 2, 2026 01:53:09 |                    44s |          29 |             56.1s |             56.1s |                               36.8s |
+| [147475611378](https://www.chess.com/game/live/147475611378) | Jan 2, 2026 03:58:13 | Jan 2, 2026 04:01:46 |                   213s |          83 |              7.8s |              1.7s |                              193.5s |
+| [147511905624](https://www.chess.com/game/live/147511905624) | Jan 2, 2026 22:57:11 | Jan 2, 2026 22:58:40 |                    89s |          34 |             23.8s |             47.1s |                               83.1s |
+
+All five use `60+1`: two initial 60-second clocks plus one real increment per observed ply, minus the final observed clocks. For example, the first reconstruction is `120 + 92 - 5 - 9.6 = 197.4 seconds`. These values sum actual clock expenditure; the parser never substitutes the nominal 60-second control for game duration. Full Start/End headers take priority because clocks omit time between the last move and resignation/timeout, and can omit latency/rounding overhead. The stripped-header path is explicitly marked derived and leaves start/end timestamps unknown.
+
+Clock reconstruction requires at least 95% valid per-ply clock differences and both players' final clocks. Final clocks recover a small missing internal annotation without assigning the missing time to zero. Complete `%emt` annotations are the third source. Missing data, invalid clocks, impossible intervals, and strongly conflicting header/clock sources remain unavailable.
+
+Session reconstruction uses observed Start/End intervals, a gap greater than 30 minutes, and excludes Daily. Missing interval games split apparent joins. Session span includes short breaks; recorded play time sums the games themselves. Rating changes compare adjacent observations within the same session and rating pool; an initial pregame rating is unavailable.
+
+The database upgrade is additive: version 4 introduces only `gameDurationAnalysis`, indexed by username, keyed by the existing game ID. Existing games, archives, users, puzzles, engine analyses, review schedules and other caches are preserved. A parser-version and PGN/metadata fingerprint prevents stale durations from being counted. Analysis yields before startup work and after at most 12 games or a 16ms batch budget.

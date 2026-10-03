@@ -18,10 +18,18 @@ import {
   MANUAL_REFRESH_COOLDOWN,
 } from "../../shared/constants";
 import { timezone } from "../../shared/dates";
-import type { Snapshot, UserRecord } from "../../shared/types";
+import { durationFingerprint } from "../../analysis/playTime";
+import type { NormalizedGame, Snapshot, UserRecord } from "../../shared/types";
 const locks = new Map<string, Promise<void>>();
 // PubAPI/CDN responses can lag by 24 hours, including just-closed archives.
 const ARCHIVE_SETTLE_DELAY = 24 * 60 * 60_000;
+export function gameForSnapshot(game: NormalizedGame): NormalizedGame {
+  return {
+    ...game,
+    durationFingerprint: durationFingerprint(game),
+    pgn: null,
+  };
+}
 export async function snapshot(username: string): Promise<Snapshot> {
   const [games, user] = await Promise.all([
     getGames(username),
@@ -33,7 +41,7 @@ export async function snapshot(username: string): Promise<Snapshot> {
     ...(user?.archives ?? []).map((url) => Number(url.split("/").at(-2))),
   ]);
   return {
-    games: games.map((game) => ({ ...game, pgn: null })),
+    games: games.map(gameForSnapshot),
     years: [...years].filter(Number.isFinite).sort((a, b) => b - a),
     lastSync: user?.lastSync ?? 0,
     version: user?.version ?? 0,
