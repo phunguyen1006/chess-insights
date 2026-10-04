@@ -1,6 +1,6 @@
 # Install and update Chess Insights
 
-The audit branch builds **v0.1.11 Release Candidate**, which is not yet approved for a stable release. For local verification, load its built `dist/` folder or extract `releases/chess-insights-v0.1.11.zip`. The published download below remains the earlier preview. See [the audit gates](https://github.com/phunguyen1006/chess-insights/blob/codex/final-release-audit/FINAL-AUDIT.md).
+The Life Review branch builds **v0.1.12 Release Candidate**, based on the v0.1.11 audit candidate. For local verification, use its built `dist/` folder or extract `releases/chess-insights-v0.1.12.zip`. The published download below remains the earlier preview. This candidate still has open [audit gates](https://github.com/phunguyen1006/chess-insights/blob/codex/final-release-audit/FINAL-AUDIT.md); see [Life Review verification](LIFE-REVIEW.md).
 
 ## First installation — Edge or Chrome
 
@@ -14,7 +14,7 @@ The audit branch builds **v0.1.11 Release Candidate**, which is not yet approved
 
 1. Note the directory used by the existing unpacked extension. If it already supports puzzle backups (v0.1.7 or later), download one from Settings before replacing files.
 2. Close Chess.com tabs, extract the new ZIP to a temporary directory and replace the extension files in the **same existing extension directory**. Do not uninstall the extension, change its directory, clear extension storage or load a second copy.
-3. Click **Reload** on the existing extension card, then reopen/reload Chess.com. v0.1.10 and the v0.1.11 candidate keep database version 4 and the same engine/analysis format without resetting storage. Upgrades from versions before v0.1.8 also add the duration cache. Automated storage tests verify preservation of games, archives, puzzles, analysis, reviews and settings; the candidate still needs an actual browser update check. No storage reset is needed.
+3. Click **Reload** on the existing extension card, then reopen/reload Chess.com. v0.1.10, v0.1.11 and v0.1.12 keep database version 4 and the same engine/analysis format without resetting storage. Upgrades from versions before v0.1.8 also add the duration cache. Automated storage tests verify preservation of games, archives, puzzles, analysis, reviews and settings; the candidate still needs an actual browser update check. No storage reset is needed.
 4. The homepage calendar should appear below Play Online and above Recommended Match + Daily Puzzle. Insights should be present in the sidebar on native navigation pages.
 
 ## Puzzle tracking check

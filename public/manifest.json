@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Chess Insights",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "Advanced activity and performance analytics for Chess.com.",
   "permissions": ["storage", "offscreen"],
   "minimum_chrome_version": "116",
@@ -27,5 +27,5 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "version_name": "0.1.11 Release Candidate"
+  "version_name": "0.1.12 Release Candidate"
 }

@@ -4,6 +4,8 @@ export interface Datum {
   label: string;
   value: number | null;
   detail?: string;
+  /** Optional chronological coordinate, e.g. a completion timestamp. */
+  position?: number;
 }
 const colors = [
   "#81b64c",
@@ -82,8 +84,19 @@ export function Trend({
     right = compact ? 598 : W - 12,
     top = compact ? 4 : 20,
     bottom = compact ? 54 : H - 45;
+  const positioned =
+    data.length > 1 && data.every((d) => Number.isFinite(d.position));
+  const firstPosition = data[0]?.position ?? 0;
+  const positionSpan = Math.max(
+    1,
+    (data.at(-1)?.position ?? 0) - firstPosition,
+  );
   const point = (d: Datum, i: number) => [
-    left + (i / Math.max(1, data.length - 1)) * (right - left),
+    left +
+      (positioned
+        ? (d.position! - firstPosition) / positionSpan
+        : i / Math.max(1, data.length - 1)) *
+        (right - left),
     bottom - ((d.value! - low) / (high - low)) * (bottom - top),
   ];
   const step = Math.max(1, Math.ceil(data.length / 180));
@@ -226,6 +239,14 @@ export function Trend({
               : [0, Math.floor((data.length - 1) / 2), data.length - 1]
           )
             .filter((n, i, a) => a.indexOf(n) === i)
+            .filter((i) => {
+              if (!positioned || i === 0 || i === data.length - 1) return true;
+              const x = point(data[i], i)[0];
+              // Clustered timestamps can put a middle observation beside an
+              // endpoint. Keep the exact point tooltip, but omit overlapping ticks.
+              const clearance = Math.max(90, data[i].label.length * 7);
+              return x - left > clearance && right - x > clearance;
+            })
             .map((i) => (
               <text
                 key={i}

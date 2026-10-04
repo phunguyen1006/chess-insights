@@ -1,6 +1,10 @@
 # Verification
 
-## Current version — 0.1.8
+## Current candidate — 0.1.12
+
+Life Review passes **455 tests in 63 files**, typecheck, ESLint, 1,399 independent data comparisons across four timezones, production build and package verification. Local public-data browser checks cover all nine tabs and 375/768/1024/1440 px in both themes. Real accuracy remains unavailable in the stored game model. See [Life Review formulas, evidence and remaining Edge checks](LIFE-REVIEW.md); the [v0.1.11 audit gates](../FINAL-AUDIT.md) remain open and this is not a stable release.
+
+## Previous version — 0.1.8
 
 Observed Play Time, Sessions, additive duration caching and the native Stats redesign pass **333 tests in 43 files**, typecheck, ESLint and the verified production build. Real public PGNs independently validate duration calculations. Desktop and 390px screenshots were inspected across the main pages, and bundled local Stockfish completed a historical game/review flow. See [the full implementation, screenshots, automated results and authenticated manual scope](QA-0.1.8.md).
 

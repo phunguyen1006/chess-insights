@@ -9,6 +9,7 @@ export const MIN_OPPONENT_SAMPLE = 5;
 export const POOLS = ["rapid", "blitz", "bullet", "daily"] as const;
 export const SECTIONS = [
   "overview",
+  "life-review",
   "activity",
   "rating",
   "openings",
