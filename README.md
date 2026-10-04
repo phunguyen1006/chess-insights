@@ -5,7 +5,7 @@
 
 A standalone Chrome / Edge extension for Chess.com activity analytics, locally tracked rated puzzles, and on-demand review of completed games. Independent community software; not an official Chess.com product.
 
-**Audit candidate: v0.1.11.** This branch contains correctness, resilience and performance fixes plus an independent data verifier. It is **not release ready**: a clean-profile production installation and the independent security scan remain unverified. See [the final audit and release gates](FINAL-AUDIT.md). No stable tag has been created.
+**Life Review candidate: v0.1.12.** This branch adds a personal history review to the v0.1.11 audit fixes. See [Life Review, formulas and verification](docs/LIFE-REVIEW.md). Production installation/update checks in an authenticated browser and the independent security scan remain open [audit release gates](FINAL-AUDIT.md); this is not a stable release. No stable tag has been created.
 
 ## Install
 
@@ -28,8 +28,9 @@ GitHub's automatic **Source code** archives contain development source and must 
 - **Sessions:** observed start/end intervals grouped by a 30-minute gap; session spans, distributions, recent sessions and results by game number. Clock-only durations cannot establish a session interval.
 
 - **Homepage activity:** green/white annual heatmap, full width below Play Online and above Recommended Match + Daily Puzzle; games and locally tracked puzzles, year selection, streaks, tooltips and date navigation.
-- **Persistent Insights navigation:** sidebar entry between Stats and Train, with eight analytics sections.
+- **Persistent Insights navigation:** sidebar entry between Stats and Train, with nine analytics sections.
 - **Overview / Activity:** activity summaries, game filters, outcomes, streaks, and All Activity / Games / Puzzles views.
+- **Life Review:** nine local calendar ranges, matched previous periods, observed rating journeys, activity calendars, weekday/hour matrices, play-time/session analytics, results, openings, matchups, saved engine error rates, supported moments, a chronological timeline and SVG summary export. Missing real accuracy and evaluation history stay unavailable; conclusions use explicit sample and evidence thresholds.
 - **Game CSV export:** download the current filtered cached games, with 16 columns and spreadsheet-safe UTF-8 output.
 - **Rating / Openings / Opponents / Results:** separate rating pools, rolling averages, opening and head-to-head comparisons, sample-size thresholds, termination and timeout statistics.
 - **Time Management:** clock coverage, thinking-time distributions, phase comparisons and historical per-game details from PGN clocks.

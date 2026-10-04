@@ -34,6 +34,166 @@
   text-align: left;
   color-scheme: light;
 }
+
+/* Life Review extends the existing native section, summary and chart system. */
+.ci-life-review {
+  min-width: 0;
+}
+.ci-scope .ci-cell.ci-outside-range {
+  background: transparent;
+  border: 1px dashed var(--ci-border);
+}
+.ci-life-range,
+.ci-life-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+}
+.ci-life-hero {
+  padding: 10px 0 18px;
+  border-bottom: 1px solid var(--ci-border);
+}
+.ci-life-heading {
+  margin: 0 0 14px;
+}
+.ci-life-heading > .ci-life-kicker {
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  margin: 0 0 6px;
+}
+.ci-life-heading > .ci-muted:not(.ci-life-kicker) {
+  font-size: 13px;
+  margin-top: 6px;
+}
+.ci-life-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+.ci-life-jump button {
+  font-size: 12px;
+}
+.ci-life-block {
+  min-width: 0;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--ci-border);
+  scroll-margin-top: 16px;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
+}
+.ci-life-block .ci-two-columns > * {
+  min-width: 0;
+}
+.ci-life-block .ci-section-label small {
+  display: block;
+  margin: 4px 0 0;
+}
+.ci-life-block .ci-section-row {
+  align-items: start;
+}
+.ci-life-block .ci-table tbody th {
+  background: transparent;
+  text-transform: none;
+  font-weight: 600;
+  white-space: normal;
+}
+.ci-life-inline-events {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  font-size: 12px;
+  color: var(--ci-muted);
+}
+.ci-life-matrix-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  margin-top: 12px;
+}
+.ci-life-matrix-grid {
+  display: grid;
+  grid-template-columns: 44px repeat(24, minmax(24px, 1fr));
+  gap: 3px;
+  min-width: 692px;
+  align-items: center;
+}
+.ci-life-hour-label {
+  text-align: center;
+  font-size: 10px;
+  color: var(--ci-muted);
+}
+.ci-scope .ci-life-hour-cell {
+  min-width: 0;
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 1px solid var(--ci-border);
+  border-radius: 2px;
+}
+.ci-scope .ci-life-hour-cell.ci-level-0 {
+  background: var(--ci-empty);
+}
+.ci-scope .ci-life-hour-cell.ci-level-1 {
+  background: var(--ci-green-1);
+}
+.ci-scope .ci-life-hour-cell.ci-level-2 {
+  background: var(--ci-green-2);
+}
+.ci-scope .ci-life-hour-cell.ci-level-3 {
+  background: var(--ci-green-3);
+}
+.ci-scope .ci-life-hour-cell.ci-level-4 {
+  background: var(--ci-green-4);
+}
+.ci-scope .ci-life-hour-cell:hover {
+  outline: 1px solid var(--ci-link);
+}
+.ci-life-results {
+  display: grid;
+  gap: 18px;
+  margin: 14px 0;
+}
+.ci-life-result-row {
+  display: grid;
+  gap: 6px;
+}
+.ci-life-result-row .ci-row {
+  flex-wrap: wrap;
+}
+.ci-life-share h4,
+.ci-life-share p,
+.ci-life-share .ci-summary-row {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.ci-life-streak {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 12px 0;
+  font-size: 12px;
+}
+@media (max-width: 700px) {
+  .ci-life-range .ci-field {
+    min-width: 0;
+    flex: 1 1 120px;
+  }
+  .ci-life-range input,
+  .ci-life-range select {
+    width: 100%;
+  }
+  .ci-life-block .ci-section-row > strong {
+    white-space: normal;
+  }
+  .ci-life-jump button {
+    flex: 1 1 100px;
+  }
+  .ci-life-review .ci-summary-row {
+    row-gap: 16px;
+  }
+}
 .ci-scope * {
   box-sizing: border-box;
 }

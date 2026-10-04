@@ -29,6 +29,8 @@ export function ActivityHeatmap({
   mode: requestedMode = "games",
   trackingSince,
   durationRecords = [],
+  startDate,
+  endDate,
 }: {
   games: NormalizedGame[];
   year: number;
@@ -41,6 +43,9 @@ export function ActivityHeatmap({
   mode?: ActivityMode;
   trackingSince?: string;
   durationRecords?: GameDurationRecord[];
+  /** Optional review bounds: outside days are excluded, not zero activity. */
+  startDate?: string;
+  endDate?: string;
 }) {
   const mode = metric === "playTime" ? "games" : requestedMode;
   const weeks = useMemo(() => calendar(year), [year]),
@@ -199,6 +204,18 @@ export function ActivityHeatmap({
               {week.map((date, j) => {
                 if (!date)
                   return <span className="ci-cell ci-outside" key={j} />;
+                if (
+                  (startDate && date < startDate) ||
+                  (endDate && date > endDate)
+                )
+                  return (
+                    <span
+                      key={date}
+                      className="ci-cell ci-outside-range"
+                      role="img"
+                      aria-label={`${displayDate(date)} — outside selected review range`}
+                    />
+                  );
                 const list = days.get(date) ?? [],
                   intensity =
                     (mode === "games" ? intensities : levels).get(date) ?? 0;

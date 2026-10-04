@@ -26,6 +26,7 @@ import { SegmentedControl } from "./components/NativeStats";
 import { AppearanceSettings } from "./components/AppearanceSettings";
 import { useAppearance } from "../state/useAppearance";
 import { WidgetBoundary } from "./components/WidgetBoundary";
+import { LifeReviewPage } from "./pages/LifeReviewPage";
 export function InsightsApp({
   state,
   detected,
@@ -108,6 +109,7 @@ export function InsightsApp({
     username,
     data.version,
     section === "overview" ||
+      section === "life-review" ||
       section === "time" ||
       (section === "activity" && activityMode === "playTime"),
   );
@@ -209,7 +211,9 @@ export function InsightsApp({
               openInsights(s);
             }}
           >
-            {s[0].toUpperCase() + s.slice(1)}
+            {s === "life-review"
+              ? "Life Review"
+              : s[0].toUpperCase() + s.slice(1)}
           </a>
         ))}
       </nav>
@@ -248,21 +252,23 @@ export function InsightsApp({
           )}
           {
             <>
-              <FilterBar
-                filters={filters}
-                hideColor={
-                  section === "rating" ||
-                  section === "openings" ||
-                  section === "results"
-                }
-                activityOnly={
-                  section === "activity" &&
-                  activityMode !== "games" &&
-                  activityMode !== "playTime"
-                }
-                onChange={setFilters}
-                onPeriod={loadPeriod}
-              />
+              {section !== "life-review" && (
+                <FilterBar
+                  filters={filters}
+                  hideColor={
+                    section === "rating" ||
+                    section === "openings" ||
+                    section === "results"
+                  }
+                  activityOnly={
+                    section === "activity" &&
+                    activityMode !== "games" &&
+                    activityMode !== "playTime"
+                  }
+                  onChange={setFilters}
+                  onPeriod={loadPeriod}
+                />
+              )}
             </>
           }
           {loading && !data.games.length ? (
@@ -273,7 +279,22 @@ export function InsightsApp({
               </p>
             </Panel>
           ) : (
-            <WidgetBoundary key={`${username}:${section}:${data.version}`}>
+            <WidgetBoundary
+              key={`${username}:${section}:${section === "life-review" ? "stable" : data.version}`}
+            >
+              {section === "life-review" && (
+                <LifeReviewPage
+                  username={username}
+                  allGames={data.games}
+                  years={data.years}
+                  version={data.version}
+                  durationRecords={duration.records}
+                  durationLoading={duration.loading}
+                  loadingHistory={loading}
+                  onLoadYears={refresh}
+                  theme={appearance.theme}
+                />
+              )}
               {section === "overview" && (
                 <>
                   <OverviewPage

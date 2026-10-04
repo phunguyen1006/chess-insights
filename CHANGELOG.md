@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.1.12 Release Candidate — 2026-10-04 (unreleased)
+
+### Added
+
+- Life Review beside Overview: nine calendar ranges, matched previous periods, deterministic evidence summaries and pool-separated observed rating timelines.
+- Selected-range activity calendars, game volume, recorded playing time, existing sessions, completion-hour and weekday/hour views, W/D/L comparison and calendar-day consistency.
+- Saved local error coverage/rates, opening and matchup comparisons, supported best/tough moments, streaks, a chronological timeline and monthly yearly-review charts.
+- Native light/dark summary card with escaped, self-contained SVG export. No new permissions, dependencies, backend or AI service.
+
+### Fixed
+
+- Keep Life Review mounted through archive refreshes so the selected rating pool survives and year loading does not repeat in a loop.
+- Advance calendar boundaries after Refresh even when the archive fingerprint is unchanged, including month rollover.
+- Use actual elapsed positions for chronological trends and omit overlapping clustered middle-axis labels; exact point details remain available.
+- Distinguish same-name opening families by ECO and exclude out-of-range calendar cells from interaction.
+
+The candidate keeps database version 4 and existing analysis formats. Viewing Life Review reads saved analysis without starting Stockfish. Real accuracy, comeback evaluation and per-opening rating contribution remain unavailable when unsupported by the stored data. Lint, typecheck, 455 tests, 1,399 independent data comparisons, production build and packaging pass. See [formulas, screenshots, coverage and authenticated manual checks](docs/LIFE-REVIEW.md). The previous audit gates remain open; no stable tag is created.
+
 ## 0.1.11 Release Candidate — 2026-10-04 (unreleased)
 
 ### Fixed
